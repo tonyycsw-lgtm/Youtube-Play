@@ -270,6 +270,35 @@ export async function onRequest(context) {
   let videoId = url.searchParams.get('videoId') || url.searchParams.get('v') || '';
   let lang = url.searchParams.get('lang') || 'en';
 
+  if (url.searchParams.has('debug')) {
+    const page = await fetchPage(videoId);
+    const tracks = getTracks(page.playerResponse);
+    let dlStatus = 'n/a', dlLen = 0;
+    if (tracks.length) {
+      const track = pickTrack(tracks, lang);
+      if (track && track.baseUrl) {
+        const u = track.baseUrl.includes('?') ? track.baseUrl + '&fmt=json3' : track.baseUrl + '?fmt=json3';
+        try {
+          const r = await fetch(u, {
+            headers: { 'User-Agent': UA, 'Referer': 'https://www.youtube.com/watch?v=' + videoId, 'Origin': 'https://www.youtube.com', 'Cookie': CONSENT }
+          });
+          dlStatus = r.status + ' ' + (r.ok ? 'ok' : 'fail');
+          dlLen = (await r.text()).length;
+        } catch (e) { dlStatus = 'throw:' + e.message; }
+      }
+    }
+    return json({
+      ok: true, videoId: videoId,
+      htmlLength: page.html.length,
+      playerResponseFound: !!page.playerResponse,
+      playability: page.playerResponse && page.playerResponse.playabilityStatus && page.playerResponse.playabilityStatus.status,
+      apiKeyFound: !!page.apiKey,
+      transcriptParamsFound: !!page.transcriptParams,
+      tracks: summarizeTracks(tracks),
+      timedtext: { status: dlStatus, length: dlLen }
+    }, 200, headers);
+  }
+
   if (request.method === 'POST') {
     try {
       const body = await request.json();
