@@ -31,6 +31,16 @@ a{color:var(--accent-2);text-decoration:none}
 a:hover{text-decoration:underline}
 
 /* ---------- 頂部 ---------- */
+.back-home{
+  display:inline-flex;align-items:center;gap:8px;
+  margin:22px 20px 0;max-width:960px;
+  font-size:20px;font-weight:800;letter-spacing:.01em;
+  color:#fff;text-decoration:none;
+  background:var(--accent-soft);border:1px solid rgba(37,99,235,.45);
+  padding:12px 20px;border-radius:12px;
+  transition:background .15s,border-color .15s,box-shadow .15s;
+}
+.back-home:hover{background:var(--accent);border-color:var(--accent);text-decoration:none;box-shadow:0 6px 20px rgba(37,99,235,.4)}
 .top{max-width:960px;margin:0 auto;padding:30px 20px 6px}
 .brand{
   display:inline-flex;align-items:center;gap:10px;
@@ -231,6 +241,8 @@ summary:hover{text-decoration:underline}
 </head>
 <body>
 
+<a class="back-home" href="index.html">← 返回影片學習站</a>
+
 <header class="top">
   <a class="brand" href="index.html">
     <span class="mark" aria-hidden="true">
@@ -239,7 +251,7 @@ summary:hover{text-decoration:underline}
     飛象影片學習站
   </a>
   <h1>SRT 字幕產生工具</h1>
-  <p class="tagline">給老師使用：從 YouTube 抓取或貼上英文字幕，一鍵翻譯成繁體中文，逐句修改後匯出 SRT 檔，學生端即可看到中英對照字幕。</p>
+  <p class="tagline">給老師使用：貼上 YouTube 轉錄稿，一鍵翻譯成繁體中文，逐句修改後匯出 SRT 檔，並可產生詞匯表。</p>
 </header>
 
 <div class="steps" aria-label="步驟">
@@ -254,18 +266,17 @@ summary:hover{text-decoration:underline}
   <!-- ===== 1 · 來源 ===== -->
   <section class="panel">
     <h2><span class="badge">步驟 1</span>選擇字幕來源</h2>
-    <p class="desc">貼上 YouTube 網址後按「從 YouTube 抓取字幕」。若自動抓取被 YouTube 限制（目前常見），請按「開啟影片轉錄稿」→ 在 YouTube 點「⋯」→「顯示轉錄稿」→ 全選複製 → 貼到下方欄位解析。</p>
+    <p class="desc">按「開啟影片轉錄稿」→ 在 YouTube 點「⋯ 更多」→「顯示轉錄稿」→ 全選複製 → 貼到下方欄位解析。</p>
 
     <div class="row">
-      <input type="text" id="in-url" class="grow" placeholder="貼上 YouTube 網址，例如 https://youtu.be/gj1v-L1bEQc">
-      <button type="button" class="btn primary" id="btn-fetch">從 YouTube 抓取字幕</button>
-      <button type="button" class="btn" id="btn-open-video">開啟影片轉錄稿</button>
+      <input type="text" id="in-url" class="grow" placeholder="YouTube 網址（從播放頁點「字幕工具」會自動填入）">
+      <button type="button" class="btn primary" id="btn-open-video">開啟影片轉錄稿</button>
     </div>
     <p class="hint" id="detect-hint"></p>
     <div class="status" id="status-src" hidden role="status"></div>
 
     <div class="guide">
-      <h3>取得 YouTube 轉錄稿的步驟（自動抓取被限制時請照做）</h3>
+      <h3>取得 YouTube 轉錄稿的步驟</h3>
       <ol>
         <li>按上面「開啟影片轉錄稿」，會在新分頁開啟該 YouTube 影片。</li>
         <li>在影片標題下方、<span class="k">分享</span> 按鈕旁邊，點 <span class="k">⋯ 更多</span>。</li>
@@ -375,9 +386,8 @@ summary:hover{text-decoration:underline}
 </main>
 
 <footer class="footer">
-  <a href="index.html">返回影片學習站</a>
   <a href="README.md">部署與使用說明</a>
-  <span>字幕自動抓取功能需部署至 Cloudflare Pages 後運作</span>
+  <span>字幕自動抓取功能已停用（YouTube 限制）</span>
 </footer>
 
 <script src="js/vocab.js"></script>
@@ -658,30 +668,6 @@ summary:hover{text-decoration:underline}
   });
 
   /* ---------- 來源 ---------- */
-  $('btn-fetch').addEventListener('click', async function () {
-    var vid = extractVideoId($('in-url').value);
-    if (!vid) { setStatus('status-src', 'error', '無法辨識影片 ID：請貼上完整的 YouTube 網址（youtu.be/… 或 watch?v=…）。'); return; }
-    state.videoId = vid;
-    setStatus('status-src', 'info', '偵測到影片 ID：' + vid + '。正在從 YouTube 抓取字幕…');
-    try {
-      var res = await fetch('api/captions', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ videoId: vid, lang: 'en' })
-      });
-      var data = await res.json();
-      if (data && data.ok && Array.isArray(data.subtitles) && data.subtitles.length) {
-        setLang(data.lang || 'en');
-        loadCues(data.subtitles);
-        setStatus('status-src', 'ok', '已從 YouTube 取得 ' + data.subtitles.length + ' 行字幕（' + state.lang + '）。');
-      } else {
-        var msg = (data && data.note) ? data.note : '自動抓取失敗：YouTube 未回傳可用字幕。';
-        setStatus('status-src', 'warn', msg);
-      }
-    } catch (err) {
-      setStatus('status-src', 'warn', '自動抓取服務目前不可用（本機預覽或尚未部署）。請按「開啟影片轉錄稿」複製貼上，或上傳 SRT 檔。');
-    }
-  });
-
   $('btn-open-video').addEventListener('click', function () {
     var vid = extractVideoId($('in-url').value);
     if (!vid) { setStatus('status-src', 'error', '請先貼上 YouTube 網址。'); return; }
@@ -946,6 +932,17 @@ summary:hover{text-decoration:underline}
     $('detect-hint').textContent = vid ? '偵測到影片 ID：' + vid : '';
   });
   $('sel-srclang').addEventListener('change', function () { state.lang = this.value; });
+
+  /* 從播放頁帶入的影片網址（?v=VIDEOID）自動填入 */
+  (function () {
+    var qv = new URLSearchParams(location.search).get('v');
+    var vid = extractVideoId(qv || '');
+    if (vid) {
+      $('in-url').value = 'https://youtu.be/' + vid;
+      state.videoId = vid;
+      $('detect-hint').textContent = '偵測到影片 ID：' + vid;
+    }
+  })();
 
   /* ---------- 測試掛鉤（供自動化驗證） ---------- */
   window.__srtTool = {

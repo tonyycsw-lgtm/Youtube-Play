@@ -248,7 +248,17 @@ html, body {
   background: var(--accent);
   border-radius: 9999px;
   box-shadow: 0 0 10px rgba(37, 99, 235, 0.55);
+  cursor: grab;
+  z-index: 3;
 }
+.ab-range::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: -9px; bottom: -9px;
+}
+.ab-range:hover { box-shadow: 0 0 14px rgba(37, 99, 235, 0.85); }
+.ab-range.dragging { cursor: grabbing; box-shadow: 0 0 16px rgba(37, 99, 235, 1); }
 .ab-handle {
   position: absolute;
   top: 50%;

@@ -76,6 +76,8 @@
     if (App.program && App.program.description) {
       $('page-desc').textContent = App.program.description;
     }
+    var toolLink = $('btn-srt-tool');
+    if (toolLink) toolLink.href = 'srt-tool.html?v=' + encodeURIComponent(App.videoId);
 
     bindUI();
     loadPlayer();
@@ -501,8 +503,46 @@
     $('ab-handle-a').addEventListener('mousedown', makeDrag('A'));
     $('ab-handle-b').addEventListener('mousedown', makeDrag('B'));
 
+    // 拖曳藍色 A-B 區段：整段平移，畫面跟隨 A 點
+    var range = $('ab-range');
+    range.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var rect = track.getBoundingClientRect();
+      var startX = e.clientX;
+      var a0 = App.timeA;
+      var span = Math.max(MIN_GAP, App.timeB - App.timeA);
+      var maxA = Math.max(0, (App.duration || 0) - span);
+      var moved = false;
+      range.classList.add('dragging');
+
+      function onMove(ev) {
+        if (Math.abs(ev.clientX - startX) > 2) moved = true;
+        var delta = ((ev.clientX - startX) / rect.width) * App.duration;
+        window.requestAnimationFrame(function () {
+          App.timeA = clamp(a0 + delta, 0, maxA);
+          App.timeB = Math.min(App.duration || (App.timeA + span), App.timeA + span);
+          updateTimelineUI();
+          updateTimeLabels();
+          seekTo(App.timeA);
+        });
+      }
+      function onUp(ev) {
+        range.classList.remove('dragging');
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onUp);
+        if (!moved) {
+          var x = Math.max(0, Math.min(ev.clientX - rect.left, rect.width));
+          seekTo((x / rect.width) * App.duration);
+        }
+        saveState();
+      }
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+    });
+
     wrapper.addEventListener('click', function (e) {
-      if (e.target.closest('.ab-handle')) return;
+      if (e.target.closest('.ab-handle') || e.target.closest('.ab-range')) return;
       var rect = track.getBoundingClientRect();
       var offsetX = e.clientX - rect.left;
       offsetX = Math.max(0, Math.min(offsetX, rect.width));
@@ -524,8 +564,6 @@
       applySpeed();
       saveState();
     });
-    $('btn-copy').addEventListener('click', onCopyCard);
-    $('btn-csv').addEventListener('click', onDownloadCSV);
 
     $('btn-prev-seg').addEventListener('click', function () { gotoSegment(App.segIndex - 1); });
     $('btn-next-seg').addEventListener('click', function () { gotoSegment(App.segIndex + 1); });
@@ -548,36 +586,6 @@
     bindTimeline();
     bindKeyboard();
     bindFocusRetention();
-  }
-
-  /* ================= 匯出 ================= */
-  function onCopyCard() {
-    if (!App.ready) return;
-    var card = window.AnkiExport.buildCard({
-      subtitles: App.subtitles,
-      timeA: App.timeA,
-      timeB: App.timeB,
-      title: App.title,
-      videoId: App.videoId,
-      formatTime: formatTime
-    });
-    window.AnkiExport.copyCard(card).then(function (ok) {
-      showOSD(ok ? '✓ 已複製卡片' : '✕ 複製失敗', ok ? '#34C759' : '#F59E0B', ok ? 1200 : 2000);
-    });
-  }
-
-  function onDownloadCSV() {
-    if (!App.ready) return;
-    var card = window.AnkiExport.buildCard({
-      subtitles: App.subtitles,
-      timeA: App.timeA,
-      timeB: App.timeB,
-      title: App.title,
-      videoId: App.videoId,
-      formatTime: formatTime
-    });
-    window.AnkiExport.downloadCSV(card, App.videoId);
-    showOSD('✓ 已下載 CSV（可匯入 Anki）', '#34C759', 1500);
   }
 
   /* ================= 快捷鍵（捕獲階段） ================= */

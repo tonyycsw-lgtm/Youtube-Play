@@ -14,8 +14,7 @@ js/programs.js          首頁邏輯
 js/player.js            播放頁主邏輯（A-B、詞匯片段、快捷鍵、持久化）
 js/captions.js          字幕引擎（SRT 優先 → Function 自動抓取）
 js/vocab.js             詞匯引擎（句群切段、斷詞、停用詞、詞匯 JSON 載入）
-js/anki.js              匯出模組（剪貼簿複製 + Anki CSV）
-functions/api/captions.js  Cloudflare Pages Function：自動抓取 YouTube 字幕
+functions/api/captions.js  Cloudflare Pages Function：自動抓取 YouTube 字幕（已停用）
 programs.json           節目清單設定檔（老師編輯）
 subtitles/              （選用）老師上傳的 SRT 字幕檔
 vocabulary/             （選用）老師產生的詞匯 JSON
@@ -96,7 +95,7 @@ python -m http.server 8000
 
 使用流程：
 
-1. **選擇來源**：貼上 YouTube 網址按「從 YouTube 抓取字幕」（現多被限制）；建議按「開啟影片轉錄稿」→ 在 YouTube「⋯ 更多」→「顯示轉錄稿」→ 全選複製 → 貼到「貼上字幕文字」解析。或上傳現有 `.srt` 檔繼續編輯。
+1. **選擇來源**：按「開啟影片轉錄稿」→ 在 YouTube「⋯ 更多」→「顯示轉錄稿」→ 全選複製 → 貼到「貼上字幕文字」解析（從播放頁點「字幕工具」會自動帶入影片網址）。或上傳現有 `.srt` 檔繼續編輯。
 2. **翻譯成繁體中文**：一鍵整批翻譯（免費服務 MyMemory）。選填聯絡信箱可把每日免費額度從約 5,000 字提升至 50,000 字；個別句子翻譯不佳可留空手動補。
 3. **逐句編輯**：每行有時間、英文原文、繁體中文三個欄位，可直接修改；可新增／刪除句子；時間重疊會在匯出時自動修正。
 4. **匯出 SRT**：選擇輸出內容（中英雙語／只繁體中文／只英文）→ 預覽 → 下載 `{影片 ID}.srt`（UTF-8 BOM）。把檔案放進 `subtitles/` 再 push。
@@ -118,8 +117,7 @@ python -m http.server 8000
 
 ## 匯出卡片
 
-- **複製卡片**：把 A-B 區間的字幕（含標題、時間、回播連結）複製到剪貼簿，可直接貼進 Anki 編輯器。
-- **匯出 CSV**：下載 Anki 相容 CSV（Front / Back / Tags），Anki 匯入即可建立卡片。
+播放頁已移除 Anki 卡片匯出功能（`複製卡片` / `匯出 CSV`）。
 
 ## 已知限制（V1）
 
