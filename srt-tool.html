@@ -215,19 +215,20 @@ summary:hover{text-decoration:underline}
   <!-- ===== 1 · 來源 ===== -->
   <section class="panel">
     <h2><span class="badge">步驟 1</span>選擇字幕來源</h2>
-    <p class="desc">貼上 YouTube 網址後按「從 YouTube 抓取字幕」；自動抓取需在 Cloudflare 部署後運作，亦可直接貼上字幕文字或上傳 SRT 檔。</p>
+    <p class="desc">貼上 YouTube 網址後按「從 YouTube 抓取字幕」。若自動抓取被 YouTube 限制（目前常見），請按「開啟影片轉錄稿」→ 在 YouTube 點「⋯」→「顯示轉錄稿」→ 全選複製 → 貼到下方欄位解析。</p>
 
     <div class="row">
       <input type="text" id="in-url" class="grow" placeholder="貼上 YouTube 網址，例如 https://youtu.be/gj1v-L1bEQc">
       <button type="button" class="btn primary" id="btn-fetch">從 YouTube 抓取字幕</button>
+      <button type="button" class="btn" id="btn-open-video">開啟影片轉錄稿</button>
     </div>
     <p class="hint" id="detect-hint"></p>
     <div class="status" id="status-src" hidden role="status"></div>
 
-    <details>
-      <summary>或使用其他方式：貼上字幕文字／上傳現有 SRT</summary>
-      <label class="field" for="in-paste">貼上字幕文字：可貼 SRT 全文、或 YouTube「顯示轉錄稿」複製的內容（含時間戳）</label>
-      <textarea id="in-paste" rows="6" placeholder="例如：&#10;0:01&#10;Long long ago, a magic stone gave birth to a monkey.&#10;0:07&#10;Everyone called him the Monkey King."></textarea>
+    <details open>
+      <summary>建議做法：貼上 YouTube 轉錄稿（或 SRT 全文）／上傳現有 SRT</summary>
+      <label class="field" for="in-paste">貼上字幕文字：可貼 YouTube「顯示轉錄稿」全選複製的內容（含時間戳），或 SRT 全文</label>
+      <textarea id="in-paste" rows="6" placeholder="例如（YouTube 轉錄稿格式）：&#10;0:01&#10;Long long ago, a magic stone gave birth to a monkey.&#10;0:07&#10;Everyone called him the Monkey King.&#10;&#10;或 SRT 格式：&#10;1&#10;00:00:01,200 --> 00:00:04,000&#10;Long long ago, a magic stone gave birth to a monkey."></textarea>
       <div class="btn-row">
         <button type="button" class="btn" id="btn-parse-paste">解析貼上的文字</button>
       </div>
@@ -360,14 +361,18 @@ summary:hover{text-decoration:underline}
   }
 
   var TS_RE = /^(?:(\d{1,2}):)?(\d{1,2}):(\d{2})(?:[.,](\d{1,3}))?$/;
+  var TS_LINE_RE = /^(?:(\d{1,2}):)?(\d{1,2}):(\d{2})(?:[.,](\d{1,3}))?\s+(.+)$/;
   function parseTranscriptText(text) {
     var lines = String(text).replace(/^\uFEFF/, '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
     var cues = [], cur = null;
     for (var i = 0; i < lines.length; i++) {
       var m = lines[i].match(TS_RE);
-      if (m) {
+      var m2 = m ? null : lines[i].match(TS_LINE_RE);
+      if (m || m2) {
         if (cur) cues.push(cur);
-        cur = { start: toSec(m[1], m[2], m[3], m[4]), texts: [] };
+        var mm = m || m2;
+        cur = { start: toSec(mm[1], mm[2], mm[3], mm[4]), texts: [] };
+        if (m2) cur.texts.push(m2[5]);
       } else if (cur) {
         cur.texts.push(lines[i]);
       } else {
@@ -563,11 +568,20 @@ summary:hover{text-decoration:underline}
         loadCues(data.subtitles);
         setStatus('status-src', 'ok', '已從 YouTube 取得 ' + data.subtitles.length + ' 行字幕（' + state.lang + '）。');
       } else {
-        setStatus('status-src', 'warn', (data && data.note ? data.note : '自動抓取失敗') + '。請改用「貼上字幕文字」或上傳 SRT 檔。');
+        var msg = (data && data.note) ? data.note : '自動抓取失敗：YouTube 未回傳可用字幕。';
+        setStatus('status-src', 'warn', msg);
       }
     } catch (err) {
-      setStatus('status-src', 'warn', '自動抓取服務目前不可用（本機預覽或尚未部署）。請改用「貼上字幕文字」或上傳 SRT 檔。');
+      setStatus('status-src', 'warn', '自動抓取服務目前不可用（本機預覽或尚未部署）。請按「開啟影片轉錄稿」複製貼上，或上傳 SRT 檔。');
     }
+  });
+
+  $('btn-open-video').addEventListener('click', function () {
+    var vid = extractVideoId($('in-url').value);
+    if (!vid) { setStatus('status-src', 'error', '請先貼上 YouTube 網址。'); return; }
+    state.videoId = vid;
+    window.open('https://www.youtube.com/watch?v=' + vid, '_blank', 'noopener');
+    setStatus('status-src', 'info', '已開啟影片。請在 YouTube 點「⋯」→「顯示轉錄稿」，全選複製後貼到下方「貼上字幕文字」，再按「解析貼上的文字」。');
   });
 
   $('btn-parse-paste').addEventListener('click', function () {
@@ -576,7 +590,7 @@ summary:hover{text-decoration:underline}
     var first = text.split('\n').map(function (l) { return l.trim(); }).filter(Boolean)[0] || '';
     var subs = null;
     if (text.indexOf('-->') !== -1) subs = parseSrtText(text);
-    else if (TS_RE.test(first)) subs = parseTranscriptText(text);
+    else if (TS_RE.test(first) || TS_LINE_RE.test(first)) subs = parseTranscriptText(text);
     else subs = parsePlainText(text);
     if (!subs || !subs.length) { setStatus('status-src', 'error', '無法解析貼上的文字：請貼上 SRT 格式、或含時間戳的轉錄稿。'); return; }
     if (!state.videoId) { var v = extractVideoId($('in-url').value); if (v) state.videoId = v; }

@@ -225,21 +225,37 @@ async function fetchSubtitles(videoId, lang) {
   const page = await fetchPage(videoId);
   const tracks = getTracks(page.playerResponse);
   const summary = summarizeTracks(tracks);
+  const trackNames = summary
+    .map((t) => t.languageCode + (t.kind === 'asr' ? '（自動）' : '（人工）'))
+    .join('、');
+
+  if (!page.html) {
+    return {
+      ok: false, subtitles: [], tracks: summary, error: 'fetch_blocked', hint: 'manual',
+      note: 'YouTube 目前拒絕伺服器端讀取此影片（常見於資料中心 IP 被限流）。請改用「開啟轉錄稿」複製貼上，或上傳 SRT。'
+    };
+  }
 
   if (!tracks.length) {
-    return { ok: false, subtitles: [], tracks: summary, error: 'no_captions', hint: 'upload_srt' };
+    return {
+      ok: false, subtitles: [], tracks: summary, error: 'no_captions', hint: 'manual',
+      note: '此影片在伺服器端沒有可讀取的字幕軌（可能沒有字幕，或 YouTube 已封鎖自動讀取）。請改用「開啟轉錄稿」複製貼上，或上傳 SRT。'
+    };
   }
 
   const track = pickTrack(tracks, lang);
   if (!track) {
-    return { ok: false, subtitles: [], tracks: summary, error: 'no_track', hint: 'upload_srt' };
+    return {
+      ok: false, subtitles: [], tracks: summary, error: 'no_track', hint: 'manual',
+      note: '偵測到的字幕軌：' + trackNames + '，但找不到指定語言。請改用「開啟轉錄稿」複製貼上，或上傳 SRT。'
+    };
   }
 
   const viaTimedtext = await downloadTimedtext(track, videoId);
   if (viaTimedtext && viaTimedtext.length) {
     return {
       ok: true, subtitles: viaTimedtext, tracks: summary,
-      source: 'youtube', lang: track.languageCode || '', kind: track.kind || 'manual'
+      source: 'youtube', lang: track.languageCode || '', kind: track.kind || 'manual', note: ''
     };
   }
 
@@ -247,13 +263,14 @@ async function fetchSubtitles(videoId, lang) {
   if (viaTranscript && viaTranscript.length) {
     return {
       ok: true, subtitles: viaTranscript, tracks: summary,
-      source: 'youtube', lang: track.languageCode || '', kind: track.kind || 'manual'
+      source: 'youtube', lang: track.languageCode || '', kind: track.kind || 'manual', note: ''
     };
   }
 
   return {
     ok: false, subtitles: [], tracks: summary,
-    error: 'download_blocked', hint: 'upload_srt', lang: track.languageCode || ''
+    error: 'download_blocked', hint: 'manual', lang: track.languageCode || '',
+    note: '偵測到字幕軌：' + trackNames + '，但 YouTube 已限制伺服器端下載字幕（需要 proof-of-origin 權杖）。請用「開啟轉錄稿」複製貼上，或上傳 SRT。'
   };
 }
 
@@ -269,42 +286,6 @@ export async function onRequest(context) {
   const url = new URL(request.url);
   let videoId = url.searchParams.get('videoId') || url.searchParams.get('v') || '';
   let lang = url.searchParams.get('lang') || 'en';
-
-  if (url.searchParams.has('debug')) {
-    const page = await fetchPage(videoId);
-    const tracks = getTracks(page.playerResponse);
-    let dlStatus = 'n/a', dlLen = 0;
-    if (tracks.length) {
-      const track = pickTrack(tracks, lang);
-      if (track && track.baseUrl) {
-        const u = track.baseUrl.includes('?') ? track.baseUrl + '&fmt=json3' : track.baseUrl + '?fmt=json3';
-        try {
-          const r = await fetch(u, {
-            headers: { 'User-Agent': UA, 'Referer': 'https://www.youtube.com/watch?v=' + videoId, 'Origin': 'https://www.youtube.com', 'Cookie': CONSENT }
-          });
-          dlStatus = r.status + ' ' + (r.ok ? 'ok' : 'fail');
-          dlLen = (await r.text()).length;
-        } catch (e) { dlStatus = 'throw:' + e.message; }
-      }
-    }
-    let trStatus = 'n/a', trCount = 0;
-    try {
-      const subs = await downloadTranscript(videoId, page);
-      trStatus = subs ? 'ok' : 'null';
-      trCount = subs ? subs.length : 0;
-    } catch (e) { trStatus = 'throw:' + e.message; }
-    return json({
-      ok: true, videoId: videoId,
-      htmlLength: page.html.length,
-      playerResponseFound: !!page.playerResponse,
-      playability: page.playerResponse && page.playerResponse.playabilityStatus && page.playerResponse.playabilityStatus.status,
-      apiKeyFound: !!page.apiKey,
-      transcriptParamsFound: !!page.transcriptParams,
-      tracks: summarizeTracks(tracks),
-      timedtext: { status: dlStatus, length: dlLen },
-      transcript: { status: trStatus, count: trCount }
-    }, 200, headers);
-  }
 
   if (request.method === 'POST') {
     try {

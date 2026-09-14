@@ -60,11 +60,13 @@ window.Captions = (function () {
       if (data.ok && Array.isArray(data.subtitles) && data.subtitles.length) {
         return { subtitles: data.subtitles, source: 'youtube', note: '' };
       }
-      // 有軌但下載失敗 / 無軌
+      if (data.note) {
+        return { subtitles: [], source: 'none', note: data.note };
+      }
       const tracks = Array.isArray(data.tracks) ? data.tracks : [];
       const trackStr = tracks.map((t) => t.languageCode + (t.kind === 'asr' ? '（自動）' : '')).join(', ');
       const note = trackStr
-        ? 'YouTube 有字幕軌（' + trackStr + '），但自動下載被 YouTube 限制；老師可上傳 SRT 覆蓋'
+        ? 'YouTube 有字幕軌（' + trackStr + '），但自動下載被限制；老師可上傳 SRT 覆蓋'
         : '此影片目前沒有可用的字幕軌；老師可上傳 SRT';
       return { subtitles: [], source: 'none', note };
     } catch (e) {
