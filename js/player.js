@@ -36,8 +36,10 @@
     tickTimer: null,
     osdTimer: null,
     lastActiveIdx: -1,
+    lastOverlayKey: null,
     autoScroll: true,
-    filterText: ''
+    filterText: '',
+    offset: 0
   };
 
   /* ================= 初始化 ================= */
@@ -81,8 +83,6 @@
     var el = $('player-error');
     el.textContent = msg;
     el.hidden = false;
-    var note = $('sub-note');
-    if (note) note.textContent = '';
   }
 
   /* ================= 播放器載入 ================= */
@@ -170,32 +170,12 @@
 
   /* ================= 字幕載入與渲染 ================= */
   async function loadSubtitles() {
-    var note = $('sub-note');
-    note.textContent = '字幕載入中…';
-    note.className = 'sub-note';
-
     var result = await window.Captions.load(App.videoId, App.lang, App.srtPath);
     result = result || { subtitles: [], source: 'none', note: '字幕載入失敗' };
     App.subtitles = result.subtitles || [];
     App.subSource = result.source;
     App.subNote = result.note || '';
     renderTranscript();
-    updateSubNote();
-  }
-
-  function updateSubNote() {
-    var note = $('sub-note');
-    var n = App.subtitles.length;
-    if (App.subSource === 'srt') {
-      note.textContent = '✓ 字幕來源：老師上傳的 SRT（' + n + ' 行）';
-      note.className = 'sub-note ok';
-    } else if (App.subSource === 'youtube') {
-      note.textContent = '✓ 字幕來源：YouTube 自動抓取（' + n + ' 行，' + App.lang + '）';
-      note.className = 'sub-note ok';
-    } else {
-      note.textContent = '⚠️ ' + App.subNote + '（上傳方式見 README.md）';
-      note.className = 'sub-note warn';
-    }
   }
 
   function renderTranscript() {
@@ -242,15 +222,23 @@
   function renderSubtitle(t) {
     var overlay = $('subtitle-overlay');
     var active = getActiveLines(t);
+    var show = App.showSubs && active.length;
 
-    if (!App.showSubs || !active.length) {
-      overlay.innerHTML = '';
-      overlay.classList.remove('visible');
-    } else {
-      overlay.innerHTML = active
-        .map(function (s) { return '<div class="sub-line">' + escapeHtml(s.text).replace(/\n/g, '<br>') + '</div>'; })
-        .join('');
-      overlay.classList.add('visible');
+    // 只在內容真正改變時更新 DOM，避免每 250ms 重繪造成閃動
+    var key = show
+      ? active.map(function (s) { return s.start + '|' + s.text; }).join('~')
+      : '';
+    if (key !== App.lastOverlayKey) {
+      App.lastOverlayKey = key;
+      if (!show) {
+        overlay.innerHTML = '';
+        overlay.classList.remove('visible');
+      } else {
+        overlay.innerHTML = active
+          .map(function (s) { return '<div class="sub-line">' + escapeHtml(s.text).replace(/\n/g, '<br>') + '</div>'; })
+          .join('');
+        overlay.classList.add('visible');
+      }
     }
 
     // 面板高亮 + 目前句（只在行改變時觸發，避免抖動）
@@ -276,8 +264,9 @@
 
   function getActiveLines(t) {
     if (!App.subtitles.length) return [];
+    var st = t - App.offset;
     return App.subtitles.filter(function (s) {
-      return t >= s.start - 0.05 && t <= s.end + 0.05;
+      return st >= s.start - 0.05 && st <= s.end + 0.05;
     });
   }
 
@@ -333,8 +322,8 @@
   }
 
   function loopSentence(line) {
-    App.timeA = Math.max(0, line.start - 0.15);
-    App.timeB = Math.min(App.duration, line.end + 0.15);
+    App.timeA = Math.max(0, line.start + App.offset - 0.15);
+    App.timeB = Math.min(App.duration, line.end + App.offset + 0.15);
     App.loopActive = true;
     setLoopUI(true);
     seekTo(App.timeA);
@@ -349,7 +338,7 @@
       showOSD('⚠️ 無字幕數據', '#F59E0B', 1200);
       return;
     }
-    var t = App.player.getCurrentTime();
+    var t = App.player.getCurrentTime() - App.offset;
     var target = null;
     if (dir < 0) {
       var prev = App.subtitles.filter(function (s) { return s.end < t - 0.05; });
@@ -361,7 +350,7 @@
     if (App.loopActive) {
       loopSentence(target);
     } else {
-      seekTo(target.start);
+      seekTo(target.start + App.offset);
       showOSD(dir < 0 ? '◀ 上一句' : '下一句 ▶', '#FFFFFF', 800);
     }
   }
@@ -490,6 +479,12 @@
     $('btn-csv').addEventListener('click', onDownloadCSV);
 
     $('sub-filter').addEventListener('input', applyFilter);
+    $('sub-offset').addEventListener('input', function () {
+      App.offset = parseFloat(this.value) || 0;
+      App.lastOverlayKey = null;
+      App.lastActiveIdx = -1;
+      saveState();
+    });
     $('btn-autoscroll').addEventListener('click', function () {
       App.autoScroll = !App.autoScroll;
       this.classList.toggle('on', App.autoScroll);
@@ -611,7 +606,9 @@
         timeB: App.timeB,
         loopActive: App.loopActive,
         speed: App.speed,
-        showSubs: App.showSubs
+        showSubs: App.showSubs,
+        offset: App.offset,
+        autoScroll: App.autoScroll
       }));
     } catch (e) { /* ignore */ }
   }
@@ -626,8 +623,12 @@
       if (SPEEDS.indexOf(d.speed) !== -1) App.speed = d.speed;
       if (typeof d.loopActive === 'boolean') App.loopActive = d.loopActive;
       if (typeof d.showSubs === 'boolean') App.showSubs = d.showSubs;
+      if (isFinite(d.offset)) App.offset = d.offset;
+      if (typeof d.autoScroll === 'boolean') App.autoScroll = d.autoScroll;
       setLoopUI(App.loopActive);
       $('btn-cc').classList.toggle('on', App.showSubs);
+      $('sub-offset').value = App.offset;
+      $('btn-autoscroll').classList.toggle('on', App.autoScroll);
     } catch (e) { /* ignore */ }
   }
 

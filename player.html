@@ -79,7 +79,6 @@
       </div>
     </section>
 
-    <div class="sub-note" id="sub-note">字幕載入中…</div>
     </div>
 
     <aside class="player-side" aria-label="逐句字幕">
@@ -90,6 +89,10 @@
       </div>
       <div class="transcript-tools">
         <input id="sub-filter" class="sub-filter" type="search" placeholder="搜尋句子…" autocomplete="off">
+        <label class="offset-wrap" title="字幕校時（秒）：正值＝字幕延後出現，負值＝提早">
+          <span class="offset-label">校時</span>
+          <input id="sub-offset" class="sub-offset" type="number" step="0.1" value="0" inputmode="decimal">
+        </label>
         <button class="mini-btn on" id="btn-autoscroll" title="跟隨播放自動捲動到目前句">自動捲動</button>
       </div>
       <div class="now-line" id="now-line"></div>
