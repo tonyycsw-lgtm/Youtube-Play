@@ -134,6 +134,7 @@
     applySpeed();
     updateTimelineUI();
     updateTimeLabels();
+    updatePlayhead(0);
     window.focus();
     document.body.focus();
     loadSubtitles();
@@ -157,6 +158,7 @@
     if (!isFinite(t)) return;
 
     $('txt-now').textContent = formatTime(t);
+    updatePlayhead(t);
 
     if (App.loopActive && App.duration && t >= App.timeB) {
       seekTo(App.timeA);
@@ -379,6 +381,12 @@
     $('ab-range').style.width = Math.max(0, pb - pa) + '%';
     $('ab-handle-a').style.left = pa + '%';
     $('ab-handle-b').style.left = pb + '%';
+  }
+
+  function updatePlayhead(t) {
+    if (!App.duration) return;
+    var p = clamp((t / App.duration) * 100, 0, 100);
+    $('ab-playhead').style.left = p + '%';
   }
 
   function updateTimeLabels() {

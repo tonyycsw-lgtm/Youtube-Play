@@ -1,0 +1,24 @@
+1
+00:00:01,000 --> 00:00:04,200
+Long long ago, a magic stone gave birth to a monkey.
+很久以前，一顆神奇的石頭孕育出一隻猴子。
+
+2
+00:00:04,500 --> 00:00:08,200
+Everyone called him the Monkey King.
+大家都叫他美猴王。
+
+3
+00:00:08,500 --> 00:00:12,000
+He could do many amazing things.
+他會許多神奇的本領。
+
+4
+00:00:12,300 --> 00:00:16,000
+This is a test subtitle to check the display.
+這是測試字幕，用來檢查顯示是否正常。
+
+5
+00:00:16,300 --> 00:00:20,000
+If you can read this, subtitles are working.
+如果你能看到這行，代表字幕功能正常。

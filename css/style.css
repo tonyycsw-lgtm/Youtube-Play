@@ -205,6 +205,7 @@ html, body {
   padding: 24px;
   z-index: 5;
 }
+.player-error[hidden] { display: none; }
 
 /* ---------- 播放頁：控制面板 ---------- */
 .control-panel {
@@ -254,6 +255,21 @@ html, body {
   transition: opacity 0.2s ease, transform 0.1s ease;
   z-index: 2;
 }
+.ab-playhead {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 12px;
+  background: #fff;
+  border-radius: 9999px;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  z-index: 1;
+  transition: height 0.12s ease;
+}
+.ab-timeline:hover .ab-playhead { height: 16px; }
 .ab-handle:hover { transform: translate(-50%, -50%) scale(1.25); }
 .ab-timeline:hover .ab-handle { opacity: 1; }
 .ab-handle.dragging { opacity: 1; transform: translate(-50%, -50%) scale(1.25); }
