@@ -287,6 +287,12 @@ export async function onRequest(context) {
         } catch (e) { dlStatus = 'throw:' + e.message; }
       }
     }
+    let trStatus = 'n/a', trCount = 0;
+    try {
+      const subs = await downloadTranscript(videoId, page);
+      trStatus = subs ? 'ok' : 'null';
+      trCount = subs ? subs.length : 0;
+    } catch (e) { trStatus = 'throw:' + e.message; }
     return json({
       ok: true, videoId: videoId,
       htmlLength: page.html.length,
@@ -295,7 +301,8 @@ export async function onRequest(context) {
       apiKeyFound: !!page.apiKey,
       transcriptParamsFound: !!page.transcriptParams,
       tracks: summarizeTracks(tracks),
-      timedtext: { status: dlStatus, length: dlLen }
+      timedtext: { status: dlStatus, length: dlLen },
+      transcript: { status: trStatus, count: trCount }
     }, 200, headers);
   }
 
