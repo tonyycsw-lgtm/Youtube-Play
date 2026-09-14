@@ -183,6 +183,29 @@ summary:hover{text-decoration:underline}
 .cue-ops{display:flex;flex-direction:column;gap:7px}
 .cue-ops .btn{width:100%}
 
+/* ---------- 詞匯表 ---------- */
+.vocab-words{
+  margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:10px;max-height:52vh;overflow:auto;padding-right:4px;
+}
+.vocab-words:empty{display:none}
+.vw-row{
+  display:flex;gap:6px;align-items:center;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:7px 8px;
+}
+.vw-row.removed{opacity:.4}
+.vw-word{font-weight:600;color:#dbeafe;flex:0 0 auto;min-width:66px;font-size:13.5px;word-break:break-word}
+.vw-zh{
+  flex:1 1 auto;min-width:0;background:transparent;border:0;border-bottom:1px dashed var(--line);
+  color:var(--text);font-family:var(--sans);font-size:13.5px;outline:none;padding:3px 4px;
+}
+.vw-zh:focus{border-bottom-color:var(--accent)}
+.vw-del{
+  flex:0 0 auto;background:transparent;border:1px solid var(--line);border-radius:7px;
+  color:var(--muted);cursor:pointer;font-size:12px;padding:3px 8px;
+}
+.vw-del:hover{color:#fecaca;border-color:rgba(239,68,68,.5);background:rgba(239,68,68,.12)}
+
 /* ---------- 輸出 ---------- */
 .out-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .out-meta .count{font-size:13px;color:var(--muted)}
@@ -224,6 +247,7 @@ summary:hover{text-decoration:underline}
   <span class="step" id="step-2"><span class="n">2</span>翻譯繁體中文</span>
   <span class="step" id="step-3"><span class="n">3</span>逐句編輯</span>
   <span class="step" id="step-4"><span class="n">4</span>匯出 SRT</span>
+  <span class="step" id="step-5"><span class="n">5</span>產生詞匯表</span>
 </div>
 
 <main>
@@ -323,6 +347,31 @@ summary:hover{text-decoration:underline}
     <p class="hint">下載後把檔案放到專案 <code>subtitles/</code> 資料夾，檔名為 <code>{影片 ID}.srt</code>，學生端即自動使用（本工具偵測到的 ID 會自動帶入檔名）。也可在 <code>programs.json</code> 的該節目加 <code>"srt": "路徑.srt"</code> 指定其他檔名。</p>
     <div class="status" id="status-out" hidden role="status"></div>
   </section>
+
+  <!-- ===== 5 · 詞匯表 ===== -->
+  <section class="panel" id="panel-vocab" hidden>
+    <h2><span class="badge">步驟 5</span>產生詞匯表（選用）</h2>
+    <p class="desc">把字幕切成約 N 秒的片段，列出每段出現的英文詞匯。可翻譯成中文、刪除不要的詞，匯出 JSON 放到專案 <code>vocabulary/</code>，學生端播放頁就會顯示詞匯面板。</p>
+    <div class="row">
+      <label class="field" for="sel-window" style="margin:0">片段長度</label>
+      <select id="sel-window">
+        <option value="8">8 秒</option>
+        <option value="10" selected>10 秒</option>
+        <option value="15">15 秒</option>
+      </select>
+      <button type="button" class="btn primary" id="btn-build-vocab">產生詞匯表</button>
+      <button type="button" class="btn" id="btn-translate-vocab">翻譯詞匯（中文）</button>
+      <span class="count" id="vocab-count"></span>
+    </div>
+    <div class="progress" id="vocab-progress" hidden role="status"><span id="vocab-prog-text"></span></div>
+    <div class="status" id="status-vocab" hidden role="status"></div>
+    <div class="vocab-words" id="vocab-words"></div>
+    <div class="btn-row">
+      <button type="button" class="btn primary" id="btn-vocab-download">下載詞匯 JSON</button>
+      <button type="button" class="btn" id="btn-vocab-copy">複製 JSON</button>
+    </div>
+    <p class="hint">檔名：<code>{影片 ID}.json</code>，放到專案 <code>vocabulary/</code> 資料夾。播放頁會自動讀取；沒有 JSON 時會自動抽取英文詞（無中文）。</p>
+  </section>
 </main>
 
 <footer class="footer">
@@ -331,12 +380,16 @@ summary:hover{text-decoration:underline}
   <span>字幕自動抓取功能需部署至 Cloudflare Pages 後運作</span>
 </footer>
 
+<script src="js/vocab.js"></script>
 <script>
 (function () {
   'use strict';
 
   var $ = function (id) { return document.getElementById(id); };
-  var state = { videoId: '', lang: 'en', cues: [], translating: false };
+  var state = {
+    videoId: '', lang: 'en', cues: [], translating: false,
+    vocabSegments: null, vocabGloss: {}, vocabHidden: {}, vocabTranslating: false
+  };
 
   /* ---------- 小工具 ---------- */
   function setStatus(id, kind, msg) {
@@ -465,6 +518,7 @@ summary:hover{text-decoration:underline}
     $('panel-translate').hidden = false;
     $('panel-edit').hidden = false;
     $('panel-export').hidden = false;
+    $('panel-vocab').hidden = false;
     setSteps(2);
     setTimeout(function () {
       $('panel-translate').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -725,9 +779,146 @@ summary:hover{text-decoration:underline}
 
   $('sel-mode').addEventListener('change', refreshPreview);
 
+  /* ---------- 詞匯表（步驟 5） ---------- */
+  function vocabSubs() {
+    return state.cues.map(function (c) { return { start: c.start, end: c.end, text: c.en }; });
+  }
+
+  function uniqueWords() {
+    var seen = {}, list = [];
+    (state.vocabSegments || []).forEach(function (seg) {
+      seg.words.forEach(function (it) {
+        if (!seen[it.w]) { seen[it.w] = true; list.push(it.w); }
+      });
+    });
+    return list;
+  }
+
+  function buildVocab() {
+    if (!state.cues.length) { setStatus('status-vocab', 'error', '請先載入字幕（步驟 1）。'); return; }
+    var win = +$('sel-window').value || 10;
+    state.vocabSegments = window.Vocab.extract(vocabSubs(), win).segments;
+    renderVocabWords();
+    setSteps(5);
+    var n = uniqueWords().length;
+    $('vocab-count').textContent = state.vocabSegments.length + ' 段 · ' + n + ' 詞';
+    setStatus('status-vocab', 'ok', '已切成 ' + state.vocabSegments.length + ' 段、' + n + ' 個詞匯。可按「翻譯詞匯（中文）」自動翻譯，或刪除不要的詞。');
+  }
+
+  function renderVocabWords() {
+    var box = $('vocab-words');
+    box.innerHTML = '';
+    uniqueWords().forEach(function (w) {
+      var removed = !!state.vocabHidden[w];
+      var row = document.createElement('div');
+      row.className = 'vw-row' + (removed ? ' removed' : '');
+      row.dataset.w = w;
+      var span = document.createElement('span');
+      span.className = 'vw-word';
+      span.textContent = w;
+      var input = document.createElement('input');
+      input.className = 'vw-zh';
+      input.type = 'text';
+      input.placeholder = '中文…';
+      input.value = state.vocabGloss[w] || '';
+      input.addEventListener('input', function () { state.vocabGloss[w] = this.value; });
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'vw-del';
+      del.textContent = removed ? '恢復' : '刪除';
+      del.addEventListener('click', function () {
+        state.vocabHidden[w] = !state.vocabHidden[w];
+        renderVocabWords();
+      });
+      row.appendChild(span);
+      row.appendChild(input);
+      row.appendChild(del);
+      box.appendChild(row);
+    });
+  }
+
+  async function translateVocab() {
+    if (state.vocabTranslating) return;
+    if (!state.vocabSegments) { setStatus('status-vocab', 'error', '請先按「產生詞匯表」。'); return; }
+    state.vocabTranslating = true;
+    var btn = $('btn-translate-vocab');
+    btn.disabled = true;
+    var prog = $('vocab-progress');
+    prog.hidden = false;
+    var words = uniqueWords().filter(function (w) {
+      return !state.vocabHidden[w] && !(state.vocabGloss[w] || '').trim();
+    });
+    var ok = 0, fail = 0;
+    for (var i = 0; i < words.length; i++) {
+      $('vocab-prog-text').textContent = '翻譯詞匯 ' + (i + 1) + ' / ' + words.length + '（成功 ' + ok + '，略過 ' + fail + '）';
+      var t = await translateText(words[i]);
+      if (t) { state.vocabGloss[words[i]] = t; ok++; } else { fail++; }
+      if (i % 5 === 4) await new Promise(function (r) { setTimeout(r, 150); });
+    }
+    prog.hidden = true;
+    btn.disabled = false;
+    state.vocabTranslating = false;
+    renderVocabWords();
+    setStatus('status-vocab', fail ? 'warn' : 'ok',
+      '詞匯翻譯完成：成功 ' + ok + ' 個' + (fail ? '，' + fail + ' 個無法自動翻譯（可手動輸入）' : '') + '。');
+  }
+
+  function buildVocabJson() {
+    var segs = (state.vocabSegments || []).map(function (seg) {
+      var words = seg.words
+        .filter(function (it) { return !state.vocabHidden[it.w]; })
+        .map(function (it) { return { w: it.w, zh: state.vocabGloss[it.w] || '' }; });
+      return {
+        start: Math.round(seg.start * 100) / 100,
+        end: Math.round(seg.end * 100) / 100,
+        words: words
+      };
+    }).filter(function (seg) { return seg.words.length; });
+    return {
+      videoId: state.videoId || '',
+      window: +$('sel-window').value || 10,
+      segments: segs
+    };
+  }
+
+  $('btn-build-vocab').addEventListener('click', buildVocab);
+  $('btn-translate-vocab').addEventListener('click', translateVocab);
+  $('sel-window').addEventListener('change', function () {
+    if (state.vocabSegments) buildVocab();
+  });
+
+  $('btn-vocab-download').addEventListener('click', function () {
+    if (!state.vocabSegments) { setStatus('status-vocab', 'error', '請先按「產生詞匯表」。'); return; }
+    var name = (state.videoId || 'vocabulary') + '.json';
+    var content = JSON.stringify(buildVocabJson(), null, 2);
+    var blob = new Blob([content], { type: 'application/json;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    setStatus('status-vocab', 'ok', '已下載 ' + name + '。放到專案 vocabulary/ 資料夾，學生端播放頁即自動使用。');
+  });
+
+  $('btn-vocab-copy').addEventListener('click', function () {
+    if (!state.vocabSegments) { setStatus('status-vocab', 'error', '請先按「產生詞匯表」。'); return; }
+    var txt = JSON.stringify(buildVocabJson(), null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () {
+        setStatus('status-vocab', 'ok', '詞匯 JSON 已複製到剪貼簿。');
+      }).catch(function () {
+        setStatus('status-vocab', 'warn', '複製失敗，請改用「下載詞匯 JSON」。');
+      });
+    } else {
+      setStatus('status-vocab', 'warn', '此瀏覽器不支援自動複製，請改用「下載詞匯 JSON」。');
+    }
+  });
+
   /* ---------- 步驟指示 ---------- */
   function setSteps(step) {
-    for (var i = 1; i <= 4; i++) {
+    for (var i = 1; i <= 5; i++) {
       var el = $('step-' + i);
       if (el) el.classList.toggle('done', i <= step);
     }
@@ -750,7 +941,10 @@ summary:hover{text-decoration:underline}
     parsePlainText: parsePlainText,
     toCues: toCues,
     generateSrt: generateSrt,
-    translateText: translateText
+    translateText: translateText,
+    buildVocab: buildVocab,
+    buildVocabJson: buildVocabJson,
+    uniqueWords: uniqueWords
   };
 })();
 </script>

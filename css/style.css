@@ -186,7 +186,7 @@ html, body {
 }
 .player-main { min-width: 0; }
 .player-side { min-width: 0; }
-.player-side .transcript-panel { position: sticky; top: 16px; }
+.player-side .vocab-panel { position: sticky; top: 16px; }
 .video-wrap {
   position: relative;
   width: 100%;
@@ -201,37 +201,6 @@ html, body {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   border: 0;
-}
-
-.subtitle-overlay {
-  position: absolute;
-  left: 0; right: 0;
-  bottom: 26px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 0 24px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 10;
-}
-.subtitle-overlay.visible { opacity: 1; }
-.sub-line {
-  background: rgba(0, 0, 0, 0.62);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  font-size: clamp(18px, 3.2vw, 26px);
-  font-weight: 500;
-  line-height: 1.5;
-  text-align: center;
-  padding: 4px 16px;
-  border-radius: 10px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-  max-width: 94%;
-  white-space: pre-wrap;
 }
 
 .player-error {
@@ -409,9 +378,8 @@ html, body {
 }
 .speed-select:focus { border-color: var(--accent); }
 
-/* ---------- 逐句字幕面板 ---------- */
-.transcript-panel {
-  margin-top: 0;
+/* ---------- 詞匯面板 ---------- */
+.vocab-panel {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -421,25 +389,31 @@ html, body {
   display: flex;
   flex-direction: column;
 }
-.transcript-head {
+.vocab-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  padding: 12px 18px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border-soft);
   font-size: 13px;
   color: var(--text-dim);
 }
-.hotkey-hint { font-size: 11.5px; color: var(--text-faint); }
-
-.transcript-tools {
+.seg-nav {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
   padding: 10px 14px;
   border-bottom: 1px solid var(--border-soft);
+}
+.seg-label {
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: 13px;
+  color: #BFDBFE;
+  white-space: nowrap;
 }
 .sub-filter {
   flex: 1 1 auto;
@@ -481,66 +455,58 @@ html, body {
 .sub-offset::-webkit-outer-spin-button,
 .sub-offset::-webkit-inner-spin-button { opacity: 0.5; }
 
-.now-line {
-  padding: 11px 16px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #fff;
+.pinned-word {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
   background: var(--accent-soft);
   border-bottom: 1px solid var(--border-soft);
   border-left: 3px solid var(--accent);
 }
-.now-line:empty { display: none; }
-.now-line-time {
-  color: #93C5FD;
-  font-size: 12px;
-  margin-right: 6px;
-}
+.pinned-word[hidden] { display: none; }
+.pinned-en { font-size: 26px; font-weight: 700; color: #fff; line-height: 1.2; }
+.pinned-zh { font-size: 18px; color: #BFDBFE; }
 
-.transcript-list {
-  max-height: calc(100vh - 280px);
-  overflow-y: auto;
-  padding: 8px 0;
-  flex: 1 1 auto;
+.vocab-search-wrap {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-soft);
 }
-.player-side .transcript-list { max-height: calc(100vh - 300px); }
-.t-line {
+.vocab-search-wrap .sub-filter { width: 100%; }
+.vocab-list {
   display: flex;
-  gap: 14px;
-  width: 100%;
-  background: transparent;
-  border: 0;
-  border-left: 3px solid transparent;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  padding: 14px 16px 18px;
+  max-height: calc(100vh - 320px);
+  overflow-y: auto;
+}
+.vocab-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-soft);
   color: var(--text);
   font-family: var(--font);
   font-size: 14px;
-  text-align: left;
-  padding: 9px 18px;
+  padding: 7px 13px;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: background 0.12s ease, border-color 0.12s ease;
-  align-items: baseline;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
-.t-line:hover { background: rgba(255, 255, 255, 0.045); }
-.t-line[hidden] { display: none; }
-.t-line.active {
-  background: var(--accent-soft);
-  border-left-color: var(--accent);
+.vocab-chip:hover { color: #fff; border-color: rgba(37, 99, 235, 0.5); background: var(--accent-soft); }
+.vocab-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
 }
-.t-time {
-  flex: 0 0 auto;
-  font-variant-numeric: tabular-nums;
-  font-size: 12px;
-  color: var(--text-faint);
-  min-width: 52px;
-}
-.t-line.active .t-time { color: #93C5FD; }
-.t-text { flex: 1 1 auto; line-height: 1.5; white-space: pre-wrap; }
-
-.transcript-empty {
-  padding: 34px 20px;
+.vocab-empty {
+  padding: 30px 18px;
   text-align: center;
   color: var(--text-faint);
   font-size: 13.5px;
+  line-height: 1.7;
 }
 
 /* ---------- OSD 提示 ---------- */
@@ -571,15 +537,13 @@ html, body {
 /* ---------- 響應式 ---------- */
 @media (max-width: 1024px) {
   .player-layout { grid-template-columns: 1fr; }
-  .player-side .transcript-panel { position: static; }
-  .transcript-list,
-  .player-side .transcript-list { max-height: 380px; }
+  .player-side .vocab-panel { position: static; }
+  .vocab-list { max-height: 380px; }
 }
 @media (max-width: 760px) {
   .container { padding: 0 14px; }
   .program-grid { grid-template-columns: 1fr; }
   .control-bar { flex-direction: column; align-items: stretch; }
   .cb-center, .cb-right { justify-content: flex-start; }
-  .transcript-head { flex-direction: column; align-items: flex-start; }
-  .hotkey-hint { display: none; }
+  .seg-nav { justify-content: flex-start; }
 }

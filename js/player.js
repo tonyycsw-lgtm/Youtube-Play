@@ -1,5 +1,5 @@
 /* ============================================================
-   播放頁主邏輯：播放器生命週期、A-B 循環、字幕渲染、快捷鍵、匯出
+   播放頁主邏輯：播放器生命週期、A-B 循環、詞匯面板、快捷鍵、匯出
    ============================================================ */
 (function () {
   'use strict';
@@ -14,6 +14,7 @@
   var TICK_MS = 250;          // 時間輪詢週期
   var SPEEDS = [0.5, 0.75, 0.85, 1.0, 1.25];
   var LS_PREFIX = 'utube_web_v1:';
+  var DEFAULT_WINDOW = 10;    // 詞匯分段秒數
 
   var App = {
     program: null,
@@ -21,6 +22,7 @@
     title: '',
     lang: 'en',
     srtPath: '',
+    vocabPath: '',
     player: null,
     ready: false,
     duration: 0,
@@ -28,18 +30,17 @@
     timeB: 0,
     loopActive: false,
     speed: 1,
-    showSubs: true,
     fadeEnabled: true,
     subtitles: [],
-    subSource: 'none',
     subNote: '',
+    vocab: [],            // [ { start, end, words: [ { w, zh } ] } ]
+    vocabSource: 'none',  // json | auto | none
+    segIndex: -1,
+    follow: true,
+    pinned: null,
+    offset: 0,
     tickTimer: null,
-    osdTimer: null,
-    lastActiveIdx: -1,
-    lastOverlayKey: null,
-    autoScroll: true,
-    filterText: '',
-    offset: 0
+    osdTimer: null
   };
 
   /* ================= 初始化 ================= */
@@ -56,6 +57,7 @@
         App.title = p.title || 'Journey to the West';
         App.lang = p.lang || data.defaultLang || 'en';
         App.srtPath = p.srt || '';
+        App.vocabPath = p.vocab || '';
       } catch (err) {
         showFatal('無法載入節目：' + err.message);
         return;
@@ -97,7 +99,6 @@
     var first = document.getElementsByTagName('script')[0];
     first.parentNode.insertBefore(tag, first);
 
-    // 逾時保護：YouTube API 被封鎖時顯示錯誤
     setTimeout(function () {
       if (!App.ready && !window.YT) {
         showFatal('無法載入 YouTube 播放器。請檢查網路，或學校網路是否封鎖 youtube.com / youtube-nocookie.com。');
@@ -165,109 +166,149 @@
     if (App.loopActive && App.duration && t >= App.timeB) {
       seekTo(App.timeA);
     }
-    renderSubtitle(t);
+    updateSegment(t);
   }
 
-  /* ================= 字幕載入與渲染 ================= */
+  /* ================= 字幕與詞匯載入 ================= */
   async function loadSubtitles() {
     var result = await window.Captions.load(App.videoId, App.lang, App.srtPath);
     result = result || { subtitles: [], source: 'none', note: '字幕載入失敗' };
     App.subtitles = result.subtitles || [];
-    App.subSource = result.source;
     App.subNote = result.note || '';
-    renderTranscript();
+    loadVocabulary();
   }
 
-  function renderTranscript() {
-    var list = $('transcript-list');
-    var nowLine = $('now-line');
-    if (nowLine) nowLine.innerHTML = '';
-    App.lastActiveIdx = -1;
-    if (!App.subtitles.length) {
-      list.innerHTML = '<div class="transcript-empty">目前沒有字幕。' +
-        (App.subNote ? '<br>' + escapeHtml(App.subNote) : '') + '</div>';
+  async function loadVocabulary() {
+    var res = await window.Vocab.load(App.videoId, App.subtitles, {
+      window: DEFAULT_WINDOW,
+      vocabPath: App.vocabPath || ''
+    });
+    App.vocab = (res && res.segments) || [];
+    App.vocabSource = (res && res.source) || 'none';
+    App.segIndex = -1;
+    App.pinned = null;
+    renderPinned();
+
+    if (!App.vocab.length) {
+      $('vocab-list').innerHTML = '<div class="vocab-empty">目前沒有可用的詞匯。' +
+        (App.subNote ? '<br>' + escapeHtml(App.subNote) : '') +
+        '<br><br>請老師用「字幕工具」建立字幕與詞匯表。</div>';
+      $('seg-label').textContent = '--:-- – --:--';
       return;
     }
+    var t = App.player ? App.player.getCurrentTime() : 0;
+    renderSegment(segmentIndexAt(t - App.offset));
+  }
+
+  /* ---------- 段落索引 ---------- */
+  function segmentIndexAt(st) {
+    var segs = App.vocab;
+    if (!segs.length) return -1;
+    if (st < segs[0].start) return 0;
+    for (var i = 0; i < segs.length; i++) {
+      if (st >= segs[i].start - 0.001 && st < segs[i].end) return i;
+    }
+    return segs.length - 1;
+  }
+
+  function updateSegment(t) {
+    if (!App.follow || !App.vocab.length) return;
+    var i = segmentIndexAt(t - App.offset);
+    if (i !== App.segIndex && i >= 0) renderSegment(i);
+  }
+
+  /* ---------- 渲染目前段落 ---------- */
+  function renderSegment(i) {
+    if (!App.vocab.length) return;
+    i = clamp(i, 0, App.vocab.length - 1);
+    var changed = i !== App.segIndex;
+    App.segIndex = i;
+    var seg = App.vocab[i];
+
+    $('seg-label').textContent = formatClock(seg.start) + ' – ' + formatClock(seg.end);
+
+    if (changed) {
+      App.pinned = null;
+      renderPinned();
+    }
+
+    var list = $('vocab-list');
     var frag = document.createDocumentFragment();
-    App.subtitles.forEach(function (s, i) {
-      var btn = document.createElement('button');
-      btn.className = 't-line';
-      btn.dataset.i = i;
-      btn.innerHTML =
-        '<span class="t-time">' + formatTime(s.start) + '</span>' +
-        '<span class="t-text">' + escapeHtml(s.text).replace(/\n/g, '<br>') + '</span>';
-      btn.addEventListener('click', function () {
-        loopSentence(App.subtitles[+btn.dataset.i]);
+    if (!seg.words.length) {
+      var empty = document.createElement('div');
+      empty.className = 'vocab-empty';
+      empty.textContent = '此段沒有可顯示的詞匯。';
+      frag.appendChild(empty);
+    } else {
+      seg.words.forEach(function (word) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'vocab-chip';
+        btn.textContent = word.w;
+        btn.dataset.w = word.w;
+        if (App.pinned && App.pinned.w === word.w) btn.classList.add('active');
+        btn.addEventListener('click', function () { selectWord(word); });
+        frag.appendChild(btn);
       });
-      frag.appendChild(btn);
-    });
+    }
     list.innerHTML = '';
     list.appendChild(frag);
-    applyFilter();
   }
 
-  function applyFilter() {
-    var input = $('sub-filter');
-    if (!input) return;
-    var q = (input.value || '').trim().toLowerCase();
-    App.filterText = q;
-    var lines = document.querySelectorAll('#transcript-list .t-line');
-    for (var i = 0; i < lines.length; i++) {
-      var s = App.subtitles[i];
-      var hit = !q || (s && String(s.text).toLowerCase().indexOf(q) !== -1);
-      lines[i].hidden = !hit;
+  function renderPinned() {
+    var box = $('pinned-word');
+    if (!App.pinned) {
+      box.hidden = true;
+      box.innerHTML = '';
+      return;
+    }
+    box.hidden = false;
+    box.innerHTML =
+      '<span class="pinned-en">' + escapeHtml(App.pinned.w) + '</span>' +
+      '<span class="pinned-zh">' + escapeHtml(App.pinned.zh || '（尚無中文翻譯）') + '</span>';
+  }
+
+  function selectWord(word) {
+    App.pinned = word;
+    renderPinned();
+    var chips = document.querySelectorAll('#vocab-list .vocab-chip');
+    for (var i = 0; i < chips.length; i++) {
+      chips[i].classList.toggle('active', chips[i].dataset.w === word.w);
+    }
+    var seg = App.vocab[App.segIndex];
+    if (seg) loopRange(seg.start, seg.end, 0, '循環本段');
+  }
+
+  /* ---------- 段導覽 ---------- */
+  function gotoSegment(i, play) {
+    if (!App.vocab.length) return;
+    i = clamp(i, 0, App.vocab.length - 1);
+    renderSegment(i);
+    var seg = App.vocab[i];
+    var start = seg.start + App.offset;
+    if (App.loopActive) {
+      loopRange(seg.start, seg.end, 0, '循環本段');
+    } else {
+      seekTo(start);
+      if (play) { try { App.player.playVideo(); } catch (e) { /* ignore */ } }
     }
   }
 
-  function renderSubtitle(t) {
-    var overlay = $('subtitle-overlay');
-    var active = getActiveLines(t);
-    var show = App.showSubs && active.length;
-
-    // 只在內容真正改變時更新 DOM，避免每 250ms 重繪造成閃動
-    var key = show
-      ? active.map(function (s) { return s.start + '|' + s.text; }).join('~')
-      : '';
-    if (key !== App.lastOverlayKey) {
-      App.lastOverlayKey = key;
-      if (!show) {
-        overlay.innerHTML = '';
-        overlay.classList.remove('visible');
-      } else {
-        overlay.innerHTML = active
-          .map(function (s) { return '<div class="sub-line">' + escapeHtml(s.text).replace(/\n/g, '<br>') + '</div>'; })
-          .join('');
-        overlay.classList.add('visible');
+  /* ---------- 詞匯搜尋（Enter 跳到含該詞的段） ---------- */
+  function searchWord() {
+    var q = ($('vocab-search').value || '').trim().toLowerCase();
+    if (!q) return;
+    for (var i = 0; i < App.vocab.length; i++) {
+      var words = App.vocab[i].words;
+      for (var j = 0; j < words.length; j++) {
+        if (words[j].w.indexOf(q) !== -1) {
+          gotoSegment(i, true);
+          showOSD('找到「' + words[j].w + '」於 ' + formatClock(App.vocab[i].start), '#2563EB', 1500);
+          return;
+        }
       }
     }
-
-    // 面板高亮 + 目前句（只在行改變時觸發，避免抖動）
-    var idx = active.length ? App.subtitles.indexOf(active[0]) : -1;
-    if (idx !== App.lastActiveIdx) {
-      App.lastActiveIdx = idx;
-      var lines = document.querySelectorAll('#transcript-list .t-line');
-      for (var i = 0; i < lines.length; i++) {
-        lines[i].classList.toggle('active', i === idx);
-      }
-      var nowLine = $('now-line');
-      if (nowLine) {
-        nowLine.innerHTML = idx >= 0
-          ? '<span class="now-line-time mono">' + formatTime(App.subtitles[idx].start) + '</span> ' +
-            escapeHtml(App.subtitles[idx].text).replace(/\n/g, ' / ')
-          : '';
-      }
-      if (App.autoScroll && idx >= 0 && lines[idx] && !lines[idx].hidden) {
-        lines[idx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-    }
-  }
-
-  function getActiveLines(t) {
-    if (!App.subtitles.length) return [];
-    var st = t - App.offset;
-    return App.subtitles.filter(function (s) {
-      return st >= s.start - 0.05 && st <= s.end + 0.05;
-    });
+    showOSD('✕ 找不到「' + q + '」', '#F59E0B', 1500);
   }
 
   /* ================= A-B 循環核心 ================= */
@@ -321,16 +362,23 @@
     saveState();
   }
 
-  function loopSentence(line) {
-    App.timeA = Math.max(0, line.start + App.offset - 0.15);
-    App.timeB = Math.min(App.duration, line.end + App.offset + 0.15);
+  /* 循環一段時間範圍（a、b 為字幕時間，會套用校時 offset） */
+  function loopRange(a, b, pad, label) {
+    if (!App.ready) return;
+    pad = pad || 0;
+    App.timeA = clamp(a + App.offset - pad, 0, App.duration || a);
+    App.timeB = clamp(b + App.offset + pad, App.timeA + MIN_GAP, App.duration || b);
     App.loopActive = true;
     setLoopUI(true);
     seekTo(App.timeA);
-    showOSD('單句循環', '#2563EB', 1200);
+    showOSD(label || '循環本段', '#2563EB', 1200);
     updateTimelineUI();
     updateTimeLabels();
     saveState();
+  }
+
+  function loopSentence(line) {
+    loopRange(line.start, line.end, 0.15, '單句循環');
   }
 
   function jumpSentence(dir) {
@@ -450,7 +498,6 @@
     $('ab-handle-a').addEventListener('mousedown', makeDrag('A'));
     $('ab-handle-b').addEventListener('mousedown', makeDrag('B'));
 
-    // 點時間軸＝跳轉播放位置
     wrapper.addEventListener('click', function (e) {
       if (e.target.closest('.ab-handle')) return;
       var rect = track.getBoundingClientRect();
@@ -469,7 +516,6 @@
     $('btn-nudge-b').addEventListener('click', function () { nudgeB(0.1); });
     $('btn-prev-sub').addEventListener('click', function () { jumpSentence(-1); });
     $('btn-next-sub').addEventListener('click', function () { jumpSentence(1); });
-    $('btn-cc').addEventListener('click', toggleCC);
     $('speed-select').addEventListener('change', function () {
       App.speed = parseFloat(this.value) || 1;
       applySpeed();
@@ -478,35 +524,27 @@
     $('btn-copy').addEventListener('click', onCopyCard);
     $('btn-csv').addEventListener('click', onDownloadCSV);
 
-    $('sub-filter').addEventListener('input', applyFilter);
-    $('sub-offset').addEventListener('input', function () {
-      App.offset = parseFloat(this.value) || 0;
-      App.lastOverlayKey = null;
-      App.lastActiveIdx = -1;
+    $('btn-prev-seg').addEventListener('click', function () { gotoSegment(App.segIndex - 1, true); });
+    $('btn-next-seg').addEventListener('click', function () { gotoSegment(App.segIndex + 1, true); });
+    $('btn-follow').addEventListener('click', function () {
+      App.follow = !App.follow;
+      this.classList.toggle('on', App.follow);
+      showOSD(App.follow ? '自動跟隨：開' : '自動跟隨：關（已鎖定）', '#FFFFFF', 900);
+      if (App.follow && App.ready) updateSegment(App.player.getCurrentTime());
       saveState();
     });
-    $('btn-autoscroll').addEventListener('click', function () {
-      App.autoScroll = !App.autoScroll;
-      this.classList.toggle('on', App.autoScroll);
-      showOSD(App.autoScroll ? '自動捲動：開' : '自動捲動：關', '#FFFFFF', 900);
-      if (App.autoScroll && App.lastActiveIdx >= 0) {
-        var lines = document.querySelectorAll('#transcript-list .t-line');
-        if (lines[App.lastActiveIdx]) {
-          lines[App.lastActiveIdx].scrollIntoView({ block: 'center', behavior: 'smooth' });
-        }
-      }
+    $('vocab-search').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); searchWord(); }
+    });
+    $('sub-offset').addEventListener('input', function () {
+      App.offset = parseFloat(this.value) || 0;
+      if (App.ready) renderSegment(segmentIndexAt(App.player.getCurrentTime() - App.offset));
+      saveState();
     });
 
     bindTimeline();
     bindKeyboard();
     bindFocusRetention();
-  }
-
-  function toggleCC() {
-    App.showSubs = !App.showSubs;
-    $('btn-cc').classList.toggle('on', App.showSubs);
-    showOSD(App.showSubs ? '字幕：開' : '字幕：關', '#FFFFFF', 900);
-    saveState();
   }
 
   /* ================= 匯出 ================= */
@@ -576,8 +614,6 @@
         case 'd': case 'D':
           if (App.loopActive) { e.preventDefault(); jumpSentence(1); }
           break;
-        case 'c': case 'C':
-          e.preventDefault(); toggleCC(); break;
         case ' ':
           e.preventDefault(); togglePlay(); break;
       }
@@ -606,9 +642,8 @@
         timeB: App.timeB,
         loopActive: App.loopActive,
         speed: App.speed,
-        showSubs: App.showSubs,
         offset: App.offset,
-        autoScroll: App.autoScroll
+        follow: App.follow
       }));
     } catch (e) { /* ignore */ }
   }
@@ -622,13 +657,11 @@
       else App.timeB = App.duration;
       if (SPEEDS.indexOf(d.speed) !== -1) App.speed = d.speed;
       if (typeof d.loopActive === 'boolean') App.loopActive = d.loopActive;
-      if (typeof d.showSubs === 'boolean') App.showSubs = d.showSubs;
       if (isFinite(d.offset)) App.offset = d.offset;
-      if (typeof d.autoScroll === 'boolean') App.autoScroll = d.autoScroll;
+      if (typeof d.follow === 'boolean') App.follow = d.follow;
       setLoopUI(App.loopActive);
-      $('btn-cc').classList.toggle('on', App.showSubs);
       $('sub-offset').value = App.offset;
-      $('btn-autoscroll').classList.toggle('on', App.autoScroll);
+      $('btn-follow').classList.toggle('on', App.follow);
     } catch (e) { /* ignore */ }
   }
 
@@ -643,6 +676,13 @@
     var secs = Math.floor(seconds % 60);
     var tenth = Math.floor((seconds % 1) * 10);
     return pad(mins) + ':' + pad(secs) + '.' + tenth;
+  }
+
+  function formatClock(seconds) {
+    if (!isFinite(seconds) || seconds < 0) seconds = 0;
+    var mins = Math.floor(seconds / 60);
+    var secs = Math.floor(seconds % 60);
+    return pad(mins) + ':' + pad(secs);
   }
 
   function pad(n) {
