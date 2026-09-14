@@ -63,6 +63,21 @@ h1{font-size:clamp(24px,4vw,34px);font-weight:800;margin-top:14px;letter-spacing
 .step.done{color:var(--text);border-color:rgba(37,99,235,.45);background:var(--accent-soft)}
 .step.done .n{background:var(--accent);color:#fff}
 
+/* ---------- 轉錄稿教學 ---------- */
+.guide{
+  margin-top:16px;padding:14px 16px;border-radius:12px;
+  background:rgba(37,99,235,.09);border:1px solid rgba(37,99,235,.32);
+  font-size:13.5px;color:#dbeafe;line-height:1.7;
+}
+.guide h3{font-size:13.5px;font-weight:700;color:#bfdbfe;margin-bottom:8px}
+.guide ol{margin:0;padding-left:20px}
+.guide li{margin:4px 0}
+.guide .k{
+  display:inline-block;background:rgba(255,255,255,.1);border:1px solid var(--line);
+  border-radius:6px;padding:0 6px;font-size:12.5px;color:#fff;white-space:nowrap;
+}
+.guide .note{color:#93c5fd;font-size:12.5px;margin-top:8px}
+
 /* ---------- 面板 ---------- */
 main{max-width:960px;margin:0 auto;padding:8px 20px 40px}
 .panel{
@@ -224,6 +239,19 @@ summary:hover{text-decoration:underline}
     </div>
     <p class="hint" id="detect-hint"></p>
     <div class="status" id="status-src" hidden role="status"></div>
+
+    <div class="guide">
+      <h3>取得 YouTube 轉錄稿的步驟（自動抓取被限制時請照做）</h3>
+      <ol>
+        <li>按上面「開啟影片轉錄稿」，會在新分頁開啟該 YouTube 影片。</li>
+        <li>在影片標題下方、<span class="k">分享</span> 按鈕旁邊，點 <span class="k">⋯ 更多</span>。</li>
+        <li>在跳出的選單選 <span class="k">顯示轉錄稿</span>，右側會出現字幕逐句面板。</li>
+        <li>在轉錄稿面板右上角點 <span class="k">⋯</span>，確認 <span class="k">切換時間戳記</span> 為「開啟」（一定要有時間碼，否則無法定位時間）。</li>
+        <li>點一下轉錄稿文字區，按 <span class="k">Ctrl+A</span> 全選、<span class="k">Ctrl+C</span> 複製。</li>
+        <li>回到本頁，把內容貼到下方「<b>貼上字幕文字</b>」欄位，按「<b>解析貼上的文字</b>」。</li>
+      </ol>
+      <p class="note">提示：若影片沒有提供任何字幕，YouTube 就不會顯示「顯示轉錄稿」，此時只能手動聽打或自行上傳 SRT。</p>
+    </div>
 
     <details open>
       <summary>建議做法：貼上 YouTube 轉錄稿（或 SRT 全文）／上傳現有 SRT</summary>
@@ -417,6 +445,9 @@ summary:hover{text-decoration:underline}
     $('panel-edit').hidden = false;
     $('panel-export').hidden = false;
     setSteps(2);
+    setTimeout(function () {
+      $('panel-translate').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
   }
 
   function setLang(lang) {
@@ -581,7 +612,7 @@ summary:hover{text-decoration:underline}
     if (!vid) { setStatus('status-src', 'error', '請先貼上 YouTube 網址。'); return; }
     state.videoId = vid;
     window.open('https://www.youtube.com/watch?v=' + vid, '_blank', 'noopener');
-    setStatus('status-src', 'info', '已開啟影片。請在 YouTube 點「⋯」→「顯示轉錄稿」，全選複製後貼到下方「貼上字幕文字」，再按「解析貼上的文字」。');
+    setStatus('status-src', 'info', '已在新分頁開啟影片。請照下方步驟 2～6 取得轉錄稿：點「⋯ 更多」→「顯示轉錄稿」→ 確認時間戳記為開啟 → 全選複製 → 貼到下方欄位解析。');
   });
 
   $('btn-parse-paste').addEventListener('click', function () {
