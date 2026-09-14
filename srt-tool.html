@@ -484,6 +484,8 @@ summary:hover{text-decoration:underline}
       '翻譯完成：成功 ' + ok + ' 句' + (fail ? '，' + fail + ' 句無法自動翻譯（已留空，可手動補上）' : '') + '。');
   }
 
+  $('btn-translate-all').addEventListener('click', translateAll);
+
   /* ---------- 編輯器 ---------- */
   function renderCues() {
     var list = $('cue-list');
