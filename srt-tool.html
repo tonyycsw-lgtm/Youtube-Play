@@ -420,6 +420,27 @@ summary:hover{text-decoration:underline}
     return out;
   }
 
+  /* 黏在一起的時間碼格式：<M:SS><總秒數> seconds<字幕>（例如 1:071 minute, 7 secondssat up…） */
+  var GLUED_RE = /^(\d{1,2}):(\d{2})/;
+  var GLUED_DUR = /^\s*(?:\d+\s*minutes?\s*,?\s*)?(?:\d+\s*seconds?\s*)?/i;
+  function parseGluedTranscriptText(text) {
+    var lines = String(text).replace(/^\uFEFF/, '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var m = lines[i].match(GLUED_RE);
+      if (!m) continue;
+      var start = (+m[1]) * 60 + (+m[2]);
+      var t = lines[i].slice(m[0].length).replace(GLUED_DUR, '').trim();
+      if (t) out.push({ start: start, end: start + 5, text: t });
+    }
+    for (var j = 0; j < out.length; j++) {
+      var end = (j + 1 < out.length) ? out[j + 1].start : out[j].start + 5;
+      if (end <= out[j].start) end = out[j].start + 1;
+      out[j].end = end;
+    }
+    return out;
+  }
+
   function parsePlainText(text) {
     var lines = String(text).replace(/^\uFEFF/, '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
     var subs = [], t = 0;
@@ -622,6 +643,7 @@ summary:hover{text-decoration:underline}
     var subs = null;
     if (text.indexOf('-->') !== -1) subs = parseSrtText(text);
     else if (TS_RE.test(first) || TS_LINE_RE.test(first)) subs = parseTranscriptText(text);
+    else if (/^\d{1,2}:\d{2}\d+\s*(seconds?|minutes?)/i.test(first)) subs = parseGluedTranscriptText(text);
     else subs = parsePlainText(text);
     if (!subs || !subs.length) { setStatus('status-src', 'error', '無法解析貼上的文字：請貼上 SRT 格式、或含時間戳的轉錄稿。'); return; }
     if (!state.videoId) { var v = extractVideoId($('in-url').value); if (v) state.videoId = v; }
@@ -724,6 +746,7 @@ summary:hover{text-decoration:underline}
     extractVideoId: extractVideoId,
     parseSrtText: parseSrtText,
     parseTranscriptText: parseTranscriptText,
+    parseGluedTranscriptText: parseGluedTranscriptText,
     parsePlainText: parsePlainText,
     toCues: toCues,
     generateSrt: generateSrt,
