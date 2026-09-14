@@ -244,7 +244,7 @@
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'vocab-chip';
-        btn.textContent = word.w;
+        btn.textContent = wordLabel(word);
         btn.dataset.w = word.w;
         if (App.pinned && App.pinned.w === word.w) btn.classList.add('active');
         btn.addEventListener('click', function () { selectWord(word); });
@@ -264,8 +264,17 @@
     }
     box.hidden = false;
     box.innerHTML =
-      '<span class="pinned-en">' + escapeHtml(App.pinned.w) + '</span>' +
+      '<span class="pinned-en">' + escapeHtml(wordLabel(App.pinned)) + '</span>' +
       '<span class="pinned-zh">' + escapeHtml(App.pinned.zh || '（尚無中文翻譯）') + '</span>';
+  }
+
+  function wordLabel(word) {
+    if (!word) return '';
+    return (word.src && word.src !== word.w) ? word.src + ' (' + word.w + ')' : word.w;
+  }
+
+  function pauseVideo() {
+    if (App.ready) { try { App.player.pauseVideo(); } catch (e) { /* ignore */ } }
   }
 
   function selectWord(word) {
@@ -275,23 +284,17 @@
     for (var i = 0; i < chips.length; i++) {
       chips[i].classList.toggle('active', chips[i].dataset.w === word.w);
     }
-    var seg = App.vocab[App.segIndex];
-    if (seg) loopRange(seg.start, seg.end, 0, '循環本段');
+    pauseVideo();
   }
 
   /* ---------- 段導覽 ---------- */
-  function gotoSegment(i, play) {
+  function gotoSegment(i) {
     if (!App.vocab.length) return;
     i = clamp(i, 0, App.vocab.length - 1);
     renderSegment(i);
     var seg = App.vocab[i];
-    var start = seg.start + App.offset;
-    if (App.loopActive) {
-      loopRange(seg.start, seg.end, 0, '循環本段');
-    } else {
-      seekTo(start);
-      if (play) { try { App.player.playVideo(); } catch (e) { /* ignore */ } }
-    }
+    seekTo(seg.start + App.offset);
+    pauseVideo();
   }
 
   /* ---------- 詞匯搜尋（Enter 跳到含該詞的段） ---------- */
@@ -301,9 +304,9 @@
     for (var i = 0; i < App.vocab.length; i++) {
       var words = App.vocab[i].words;
       for (var j = 0; j < words.length; j++) {
-        if (words[j].w.indexOf(q) !== -1) {
-          gotoSegment(i, true);
-          showOSD('找到「' + words[j].w + '」於 ' + formatClock(App.vocab[i].start), '#2563EB', 1500);
+        if (words[j].w.indexOf(q) !== -1 || (words[j].src || '').indexOf(q) !== -1) {
+          gotoSegment(i);
+          showOSD('找到「' + wordLabel(words[j]) + '」於 ' + formatClock(App.vocab[i].start), '#2563EB', 1500);
           return;
         }
       }
@@ -524,8 +527,8 @@
     $('btn-copy').addEventListener('click', onCopyCard);
     $('btn-csv').addEventListener('click', onDownloadCSV);
 
-    $('btn-prev-seg').addEventListener('click', function () { gotoSegment(App.segIndex - 1, true); });
-    $('btn-next-seg').addEventListener('click', function () { gotoSegment(App.segIndex + 1, true); });
+    $('btn-prev-seg').addEventListener('click', function () { gotoSegment(App.segIndex - 1); });
+    $('btn-next-seg').addEventListener('click', function () { gotoSegment(App.segIndex + 1); });
     $('btn-follow').addEventListener('click', function () {
       App.follow = !App.follow;
       this.classList.toggle('on', App.follow);

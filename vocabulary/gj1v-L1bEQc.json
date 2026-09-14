@@ -8,26 +8,32 @@
       "words": [
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         },
         {
           "w": "little",
+          "src": "little",
           "zh": "小"
         },
         {
           "w": "fox",
+          "src": "fox",
           "zh": "狐狸"
         },
         {
           "w": "journey",
+          "src": "journey",
           "zh": "旅程圖"
         },
         {
           "w": "west",
+          "src": "west",
           "zh": "西"
         },
         {
           "w": "chapter",
+          "src": "chapter",
           "zh": "章"
         }
       ]
@@ -38,6 +44,7 @@
       "words": [
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         }
       ]
@@ -48,66 +55,82 @@
       "words": [
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "beginning",
+          "src": "beginning",
           "zh": "開始"
         },
         {
           "w": "time",
+          "src": "time",
           "zh": "時間"
         },
         {
           "w": "rock",
+          "src": "rock",
           "zh": "搖滾, 搖滾"
         },
         {
           "w": "sit",
+          "src": "sat",
           "zh": "坐"
         },
         {
           "w": "high",
+          "src": "high",
           "zh": "高"
         },
         {
           "w": "top",
+          "src": "top",
           "zh": "頂部"
         },
         {
           "w": "mountain",
+          "src": "mountain",
           "zh": "山"
         },
         {
           "w": "sun",
+          "src": "sun",
           "zh": "太陽"
         },
         {
           "w": "moon",
+          "src": "moon",
           "zh": "月亮"
         },
         {
           "w": "heaven",
+          "src": "heaven",
           "zh": "天堂"
         },
         {
           "w": "earth",
+          "src": "earth",
           "zh": "地線(黃綠)"
         },
         {
           "w": "worked",
+          "src": "worked",
           "zh": "工作"
         },
         {
           "w": "magic",
+          "src": "magic",
           "zh": "magic"
         },
         {
           "w": "day",
+          "src": "day",
           "zh": "天day"
         },
         {
           "w": "split",
+          "src": "split",
           "zh": "分段"
         }
       ]
@@ -118,18 +141,22 @@
       "words": [
         {
           "w": "open",
+          "src": "open",
           "zh": "開立"
         },
         {
           "w": "inside",
+          "src": "inside",
           "zh": "內側"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "stand",
+          "src": "stood",
           "zh": "維持不變 remain"
         }
       ]
@@ -140,58 +167,72 @@
       "words": [
         {
           "w": "stretched",
+          "src": "stretched",
           "zh": "伸展"
         },
         {
           "w": "suddenly",
+          "src": "suddenly",
           "zh": "忽然"
         },
         {
           "w": "powerful",
+          "src": "powerful",
           "zh": "強大的"
         },
         {
           "w": "light",
+          "src": "light",
           "zh": "輕"
         },
         {
           "w": "shot",
+          "src": "shot",
           "zh": "流感 a 和 B (流感疫苗)"
         },
         {
           "w": "eye",
+          "src": "eyes",
           "zh": "眼睛"
         },
         {
           "w": "moment",
+          "src": "moment",
           "zh": "短片"
         },
         {
           "w": "reached",
+          "src": "reached",
           "zh": "到達"
         },
         {
           "w": "cloud",
+          "src": "cloud",
           "zh": "雲端"
         },
         {
           "w": "palace",
+          "src": "palace",
           "zh": "宮殿"
         },
         {
           "w": "heaven",
+          "src": "heaven",
           "zh": "天堂"
         },
         {
           "w": "jade",
+          "src": "jade",
           "zh": "玉石"
         },
         {
           "w": "emperor",
+          "src": "emperor",
           "zh": "皇帝"
         },
         {
           "w": "ruler",
+          "src": "ruler",
           "zh": "尺規"
         }
       ]
@@ -202,50 +243,62 @@
       "words": [
         {
           "w": "sit",
+          "src": "sat",
           "zh": "坐"
         },
         {
           "w": "turned",
+          "src": "turned",
           "zh": "Turn"
         },
         {
           "w": "captain",
+          "src": "captains",
           "zh": "機長"
         },
         {
           "w": "standing",
+          "src": "standing",
           "zh": "站立中"
         },
         {
           "w": "nearby",
+          "src": "nearby",
           "zh": "附近"
         },
         {
           "w": "find",
+          "src": "find",
           "zh": "尋找"
         },
         {
           "w": "caused",
+          "src": "caused",
           "zh": "因果"
         },
         {
           "w": "light",
+          "src": "light",
           "zh": "輕"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "emperor",
+          "src": "emperor",
           "zh": "皇帝"
         },
         {
           "w": "majesty",
+          "src": "majesty",
           "zh": "陛下"
         },
         {
           "w": "rushed",
+          "src": "rushed",
           "zh": "匆忙"
         }
       ]
@@ -256,70 +309,87 @@
       "words": [
         {
           "w": "hall",
+          "src": "hall",
           "zh": "大厅"
         },
         {
           "w": "looked",
+          "src": "looked",
           "zh": "看起來"
         },
         {
           "w": "southern",
+          "src": "southern",
           "zh": "南方"
         },
         {
           "w": "gate",
+          "src": "gate",
           "zh": "閘道"
         },
         {
           "w": "heaven",
+          "src": "heaven",
           "zh": "天堂"
         },
         {
           "w": "see",
+          "src": "saw",
           "zh": "看"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "earth",
+          "src": "earth",
           "zh": "地線(黃綠)"
         },
         {
           "w": "light",
+          "src": "light",
           "zh": "輕"
         },
         {
           "w": "go",
+          "src": "gone",
           "zh": "去"
         },
         {
           "w": "captain",
+          "src": "captain",
           "zh": "機長"
         },
         {
           "w": "magical",
+          "src": "magical",
           "zh": "神奇"
         },
         {
           "w": "sight",
+          "src": "sight",
           "zh": "視線"
         },
         {
           "w": "everything",
+          "src": "everything",
           "zh": "全部"
         },
         {
           "w": "happened",
+          "src": "happened",
           "zh": "已發生"
         },
         {
           "w": "interesting",
+          "src": "interesting",
           "zh": "耐人尋味"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         }
       ]
@@ -330,38 +400,47 @@
       "words": [
         {
           "w": "captain",
+          "src": "captain",
           "zh": "機長"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "jade",
+          "src": "jade",
           "zh": "玉石"
         },
         {
           "w": "emperor",
+          "src": "emperor",
           "zh": "皇帝"
         },
         {
           "w": "returned",
+          "src": "returned",
           "zh": "退回"
         },
         {
           "w": "caused",
+          "src": "caused",
           "zh": "因果"
         },
         {
           "w": "light",
+          "src": "light",
           "zh": "輕"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "asked",
+          "src": "asked",
           "zh": "已提問"
         }
       ]
@@ -372,51 +451,53 @@
       "words": [
         {
           "w": "captain",
+          "src": "captain",
           "zh": "機長"
         },
         {
-          "w": "he'",
-          "zh": "HE"
-        },
-        {
           "w": "fruit",
+          "src": "fruit",
           "zh": "水果"
         },
         {
           "w": "flower",
+          "src": "flower",
           "zh": "花"
         },
         {
           "w": "mountain",
+          "src": "mountain",
           "zh": "山"
         },
         {
           "w": "earth",
+          "src": "earth",
           "zh": "地線(黃綠)"
         },
         {
           "w": "rock",
+          "src": "rock",
           "zh": "搖滾, 搖滾"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "come",
+          "src": "came",
           "zh": "來"
         },
         {
           "w": "light",
+          "src": "light",
           "zh": "輕"
         },
         {
           "w": "shone",
+          "src": "shone",
           "zh": "閃耀"
-        },
-        {
-          "w": "monkey'",
-          "zh": "猴子"
         }
       ]
     },
@@ -426,62 +507,72 @@
       "words": [
         {
           "w": "eye",
+          "src": "eyes",
           "zh": "眼睛"
         },
         {
           "w": "emperor",
+          "src": "emperor",
           "zh": "皇帝"
         },
         {
           "w": "think",
+          "src": "thought",
           "zh": "思维"
         },
         {
           "w": "moment",
+          "src": "moment",
           "zh": "短片"
         },
         {
           "w": "shrugged",
+          "src": "shrugged",
           "zh": "聳聳肩"
         },
         {
-          "w": "i'm",
-          "zh": "我"
-        },
-        {
           "w": "surprised",
+          "src": "surprised",
           "zh": "驚訝, 驚訝"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "amazing",
+          "src": "amazing",
           "zh": "令人驚奇的"
         },
         {
           "w": "thing",
+          "src": "things",
           "zh": "一樣。"
         },
         {
           "w": "happen",
+          "src": "happen",
           "zh": "發生"
         },
         {
           "w": "heaven",
+          "src": "heaven",
           "zh": "天堂"
         },
         {
           "w": "earth",
+          "src": "earth",
           "zh": "地線(黃綠)"
         },
         {
           "w": "work",
+          "src": "work",
           "zh": "工時"
         },
         {
           "w": "together",
+          "src": "together",
           "zh": "都混在一起"
         }
       ]
@@ -492,6 +583,7 @@
       "words": [
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         }
       ]
@@ -502,42 +594,52 @@
       "words": [
         {
           "w": "time",
+          "src": "time",
           "zh": "時間"
         },
         {
           "w": "passed",
+          "src": "passed",
           "zh": "通過"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "learned",
+          "src": "learned",
           "zh": "学习"
         },
         {
           "w": "walk",
+          "src": "walk",
           "zh": "走"
         },
         {
           "w": "run",
+          "src": "run",
           "zh": "執行"
         },
         {
           "w": "climb",
+          "src": "climb",
           "zh": "攀爬"
         },
         {
           "w": "drank",
+          "src": "drank",
           "zh": "喝了"
         },
         {
           "w": "stream",
+          "src": "streams",
           "zh": "資料流"
         },
         {
           "w": "ate",
+          "src": "ate",
           "zh": "吃"
         }
       ]
@@ -548,30 +650,37 @@
       "words": [
         {
           "w": "grass",
+          "src": "grasses",
           "zh": "草"
         },
         {
           "w": "leave",
+          "src": "leaves",
           "zh": "歷史"
         },
         {
           "w": "gathered",
+          "src": "gathered",
           "zh": "已聚集"
         },
         {
           "w": "fruit",
+          "src": "fruit",
           "zh": "水果"
         },
         {
           "w": "explored",
+          "src": "explored",
           "zh": "已探索：{0}%"
         },
         {
           "w": "cave",
+          "src": "caves",
           "zh": "洞穴"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         }
       ]
@@ -582,50 +691,62 @@
       "words": [
         {
           "w": "mountaintop",
+          "src": "mountaintops",
           "zh": "山頂"
         },
         {
           "w": "become",
+          "src": "became",
           "zh": "成為"
         },
         {
           "w": "friend",
+          "src": "friends",
           "zh": "朋友"
         },
         {
           "w": "monkey",
+          "src": "monkeys",
           "zh": "猴子"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         },
         {
           "w": "night",
+          "src": "night",
           "zh": "晚night"
         },
         {
           "w": "slept",
+          "src": "slept",
           "zh": "睡眠"
         },
         {
           "w": "cliff",
+          "src": "cliff",
           "zh": "崖"
         },
         {
           "w": "hot",
+          "src": "hot",
           "zh": "熱門"
         },
         {
           "w": "morning",
+          "src": "morning",
           "zh": "上午"
         },
         {
           "w": "playing",
+          "src": "playing",
           "zh": "播放中"
         }
       ]
@@ -636,58 +757,72 @@
       "words": [
         {
           "w": "shade",
+          "src": "shade",
           "zh": "陰天"
         },
         {
           "w": "hot",
+          "src": "hot",
           "zh": "熱門"
         },
         {
           "w": "today",
+          "src": "today",
           "zh": "今天得知"
         },
         {
           "w": "cried",
+          "src": "cried",
           "zh": "哭了"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
-          "w": "let'",
+          "w": "let",
+          "src": "let's",
           "zh": "LET"
         },
         {
           "w": "play",
+          "src": "play",
           "zh": "播放"
         },
         {
           "w": "stream",
+          "src": "stream",
           "zh": "資料流"
         },
         {
           "w": "good",
+          "src": "good",
           "zh": "很好"
         },
         {
           "w": "idea",
+          "src": "idea",
           "zh": "思考中"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         },
         {
           "w": "run",
+          "src": "ran",
           "zh": "執行"
         }
       ]
@@ -698,50 +833,62 @@
       "words": [
         {
           "w": "water",
+          "src": "water",
           "zh": "水"
         },
         {
           "w": "rolled",
+          "src": "rolled",
           "zh": "捲起"
         },
         {
           "w": "bounced",
+          "src": "bounced",
           "zh": "退回"
         },
         {
           "w": "rock",
+          "src": "rocks",
           "zh": "搖滾, 搖滾"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "jumped",
+          "src": "jumped",
           "zh": "已開啟鏈結"
         },
         {
           "w": "cool",
+          "src": "cool",
           "zh": "酷"
         },
         {
           "w": "everyone",
+          "src": "everyone",
           "zh": "所有人"
         },
         {
           "w": "splashed",
+          "src": "splashed",
           "zh": "濺水"
         },
         {
           "w": "played",
+          "src": "played",
           "zh": "已播放"
         },
         {
           "w": "minute",
+          "src": "minutes",
           "zh": "分"
         },
         {
           "w": "scratched",
+          "src": "scratched",
           "zh": "劃傷"
         }
       ]
@@ -752,58 +899,72 @@
       "words": [
         {
           "w": "head",
+          "src": "head",
           "zh": "頭部"
         },
         {
           "w": "love",
+          "src": "love",
           "zh": "愛(love)"
         },
         {
           "w": "stream",
+          "src": "stream",
           "zh": "資料流"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "drink",
+          "src": "drink",
           "zh": "飲料"
         },
         {
           "w": "swim",
+          "src": "swim",
           "zh": "SWIM"
         },
         {
           "w": "know",
+          "src": "know",
           "zh": "知道"
         },
         {
           "w": "flow",
+          "src": "flows",
           "zh": "流程"
         },
         {
           "w": "way",
+          "src": "way",
           "zh": "方式"
         },
         {
           "w": "ocean",
+          "src": "ocean",
           "zh": "海洋"
         },
         {
           "w": "anyone",
+          "src": "anyone",
           "zh": "任何人"
         },
         {
           "w": "begin",
+          "src": "begins",
           "zh": "開始"
         },
         {
           "w": "looked",
+          "src": "looked",
           "zh": "看起來"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         }
       ]
@@ -814,78 +975,92 @@
       "words": [
         {
           "w": "shook",
+          "src": "shook",
           "zh": "震撼"
         },
         {
           "w": "head",
+          "src": "heads",
           "zh": "頭部"
         },
         {
           "w": "nothing",
+          "src": "nothing",
           "zh": "無"
         },
         {
           "w": "today",
+          "src": "today",
           "zh": "今天得知"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "continued",
+          "src": "continued",
           "zh": "(continued)"
         },
         {
-          "w": "don't",
-          "zh": "不要"
-        },
-        {
           "w": "follow",
+          "src": "follow",
           "zh": "追隨, 追隨, 追蹤"
         },
         {
           "w": "stream",
+          "src": "stream",
           "zh": "資料流"
         },
         {
           "w": "find",
+          "src": "find",
           "zh": "尋找"
         },
         {
           "w": "source",
+          "src": "source",
           "zh": "來源化"
         },
         {
           "w": "sound",
+          "src": "sounds",
           "zh": "合理"
         },
         {
           "w": "like",
+          "src": "like",
           "zh": "讚"
         },
         {
           "w": "fun",
+          "src": "fun",
           "zh": "樂趣"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         },
         {
-          "w": "let'",
+          "w": "let",
+          "src": "let's",
           "zh": "LET"
         },
         {
           "w": "go",
+          "src": "go",
           "zh": "去"
         },
         {
           "w": "third",
+          "src": "third",
           "zh": "第三個"
         }
       ]
@@ -896,74 +1071,92 @@
       "words": [
         {
           "w": "everyone",
+          "src": "everyone",
           "zh": "所有人"
         },
         {
           "w": "jumped",
+          "src": "jumped",
           "zh": "已開啟鏈結"
         },
         {
           "w": "water",
+          "src": "water",
           "zh": "水"
         },
         {
           "w": "run",
+          "src": "ran",
           "zh": "執行"
         },
         {
           "w": "alongside",
+          "src": "alongside",
           "zh": "旁邊"
         },
         {
           "w": "stream",
+          "src": "stream",
           "zh": "資料流"
         },
         {
           "w": "swung",
+          "src": "swung",
           "zh": "摇摆音符"
         },
         {
           "w": "tree",
+          "src": "tree",
           "zh": "樹狀"
         },
         {
           "w": "rock",
+          "src": "rocks",
           "zh": "搖滾, 搖滾"
         },
         {
           "w": "climbed",
+          "src": "climbed",
           "zh": "已攀登"
         },
         {
           "w": "steep",
+          "src": "steep",
           "zh": "陡峭"
         },
         {
           "w": "cliff",
+          "src": "cliffs",
           "zh": "崖"
         },
         {
           "w": "higher",
+          "src": "higher",
           "zh": "較高"
         },
         {
           "w": "go",
+          "src": "went",
           "zh": "去"
         },
         {
           "w": "mountain",
+          "src": "mountain",
           "zh": "山"
         },
         {
           "w": "reached",
+          "src": "reached",
           "zh": "到達"
         },
         {
           "w": "enormous",
+          "src": "enormous",
           "zh": "巨大"
         },
         {
           "w": "waterfall",
+          "src": "waterfall",
           "zh": "瀑布"
         }
       ]
@@ -974,70 +1167,82 @@
       "words": [
         {
           "w": "mist",
+          "src": "mist",
           "zh": "薄霧"
         },
         {
           "w": "filled",
+          "src": "filled",
           "zh": "填充"
         },
         {
           "w": "air",
+          "src": "air",
           "zh": "空氣"
         },
         {
           "w": "water",
+          "src": "water",
           "zh": "水"
         },
         {
           "w": "crashed",
+          "src": "crashed",
           "zh": "被撞毀"
         },
         {
           "w": "roaring",
+          "src": "roaring",
           "zh": "咆哮"
         },
         {
           "w": "like",
+          "src": "like",
           "zh": "讚"
         },
         {
           "w": "thunder",
+          "src": "thunder",
           "zh": "打雷"
         },
         {
           "w": "wonder",
+          "src": "wonder",
           "zh": "wonder"
         },
         {
-          "w": "what'",
-          "zh": "想搵乜"
-        },
-        {
           "w": "behind",
+          "src": "behind",
           "zh": "後方"
         },
         {
           "w": "waterfall",
+          "src": "waterfall",
           "zh": "瀑布"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "second",
+          "src": "second",
           "zh": "秒"
         },
         {
           "w": "nobody",
+          "src": "nobody",
           "zh": "沒有人"
         },
         {
           "w": "jump",
+          "src": "jump",
           "zh": "跳躍"
         }
       ]
@@ -1048,58 +1253,62 @@
       "words": [
         {
           "w": "whoever",
+          "src": "whoever",
           "zh": "無論是誰"
         },
         {
-          "w": "can",
-          "zh": "可以"
-        },
-        {
           "w": "jump",
+          "src": "jump",
           "zh": "跳躍"
         },
         {
           "w": "come",
+          "src": "come",
           "zh": "來"
         },
         {
           "w": "back",
+          "src": "back",
           "zh": "trở lại"
         },
         {
           "w": "alive",
+          "src": "alive",
           "zh": "活的"
         },
         {
-          "w": "will",
-          "zh": "將"
-        },
-        {
           "w": "king",
+          "src": "king",
           "zh": "國王"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "gibon",
+          "src": "gibon",
           "zh": "gibon"
         },
         {
           "w": "anyone",
+          "src": "anyone",
           "zh": "任何人"
         },
         {
           "w": "brave",
+          "src": "brave",
           "zh": "勇敢傳說"
         },
         {
           "w": "enough",
+          "src": "enough",
           "zh": "夠"
         },
         {
           "w": "try",
+          "src": "try",
           "zh": "試"
         }
       ]
@@ -1110,54 +1319,62 @@
       "words": [
         {
           "w": "monkey",
+          "src": "monkeys",
           "zh": "猴子"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         },
         {
           "w": "looked",
+          "src": "looked",
           "zh": "看起來"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         },
         {
           "w": "shook",
+          "src": "shook",
           "zh": "震撼"
         },
         {
           "w": "head",
+          "src": "heads",
           "zh": "頭部"
         },
         {
-          "w": "i'm",
-          "zh": "我"
-        },
-        {
           "w": "go",
+          "src": "going",
           "zh": "去"
         },
         {
           "w": "try",
+          "src": "try",
           "zh": "試"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "tall",
+          "src": "tall",
           "zh": "tall!"
         },
         {
           "w": "neither",
+          "src": "neither",
           "zh": "皆不"
         },
         {
           "w": "short",
+          "src": "short",
           "zh": "short"
         }
       ]
@@ -1168,78 +1385,87 @@
       "words": [
         {
           "w": "voice",
+          "src": "voice",
           "zh": "聲音"
         },
         {
           "w": "called",
+          "src": "called",
           "zh": "呼叫"
         },
         {
-          "w": "i'll",
-          "zh": "我會"
-        },
-        {
           "w": "everyone",
+          "src": "everyone",
           "zh": "所有人"
         },
         {
           "w": "moved",
+          "src": "moved",
           "zh": "已移動"
         },
         {
           "w": "way",
+          "src": "way",
           "zh": "方式"
         },
         {
           "w": "speaker",
+          "src": "speaker",
           "zh": "擴音器"
         },
         {
           "w": "stepped",
+          "src": "stepped",
           "zh": "階梯式"
         },
         {
           "w": "forward",
+          "src": "forward",
           "zh": "轉接"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "sure",
+          "src": "sure",
           "zh": "確認"
         },
         {
           "w": "asked",
+          "src": "asked",
           "zh": "已提問"
         },
         {
           "w": "gibbon",
+          "src": "gibbon",
           "zh": "長臂猿"
         },
         {
           "w": "look",
+          "src": "looks",
           "zh": "視圖"
         },
         {
           "w": "dangerous",
+          "src": "dangerous",
           "zh": "危險的"
         },
         {
           "w": "laughed",
+          "src": "laughed",
           "zh": "笑"
         },
         {
-          "w": "i'm",
-          "zh": "我"
-        },
-        {
           "w": "afraid",
+          "src": "afraid",
           "zh": "害怕"
         },
         {
           "w": "anything",
+          "src": "anything",
           "zh": "全部"
         }
       ]
@@ -1250,42 +1476,47 @@
       "words": [
         {
           "w": "come",
+          "src": "come",
           "zh": "來"
         },
         {
           "w": "back",
+          "src": "back",
           "zh": "trở lại"
         },
         {
-          "w": "will",
-          "zh": "將"
-        },
-        {
           "w": "king",
+          "src": "king",
           "zh": "國王"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "take",
+          "src": "took",
           "zh": "take"
         },
         {
           "w": "deep",
+          "src": "deep",
           "zh": "深～"
         },
         {
           "w": "breath",
+          "src": "breath",
           "zh": "呼吸"
         },
         {
           "w": "leaped",
+          "src": "leaped",
           "zh": "跳躍"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         }
       ]
@@ -1296,22 +1527,27 @@
       "words": [
         {
           "w": "waterfall",
+          "src": "waterfall",
           "zh": "瀑布"
         },
         {
           "w": "journey",
+          "src": "journey",
           "zh": "旅程圖"
         },
         {
           "w": "west",
+          "src": "west",
           "zh": "西"
         },
         {
           "w": "chapter",
+          "src": "chapter",
           "zh": "章"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         }
       ]
@@ -1322,54 +1558,67 @@
       "words": [
         {
           "w": "cave",
+          "src": "cave",
           "zh": "洞穴"
         },
         {
           "w": "monkey",
+          "src": "monkeys",
           "zh": "猴子"
         },
         {
           "w": "splashed",
+          "src": "splashed",
           "zh": "濺水"
         },
         {
           "w": "waterfall",
+          "src": "waterfall",
           "zh": "瀑布"
         },
         {
           "w": "landed",
+          "src": "landed",
           "zh": "已降落"
         },
         {
           "w": "large",
+          "src": "large",
           "zh": "最大"
         },
         {
           "w": "eye",
+          "src": "eyes",
           "zh": "眼睛"
         },
         {
           "w": "opened",
+          "src": "opened",
           "zh": "已開啟"
         },
         {
           "w": "wide",
+          "src": "wide",
           "zh": "寬"
         },
         {
           "w": "filled",
+          "src": "filled",
           "zh": "填充"
         },
         {
           "w": "bamboo",
+          "src": "bamboo",
           "zh": "竹子"
         },
         {
           "w": "tree",
+          "src": "trees",
           "zh": "樹狀"
         },
         {
           "w": "beautiful",
+          "src": "beautiful",
           "zh": "漂亮"
         }
       ]
@@ -1380,70 +1629,87 @@
       "words": [
         {
           "w": "flower",
+          "src": "flowers",
           "zh": "花"
         },
         {
           "w": "moss",
+          "src": "moss",
           "zh": "苔藓植物门"
         },
         {
           "w": "covered",
+          "src": "covered",
           "zh": "已覆蓋"
         },
         {
           "w": "wall",
+          "src": "walls",
           "zh": "留言板"
         },
         {
           "w": "stream",
+          "src": "stream",
           "zh": "資料流"
         },
         {
           "w": "flowed",
+          "src": "flowed",
           "zh": "流淌"
         },
         {
           "w": "cave",
+          "src": "cave",
           "zh": "洞穴"
         },
         {
           "w": "glowing",
+          "src": "glowing",
           "zh": "full of praise 好評 讚揚"
         },
         {
           "w": "light",
+          "src": "light",
           "zh": "輕"
         },
         {
           "w": "mist",
+          "src": "mist",
           "zh": "薄霧"
         },
         {
           "w": "filled",
+          "src": "filled",
           "zh": "填充"
         },
         {
           "w": "air",
+          "src": "air",
           "zh": "空氣"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "find",
+          "src": "found",
           "zh": "尋找"
         },
         {
           "w": "long",
+          "src": "long",
           "zh": "长"
         },
         {
           "w": "table",
+          "src": "table",
           "zh": "資料表"
         },
         {
           "w": "bowl",
+          "src": "bowls",
           "zh": "湯碗"
         }
       ]
@@ -1454,74 +1720,92 @@
       "words": [
         {
           "w": "cup",
+          "src": "cups",
           "zh": "杯子"
         },
         {
           "w": "plate",
+          "src": "plates",
           "zh": "片"
         },
         {
           "w": "fireplace",
+          "src": "fireplace",
           "zh": "壁爐"
         },
         {
           "w": "sit",
+          "src": "sat",
           "zh": "坐"
         },
         {
           "w": "wall",
+          "src": "wall",
           "zh": "留言板"
         },
         {
           "w": "deeper",
+          "src": "deeper",
           "zh": "深入"
         },
         {
           "w": "cave",
+          "src": "cave",
           "zh": "洞穴"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "find",
+          "src": "found",
           "zh": "尋找"
         },
         {
           "w": "bedroom",
+          "src": "bedrooms",
           "zh": "睡房"
         },
         {
           "w": "cozy",
+          "src": "cozy",
           "zh": "溫馨"
         },
         {
           "w": "bed",
+          "src": "beds",
           "zh": "床"
         },
         {
           "w": "outside",
+          "src": "outside",
           "zh": "外部"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         },
         {
           "w": "looking",
+          "src": "looking",
           "zh": "看起來"
         },
         {
           "w": "waterfall",
+          "src": "waterfall",
           "zh": "瀑布"
         },
         {
           "w": "think",
+          "src": "think",
           "zh": "思维"
         },
         {
           "w": "make",
+          "src": "made",
           "zh": "製作"
         }
       ]
@@ -1532,62 +1816,77 @@
       "words": [
         {
           "w": "asked",
+          "src": "asked",
           "zh": "已提問"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         },
         {
           "w": "probably",
+          "src": "probably",
           "zh": "大概"
         },
         {
           "w": "get",
+          "src": "got",
           "zh": "取得"
         },
         {
           "w": "washed",
+          "src": "washed",
           "zh": "水洗"
         },
         {
           "w": "away",
+          "src": "away",
           "zh": "離開"
         },
         {
           "w": "river",
+          "src": "river",
           "zh": "河"
         },
         {
           "w": "suddenly",
+          "src": "suddenly",
           "zh": "忽然"
         },
         {
           "w": "splash",
+          "src": "splash",
           "zh": "濺, 潑"
         },
         {
           "w": "shot",
+          "src": "shot",
           "zh": "流感 a 和 B (流感疫苗)"
         },
         {
           "w": "waterfall",
+          "src": "waterfall",
           "zh": "瀑布"
         },
         {
           "w": "landed",
+          "src": "landed",
           "zh": "已降落"
         },
         {
           "w": "front",
+          "src": "front",
           "zh": "自拍"
         }
       ]
@@ -1598,54 +1897,62 @@
       "words": [
         {
           "w": "group",
+          "src": "group",
           "zh": "群組"
         },
         {
-          "w": "you're",
-          "zh": "你"
-        },
-        {
           "w": "alive",
+          "src": "alive",
           "zh": "活的"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "laughed",
+          "src": "laughed",
           "zh": "笑"
         },
         {
           "w": "lucky",
+          "src": "lucky",
           "zh": "幸運的"
         },
         {
           "w": "find",
+          "src": "found",
           "zh": "尋找"
         },
         {
           "w": "perfect",
+          "src": "perfect",
           "zh": "完美"
         },
         {
           "w": "home",
+          "src": "home",
           "zh": "主頁"
         },
         {
           "w": "follow",
+          "src": "follow",
           "zh": "追隨, 追隨, 追蹤"
         },
         {
           "w": "jumped",
+          "src": "jumped",
           "zh": "已開啟鏈結"
         },
         {
           "w": "back",
+          "src": "back",
           "zh": "trở lại"
         }
       ]
@@ -1656,58 +1963,72 @@
       "words": [
         {
           "w": "water",
+          "src": "water",
           "zh": "水"
         },
         {
           "w": "monkey",
+          "src": "monkeys",
           "zh": "猴子"
         },
         {
           "w": "scratched",
+          "src": "scratched",
           "zh": "劃傷"
         },
         {
           "w": "head",
+          "src": "heads",
           "zh": "頭部"
         },
         {
           "w": "still",
+          "src": "still",
           "zh": "至"
         },
         {
           "w": "look",
+          "src": "looks",
           "zh": "視圖"
         },
         {
           "w": "dangerous",
+          "src": "dangerous",
           "zh": "危險的"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
-          "w": "let'",
+          "w": "let",
+          "src": "let's",
           "zh": "LET"
         },
         {
           "w": "go",
+          "src": "go",
           "zh": "去"
         },
         {
           "w": "gibbon",
+          "src": "gibbon",
           "zh": "長臂猿"
         },
         {
           "w": "leaped",
+          "src": "leaped",
           "zh": "跳躍"
         },
         {
           "w": "waterfall",
+          "src": "waterfall",
           "zh": "瀑布"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         }
       ]
@@ -1718,54 +2039,67 @@
       "words": [
         {
           "w": "jumped",
+          "src": "jumped",
           "zh": "已開啟鏈結"
         },
         {
           "w": "soon",
+          "src": "soon",
           "zh": "%s 即刻處理"
         },
         {
           "w": "monkey",
+          "src": "monkeys",
           "zh": "猴子"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         },
         {
           "w": "cave",
+          "src": "cave",
           "zh": "洞穴"
         },
         {
           "w": "everyone",
+          "src": "everyone",
           "zh": "所有人"
         },
         {
           "w": "run",
+          "src": "ran",
           "zh": "執行"
         },
         {
           "w": "around",
+          "src": "around",
           "zh": "周圍"
         },
         {
           "w": "see",
+          "src": "see",
           "zh": "看"
         },
         {
           "w": "wonderful",
+          "src": "wonderful",
           "zh": "超棒的"
         },
         {
           "w": "thing",
+          "src": "things",
           "zh": "一樣。"
         },
         {
           "w": "beautiful",
+          "src": "beautiful",
           "zh": "漂亮"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         }
       ]
@@ -1776,70 +2110,87 @@
       "words": [
         {
           "w": "give",
+          "src": "given",
           "zh": "Give"
         },
         {
           "w": "monkey",
+          "src": "monkeys",
           "zh": "猴子"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         },
         {
           "w": "begin",
+          "src": "began",
           "zh": "開始"
         },
         {
           "w": "fighting",
+          "src": "fighting",
           "zh": "格鬥"
         },
         {
           "w": "arguing",
+          "src": "arguing",
           "zh": "逻辑论证"
         },
         {
           "w": "grabbed",
+          "src": "grabbed",
           "zh": "抓住"
         },
         {
           "w": "plate",
+          "src": "plates",
           "zh": "片"
         },
         {
           "w": "bowl",
+          "src": "bowls",
           "zh": "湯碗"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         },
         {
           "w": "other",
+          "src": "others",
           "zh": "其他"
         },
         {
           "w": "fought",
+          "src": "fought",
           "zh": "戰鬥"
         },
         {
           "w": "bedroom",
+          "src": "bedrooms",
           "zh": "睡房"
         },
         {
           "w": "see",
+          "src": "saw",
           "zh": "看"
         },
         {
           "w": "bed",
+          "src": "bed",
           "zh": "床"
         },
         {
           "w": "first",
+          "src": "first",
           "zh": "第一"
         },
         {
           "w": "yelled",
+          "src": "yelled",
           "zh": "大喊大叫"
         }
       ]
@@ -1850,42 +2201,52 @@
       "words": [
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "yelled",
+          "src": "yelled",
           "zh": "大喊大叫"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         },
         {
           "w": "watched",
+          "src": "watched",
           "zh": "已觀看"
         },
         {
           "w": "friend",
+          "src": "friends",
           "zh": "朋友"
         },
         {
           "w": "moment",
+          "src": "moment",
           "zh": "短片"
         },
         {
           "w": "folded",
+          "src": "folded",
           "zh": "折疊"
         },
         {
           "w": "arm",
+          "src": "arms",
           "zh": "臂"
         },
         {
           "w": "called",
+          "src": "called",
           "zh": "呼叫"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         }
       ]
@@ -1896,50 +2257,52 @@
       "words": [
         {
           "w": "stopped",
+          "src": "stopped",
           "zh": "已停止"
         },
         {
           "w": "looked",
+          "src": "looked",
           "zh": "看起來"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "find",
+          "src": "found",
           "zh": "尋找"
         },
         {
           "w": "cave",
+          "src": "cave",
           "zh": "洞穴"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "mean",
+          "src": "means",
           "zh": "平均"
         },
         {
           "w": "king",
+          "src": "king",
           "zh": "國王"
         },
         {
-          "w": "aren't",
-          "zh": "不是"
-        },
-        {
           "w": "bowing",
+          "src": "bowing",
           "zh": "鞠躬, 鞠躬"
         },
         {
-          "w": "he'",
-          "zh": "HE"
-        },
-        {
           "w": "right",
+          "src": "right",
           "zh": "右"
         }
       ]
@@ -1950,34 +2313,42 @@
       "words": [
         {
           "w": "gibbon",
+          "src": "gibbon",
           "zh": "長臂猿"
         },
         {
           "w": "bowed",
+          "src": "bowed",
           "zh": "鞠躬"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "hail",
+          "src": "hail",
           "zh": "哈伊勒市"
         },
         {
           "w": "king",
+          "src": "king",
           "zh": "國王"
         },
         {
           "w": "everyone",
+          "src": "everyone",
           "zh": "所有人"
         },
         {
           "w": "else",
+          "src": "else",
           "zh": "其他還有"
         }
       ]
@@ -1988,54 +2359,67 @@
       "words": [
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         },
         {
           "w": "shouted",
+          "src": "shouted",
           "zh": "喊道"
         },
         {
           "w": "many",
+          "src": "many",
           "zh": "很多"
         },
         {
           "w": "year",
+          "src": "years",
           "zh": "年"
         },
         {
           "w": "go",
+          "src": "went",
           "zh": "去"
         },
         {
           "w": "day",
+          "src": "day",
           "zh": "天day"
         },
         {
           "w": "monkey",
+          "src": "monkeys",
           "zh": "猴子"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         },
         {
           "w": "played",
+          "src": "played",
           "zh": "已播放"
         },
         {
           "w": "forest",
+          "src": "forest",
           "zh": "森林綠"
         },
         {
           "w": "stream",
+          "src": "stream",
           "zh": "資料流"
         },
         {
           "w": "every",
+          "src": "every",
           "zh": "事件重複每天/周/月"
         },
         {
           "w": "night",
+          "src": "night",
           "zh": "晚night"
         }
       ]
@@ -2046,74 +2430,92 @@
       "words": [
         {
           "w": "slept",
+          "src": "slept",
           "zh": "睡眠"
         },
         {
           "w": "safely",
+          "src": "safely",
           "zh": "安全"
         },
         {
           "w": "cave",
+          "src": "cave",
           "zh": "洞穴"
         },
         {
           "w": "night",
+          "src": "night",
           "zh": "晚night"
         },
         {
           "w": "monkey",
+          "src": "monkeys",
           "zh": "猴子"
         },
         {
           "w": "ape",
+          "src": "apes",
           "zh": "猿"
         },
         {
           "w": "huge",
+          "src": "huge",
           "zh": "巨大的"
         },
         {
           "w": "feast",
+          "src": "feast",
           "zh": "盛宴"
         },
         {
           "w": "fruit",
+          "src": "fruits",
           "zh": "水果"
         },
         {
           "w": "nut",
+          "src": "nuts",
           "zh": "螺帽"
         },
         {
           "w": "covered",
+          "src": "covered",
           "zh": "已覆蓋"
         },
         {
           "w": "table",
+          "src": "table",
           "zh": "資料表"
         },
         {
           "w": "danced",
+          "src": "danced",
           "zh": "跳舞"
         },
         {
           "w": "sang",
+          "src": "sang",
           "zh": "唱歌"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         },
         {
           "w": "played",
+          "src": "played",
           "zh": "已播放"
         },
         {
           "w": "sit",
+          "src": "sat",
           "zh": "坐"
         },
         {
           "w": "throne",
+          "src": "throne",
           "zh": "（國王、女王的）御座，寶座"
         }
       ]
@@ -2124,59 +2526,68 @@
       "words": [
         {
           "w": "smiled",
+          "src": "smiled",
           "zh": "微微一笑"
         },
         {
           "w": "smile",
+          "src": "smile",
           "zh": "微笑"
         },
         {
           "w": "faded",
+          "src": "faded",
           "zh": "已褪色"
         },
         {
           "w": "soon",
+          "src": "soon",
           "zh": "%s 即刻處理"
         },
         {
           "w": "frowning",
+          "src": "frowning",
           "zh": "皺眉"
         },
         {
           "w": "gibbon",
+          "src": "gibbon",
           "zh": "長臂猿"
         },
         {
           "w": "see",
+          "src": "saw",
           "zh": "看"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "rushed",
+          "src": "rushed",
           "zh": "匆忙"
         },
         {
           "w": "majesty",
+          "src": "majesty",
           "zh": "陛下"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "look",
+          "src": "look",
           "zh": "視圖"
         },
         {
           "w": "sad",
+          "src": "sad",
           "zh": "悲傷, 悲傷"
-        },
-        {
-          "w": "what'",
-          "zh": "想搵乜"
         }
       ]
     },
@@ -2186,58 +2597,67 @@
       "words": [
         {
           "w": "wrong",
+          "src": "wrong",
           "zh": "錯誤"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "side",
+          "src": "side",
           "zh": "一方的意見（或態度、立場）"
         },
         {
           "w": "life",
+          "src": "life",
           "zh": "生存"
         },
         {
           "w": "perfect",
+          "src": "perfect",
           "zh": "完美"
         },
         {
-          "w": "that'",
-          "zh": "問說"
-        },
-        {
           "w": "true",
+          "src": "true",
           "zh": "符合條件"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "gibbon",
+          "src": "gibbon",
           "zh": "長臂猿"
         },
         {
           "w": "sad",
+          "src": "sad",
           "zh": "悲傷, 悲傷"
         },
         {
           "w": "quiet",
+          "src": "quiet",
           "zh": "of a person 文靜"
         },
         {
           "w": "moment",
+          "src": "moment",
           "zh": "短片"
         },
         {
           "w": "someday",
+          "src": "someday",
           "zh": "有朝一日"
         },
         {
           "w": "live",
+          "src": "lives",
           "zh": "live"
         }
       ]
@@ -2247,67 +2667,73 @@
       "end": 594,
       "words": [
         {
-          "w": "will",
-          "zh": "將"
-        },
-        {
           "w": "end",
+          "src": "end",
           "zh": "結束"
         },
         {
           "w": "wish",
+          "src": "wish",
           "zh": "Wish"
         },
         {
           "w": "perfect",
+          "src": "perfect",
           "zh": "完美"
         },
         {
           "w": "life",
+          "src": "life",
           "zh": "生存"
         },
         {
           "w": "last",
+          "src": "last",
           "zh": "最後"
         },
         {
           "w": "forever",
+          "src": "forever",
           "zh": "永遠"
         },
         {
-          "w": "gibbon'",
+          "w": "gibbon",
+          "src": "gibbon's",
           "zh": "長臂猿"
         },
         {
           "w": "eye",
+          "src": "eyes",
           "zh": "眼睛"
         },
         {
           "w": "lit",
+          "src": "lit",
           "zh": "lit"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "want",
+          "src": "want",
           "zh": "要"
         },
         {
           "w": "live",
+          "src": "live",
           "zh": "live"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
-          "w": "gibbon",
-          "zh": "長臂猿"
-        },
-        {
           "w": "rubbed",
+          "src": "rubbed",
           "zh": "摩擦"
         }
       ]
@@ -2318,54 +2744,57 @@
       "words": [
         {
           "w": "chin",
+          "src": "chin",
           "zh": "下巴"
         },
         {
-          "w": "must",
-          "zh": "必須*"
-        },
-        {
           "w": "study",
+          "src": "study",
           "zh": "閱讀室"
         },
         {
           "w": "sage",
+          "src": "sage",
           "zh": "Sage"
         },
         {
           "w": "wise",
+          "src": "wise",
           "zh": "明智的"
         },
         {
           "w": "person",
+          "src": "people",
           "zh": "人物"
         },
         {
-          "w": "can",
-          "zh": "可以"
-        },
-        {
           "w": "turn",
+          "src": "turn",
           "zh": "轉動"
         },
         {
           "w": "animal",
+          "src": "animals",
           "zh": "動物"
         },
         {
           "w": "fly",
+          "src": "fly",
           "zh": "飛"
         },
         {
           "w": "sky",
+          "src": "sky",
           "zh": "天空蓝"
         },
         {
           "w": "know",
+          "src": "know",
           "zh": "知道"
         },
         {
           "w": "live",
+          "src": "live",
           "zh": "live"
         }
       ]
@@ -2376,70 +2805,67 @@
       "words": [
         {
           "w": "forever",
+          "src": "forever",
           "zh": "永遠"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "smiled",
+          "src": "smiled",
           "zh": "微微一笑"
         },
         {
-          "w": "can",
-          "zh": "可以"
-        },
-        {
           "w": "find",
+          "src": "find",
           "zh": "尋找"
         },
         {
           "w": "sage",
+          "src": "sage",
           "zh": "Sage"
         },
         {
           "w": "asked",
+          "src": "asked",
           "zh": "已提問"
         },
         {
-          "w": "must",
-          "zh": "必須*"
-        },
-        {
           "w": "land",
+          "src": "land",
           "zh": "地"
         },
         {
           "w": "person",
+          "src": "people",
           "zh": "人物"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "gibbon",
+          "src": "gibbon",
           "zh": "長臂猿"
         },
         {
-          "w": "that'",
-          "zh": "問說"
-        },
-        {
-          "w": "you'll",
-          "zh": "你會"
-        },
-        {
           "w": "next",
+          "src": "next",
           "zh": "下一個"
         },
         {
           "w": "morning",
+          "src": "morning",
           "zh": "上午"
         },
         {
           "w": "build",
+          "src": "built",
           "zh": "組建"
         }
       ]
@@ -2450,66 +2876,77 @@
       "words": [
         {
           "w": "raft",
+          "src": "raft",
           "zh": "列印基座"
         },
         {
           "w": "loaded",
+          "src": "loaded",
           "zh": "已載入"
         },
         {
           "w": "food",
+          "src": "food",
           "zh": "食物"
         },
         {
           "w": "onto",
+          "src": "onto",
           "zh": "满射"
         },
         {
           "w": "pushed",
+          "src": "pushed",
           "zh": "推"
         },
         {
           "w": "stream",
+          "src": "stream",
           "zh": "資料流"
         },
         {
           "w": "jumped",
+          "src": "jumped",
           "zh": "已開啟鏈結"
         },
         {
           "w": "begin",
+          "src": "began",
           "zh": "開始"
         },
         {
           "w": "float",
+          "src": "float",
           "zh": "浮動"
         },
         {
           "w": "away",
+          "src": "away",
           "zh": "離開"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "waved",
+          "src": "waved",
           "zh": "揮了揮手"
         },
         {
           "w": "friend",
+          "src": "friends",
           "zh": "朋友"
         },
         {
-          "w": "don't",
-          "zh": "不要"
-        },
-        {
           "w": "worry",
+          "src": "worry",
           "zh": "擔心"
         },
         {
           "w": "called",
+          "src": "called",
           "zh": "呼叫"
         }
       ]
@@ -2520,22 +2957,22 @@
       "words": [
         {
           "w": "learn",
+          "src": "learn",
           "zh": "學"
         },
         {
           "w": "live",
+          "src": "live",
           "zh": "live"
         },
         {
           "w": "forever",
+          "src": "forever",
           "zh": "永遠"
         },
         {
-          "w": "will",
-          "zh": "將"
-        },
-        {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         }
       ]
@@ -2546,22 +2983,27 @@
       "words": [
         {
           "w": "return",
+          "src": "return",
           "zh": "退回"
         },
         {
           "w": "journey",
+          "src": "journey",
           "zh": "旅程圖"
         },
         {
           "w": "west",
+          "src": "west",
           "zh": "西"
         },
         {
           "w": "chapter",
+          "src": "chapter",
           "zh": "章"
         },
         {
           "w": "sabod",
+          "src": "sabod",
           "zh": "sabod"
         }
       ]
@@ -2572,78 +3014,92 @@
       "words": [
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "sailed",
+          "src": "sailed",
           "zh": "已起航"
         },
         {
           "w": "ocean",
+          "src": "ocean",
           "zh": "海洋"
         },
         {
           "w": "long",
+          "src": "long",
           "zh": "长"
         },
         {
           "w": "time",
+          "src": "time",
           "zh": "時間"
         },
         {
           "w": "finally",
+          "src": "finally",
           "zh": "最後"
         },
         {
           "w": "arrived",
+          "src": "arrived",
           "zh": "到達"
         },
         {
           "w": "new",
+          "src": "new",
           "zh": "新"
         },
         {
           "w": "land",
+          "src": "land",
           "zh": "地"
         },
         {
           "w": "walked",
+          "src": "walked",
           "zh": "步行"
         },
         {
           "w": "many",
+          "src": "many",
           "zh": "很多"
         },
         {
           "w": "year",
+          "src": "years",
           "zh": "年"
         },
         {
           "w": "visiting",
+          "src": "visiting",
           "zh": "參觀"
         },
         {
           "w": "town",
+          "src": "towns",
           "zh": "城镇"
         },
         {
           "w": "meeting",
+          "src": "meeting",
           "zh": "會議"
         },
         {
           "w": "person",
+          "src": "people",
           "zh": "人物"
         },
         {
-          "w": "didn't",
-          "zh": "沒有"
-        },
-        {
           "w": "find",
+          "src": "find",
           "zh": "尋找"
         },
         {
           "w": "sage",
+          "src": "sage",
           "zh": "Sage"
         }
       ]
@@ -2654,78 +3110,97 @@
       "words": [
         {
           "w": "anywhere",
+          "src": "anywhere",
           "zh": "在任何地方"
         },
         {
           "w": "eventually",
+          "src": "eventually",
           "zh": "最終"
         },
         {
           "w": "come",
+          "src": "came",
           "zh": "來"
         },
         {
           "w": "mountain",
+          "src": "mountains",
           "zh": "山"
         },
         {
           "w": "covered",
+          "src": "covered",
           "zh": "已覆蓋"
         },
         {
           "w": "thick",
+          "src": "thick",
           "zh": "秀髮豐盈"
         },
         {
           "w": "forest",
+          "src": "forest",
           "zh": "森林綠"
         },
         {
           "w": "headed",
+          "src": "headed",
           "zh": "headed"
         },
         {
           "w": "steep",
+          "src": "steep",
           "zh": "陡峭"
         },
         {
           "w": "trail",
+          "src": "trail",
           "zh": "軌跡"
         },
         {
           "w": "soon",
+          "src": "soon",
           "zh": "%s 即刻處理"
         },
         {
           "w": "hear",
+          "src": "heard",
           "zh": "審理"
         },
         {
           "w": "chopping",
+          "src": "chopping",
           "zh": "切碎"
         },
         {
           "w": "wood",
+          "src": "wood",
           "zh": "樹林/林地"
         },
         {
           "w": "cutter",
+          "src": "cutter",
           "zh": "美工刀"
         },
         {
           "w": "firewood",
+          "src": "firewood",
           "zh": "柴"
         },
         {
           "w": "hello",
+          "src": "hello",
           "zh": "哈囉"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         }
       ]
@@ -2736,63 +3211,68 @@
       "words": [
         {
           "w": "sage",
+          "src": "sages",
           "zh": "Sage"
         },
         {
           "w": "mountain",
+          "src": "mountains",
           "zh": "山"
         },
         {
           "w": "wood",
+          "src": "wood",
           "zh": "樹林/林地"
         },
         {
           "w": "cutter",
+          "src": "cutter",
           "zh": "美工刀"
         },
         {
           "w": "dropped",
+          "src": "dropped",
           "zh": "丟棄"
         },
         {
           "w": "axe",
+          "src": "axe",
           "zh": "斧头"
         },
         {
-          "w": "you're",
-          "zh": "你"
-        },
-        {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "talking",
+          "src": "talking",
           "zh": "對話"
         },
         {
           "w": "want",
+          "src": "want",
           "zh": "要"
         },
         {
           "w": "live",
+          "src": "live",
           "zh": "live"
         },
         {
           "w": "forever",
+          "src": "forever",
           "zh": "永遠"
         },
         {
           "w": "know",
+          "src": "know",
           "zh": "知道"
-        },
-        {
-          "w": "can",
-          "zh": "可以"
         }
       ]
     },
@@ -2802,63 +3282,73 @@
       "words": [
         {
           "w": "find",
+          "src": "find",
           "zh": "尋找"
         },
         {
           "w": "sage",
+          "src": "sage",
           "zh": "Sage"
         },
         {
           "w": "wood",
+          "src": "wood",
           "zh": "樹林/林地"
         },
         {
           "w": "cutter",
+          "src": "cutter",
           "zh": "美工刀"
         },
         {
           "w": "scratched",
+          "src": "scratched",
           "zh": "劃傷"
         },
         {
           "w": "head",
+          "src": "head",
           "zh": "頭部"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "named",
+          "src": "named",
           "zh": "名称"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
           "w": "live",
+          "src": "lives",
           "zh": "live"
         },
         {
           "w": "mountain",
+          "src": "mountain",
           "zh": "山"
         },
         {
           "w": "wise",
+          "src": "wise",
           "zh": "明智的"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "excited",
+          "src": "excited",
           "zh": "興奮"
-        },
-        {
-          "w": "can",
-          "zh": "可以"
         }
       ]
     },
@@ -2868,42 +3358,47 @@
       "words": [
         {
           "w": "follow",
+          "src": "follow",
           "zh": "追隨, 追隨, 追蹤"
         },
         {
           "w": "trail",
+          "src": "trail",
           "zh": "軌跡"
         },
         {
-          "w": "will",
-          "zh": "將"
-        },
-        {
           "w": "come",
+          "src": "come",
           "zh": "來"
         },
         {
           "w": "home",
+          "src": "home",
           "zh": "主頁"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "wood",
+          "src": "wood",
           "zh": "樹林/林地"
         },
         {
           "w": "cutter",
+          "src": "cutter",
           "zh": "美工刀"
         },
         {
           "w": "thank",
+          "src": "thank",
           "zh": "感謝"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         }
       ]
@@ -2914,78 +3409,97 @@
       "words": [
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "waved",
+          "src": "waved",
           "zh": "揮了揮手"
         },
         {
           "w": "goodbye",
+          "src": "goodbye",
           "zh": "再見"
         },
         {
           "w": "woodcutter",
+          "src": "woodcutter",
           "zh": "伐木工"
         },
         {
           "w": "run",
+          "src": "ran",
           "zh": "執行"
         },
         {
           "w": "trail",
+          "src": "trail",
           "zh": "軌跡"
         },
         {
           "w": "soon",
+          "src": "soon",
           "zh": "%s 即刻處理"
         },
         {
           "w": "see",
+          "src": "saw",
           "zh": "看"
         },
         {
           "w": "temple",
+          "src": "temple",
           "zh": "太陽穴 粵: 魂精"
         },
         {
           "w": "build",
+          "src": "built",
           "zh": "組建"
         },
         {
           "w": "side",
+          "src": "side",
           "zh": "一方的意見（或態度、立場）"
         },
         {
           "w": "mountain",
+          "src": "mountain",
           "zh": "山"
         },
         {
           "w": "saot",
+          "src": "saot",
           "zh": "saot"
         },
         {
           "w": "sitting",
+          "src": "sitting",
           "zh": "坐"
         },
         {
           "w": "student",
+          "src": "students",
           "zh": "名學員"
         },
         {
           "w": "main",
+          "src": "main",
           "zh": "主要"
         },
         {
           "w": "room",
+          "src": "room",
           "zh": "廳"
         },
         {
           "w": "looked",
+          "src": "looked",
           "zh": "看起來"
         },
         {
           "w": "oldest",
+          "src": "oldest",
           "zh": "較舊的"
         }
       ]
@@ -2996,42 +3510,52 @@
       "words": [
         {
           "w": "student",
+          "src": "student",
           "zh": "名學員"
         },
         {
           "w": "please",
+          "src": "please",
           "zh": "請"
         },
         {
           "w": "go",
+          "src": "go",
           "zh": "去"
         },
         {
           "w": "door",
+          "src": "door",
           "zh": "门"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "sabod",
+          "src": "sabod",
           "zh": "sabod"
         },
         {
           "w": "new",
+          "src": "new",
           "zh": "新"
         },
         {
           "w": "arrive",
+          "src": "arrive",
           "zh": "抵達"
         },
         {
           "w": "let",
+          "src": "let",
           "zh": "LET"
         },
         {
           "w": "looked",
+          "src": "looked",
           "zh": "看起來"
         }
       ]
@@ -3042,34 +3566,42 @@
       "words": [
         {
           "w": "confused",
+          "src": "confused",
           "zh": "困惑"
         },
         {
           "w": "master",
+          "src": "master",
           "zh": "主要"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "student",
+          "src": "student",
           "zh": "名學員"
         },
         {
           "w": "get",
+          "src": "got",
           "zh": "取得"
         },
         {
           "w": "go",
+          "src": "went",
           "zh": "去"
         },
         {
           "w": "door",
+          "src": "door",
           "zh": "门"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         }
       ]
@@ -3080,70 +3612,82 @@
       "words": [
         {
           "w": "temple",
+          "src": "temple",
           "zh": "太陽穴 粵: 魂精"
         },
         {
           "w": "looked",
+          "src": "looked",
           "zh": "看起來"
         },
         {
           "w": "outside",
+          "src": "outside",
           "zh": "外部"
         },
         {
           "w": "hello",
+          "src": "hello",
           "zh": "哈囉"
         },
         {
           "w": "cold",
+          "src": "cold",
           "zh": "沒有興趣"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
-          "w": "i'm",
-          "zh": "我"
-        },
-        {
           "w": "see",
+          "src": "see",
           "zh": "看"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
           "w": "moment",
+          "src": "moment",
           "zh": "短片"
         },
         {
           "w": "later",
+          "src": "later",
           "zh": "晚"
         },
         {
           "w": "standing",
+          "src": "standing",
           "zh": "站立中"
         },
         {
           "w": "front",
+          "src": "front",
           "zh": "自拍"
         },
         {
           "w": "sage",
+          "src": "sage",
           "zh": "Sage"
         },
         {
           "w": "want",
+          "src": "want",
           "zh": "要"
         },
         {
           "w": "student",
+          "src": "student",
           "zh": "名學員"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         }
       ]
@@ -3154,66 +3698,67 @@
       "words": [
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
-          "w": "you're",
-          "zh": "你"
-        },
-        {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
-          "w": "can",
-          "zh": "可以"
-        },
-        {
           "w": "student",
+          "src": "student",
           "zh": "名學員"
         },
         {
           "w": "laughed",
+          "src": "laughed",
           "zh": "笑"
         },
         {
-          "w": "might",
-          "zh": "威望"
-        },
-        {
           "w": "walk",
+          "src": "walk",
           "zh": "走"
         },
         {
           "w": "talk",
+          "src": "talk",
           "zh": "傾訴"
         },
         {
           "w": "many",
+          "src": "many",
           "zh": "很多"
         },
         {
           "w": "thing",
+          "src": "things",
           "zh": "一樣。"
         },
         {
           "w": "traveled",
+          "src": "traveled",
           "zh": "旅行"
         },
         {
           "w": "almost",
+          "src": "almost",
           "zh": "幾乎"
         },
         {
           "w": "year",
+          "src": "years",
           "zh": "年"
         },
         {
           "w": "get",
+          "src": "get",
           "zh": "取得"
         }
       ]
@@ -3223,56 +3768,54 @@
       "end": 822,
       "words": [
         {
-          "w": "i'm",
-          "zh": "我"
-        },
-        {
           "w": "sure",
+          "src": "sure",
           "zh": "確認"
         },
         {
-          "w": "can",
-          "zh": "可以"
-        },
-        {
           "w": "student",
+          "src": "student",
           "zh": "名學員"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
           "w": "stared",
+          "src": "stared",
           "zh": "盯着"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "moment",
+          "src": "moment",
           "zh": "短片"
         },
         {
           "w": "parent",
+          "src": "parents",
           "zh": "父代"
         },
         {
           "w": "asked",
+          "src": "asked",
           "zh": "已提問"
         },
         {
           "w": "scratched",
+          "src": "scratched",
           "zh": "劃傷"
         },
         {
           "w": "head",
+          "src": "head",
           "zh": "頭部"
-        },
-        {
-          "w": "don't",
-          "zh": "不要"
         }
       ]
     },
@@ -3282,58 +3825,67 @@
       "words": [
         {
           "w": "parent",
+          "src": "parents",
           "zh": "父代"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "born",
+          "src": "born",
           "zh": "天生"
         },
         {
           "w": "rock",
+          "src": "rock",
           "zh": "搖滾, 搖滾"
         },
         {
           "w": "interesting",
+          "src": "interesting",
           "zh": "耐人尋味"
         },
         {
           "w": "sabod",
+          "src": "sabod",
           "zh": "sabod"
         },
         {
           "w": "probably",
+          "src": "probably",
           "zh": "大概"
         },
         {
           "w": "created",
+          "src": "created",
           "zh": "建立"
         },
         {
           "w": "heaven",
+          "src": "heaven",
           "zh": "天堂"
         },
         {
           "w": "earth",
+          "src": "earth",
           "zh": "地線(黃綠)"
         },
         {
-          "w": "may",
-          "zh": "5月"
-        },
-        {
           "w": "student",
+          "src": "student",
           "zh": "名學員"
         },
         {
           "w": "need",
+          "src": "need",
           "zh": "需要"
         },
         {
           "w": "name",
+          "src": "name",
           "zh": "名稱"
         }
       ]
@@ -3344,54 +3896,62 @@
       "words": [
         {
           "w": "think",
+          "src": "thought",
           "zh": "思维"
         },
         {
           "w": "moment",
+          "src": "moment",
           "zh": "短片"
         },
         {
-          "w": "will",
-          "zh": "將"
-        },
-        {
           "w": "call",
+          "src": "call",
           "zh": "致電"
         },
         {
           "w": "son",
+          "src": "son",
           "zh": "歌"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         },
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "next",
+          "src": "next",
           "zh": "下一個"
         },
         {
           "w": "year",
+          "src": "years",
           "zh": "年"
         },
         {
           "w": "lived",
+          "src": "lived",
           "zh": "Live"
         },
         {
-          "w": "sod'",
-          "zh": "sod '"
+          "w": "sod",
+          "src": "sod's",
+          "zh": "草皮"
         },
         {
           "w": "temple",
+          "src": "temple",
           "zh": "太陽穴 粵: 魂精"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         }
       ]
@@ -3402,46 +3962,57 @@
       "words": [
         {
           "w": "spend",
+          "src": "spent",
           "zh": "花錢"
         },
         {
           "w": "day",
+          "src": "days",
           "zh": "天day"
         },
         {
           "w": "meditating",
+          "src": "meditating",
           "zh": "冥想"
         },
         {
           "w": "listening",
+          "src": "listening",
           "zh": "正在聆聽"
         },
         {
           "w": "teacher",
+          "src": "teachers",
           "zh": "教師"
         },
         {
           "w": "lesson",
+          "src": "lessons",
           "zh": "課程單元"
         },
         {
           "w": "chore",
+          "src": "chores",
           "zh": "家務"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
           "w": "giving",
+          "src": "giving",
           "zh": "奉獻"
         },
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "started",
+          "src": "started",
           "zh": "開始"
         }
       ]
@@ -3452,67 +4023,73 @@
       "words": [
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         },
         {
           "w": "dance",
+          "src": "dance",
           "zh": "舞會"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
           "w": "stand",
+          "src": "stood",
           "zh": "維持不變 remain"
         },
         {
           "w": "dare",
+          "src": "dare",
           "zh": "敢"
         },
         {
-          "w": "i'm",
-          "zh": "我"
-        },
-        {
           "w": "teaching",
+          "src": "teaching",
           "zh": "教導"
         },
         {
           "w": "shouted",
+          "src": "shouted",
           "zh": "喊道"
         },
         {
           "w": "sorry",
+          "src": "sorry",
           "zh": "抱歉"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "happy",
+          "src": "happy",
           "zh": "開心"
         },
         {
           "w": "needed",
+          "src": "needed",
           "zh": "需要"
         },
         {
           "w": "sobot",
+          "src": "sobot",
           "zh": "sobot"
         },
         {
           "w": "calmed",
+          "src": "calmed",
           "zh": "平靜下來"
-        },
-        {
-          "w": "you're",
-          "zh": "你"
         }
       ]
     },
@@ -3522,38 +4099,47 @@
       "words": [
         {
           "w": "happy",
+          "src": "happy",
           "zh": "開心"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "monkey",
+          "src": "monkey",
           "zh": "猴子"
         },
         {
           "w": "love",
+          "src": "love",
           "zh": "愛(love)"
         },
         {
           "w": "learning",
+          "src": "learning",
           "zh": "學習"
         },
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "long",
+          "src": "long",
           "zh": "长"
         },
         {
           "w": "time",
+          "src": "time",
           "zh": "時間"
         },
         {
           "w": "like",
+          "src": "like",
           "zh": "讚"
         }
       ]
@@ -3564,74 +4150,77 @@
       "words": [
         {
           "w": "learn",
+          "src": "learn",
           "zh": "學"
         },
         {
           "w": "asked",
+          "src": "asked",
           "zh": "已提問"
         },
         {
           "w": "zbot",
+          "src": "zbot",
           "zh": "zbot"
         },
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "shrugged",
+          "src": "shrugged",
           "zh": "聳聳肩"
         },
         {
-          "w": "don't",
-          "zh": "不要"
-        },
-        {
           "w": "know",
+          "src": "know",
           "zh": "知道"
         },
         {
           "w": "tell",
+          "src": "tell",
           "zh": "電話"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
-          "w": "can",
-          "zh": "可以"
-        },
-        {
           "w": "teach",
+          "src": "teach",
           "zh": "Teach 點位"
         },
         {
           "w": "future",
+          "src": "future",
           "zh": "未來"
         },
         {
           "w": "like",
+          "src": "like",
           "zh": "讚"
         },
         {
           "w": "maybe",
+          "src": "maybe",
           "zh": "也許"
         },
         {
-          "w": "will",
-          "zh": "將"
-        },
-        {
           "w": "make",
+          "src": "make",
           "zh": "製作"
         },
         {
           "w": "live",
+          "src": "live",
           "zh": "live"
         }
       ]
@@ -3642,62 +4231,72 @@
       "words": [
         {
           "w": "forever",
+          "src": "forever",
           "zh": "永遠"
         },
         {
           "w": "course",
+          "src": "course",
           "zh": "課程"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
           "w": "forget",
+          "src": "forget",
           "zh": "忘記"
         },
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "teach",
+          "src": "teach",
           "zh": "Teach 點位"
         },
         {
           "w": "something",
+          "src": "something",
           "zh": "一些東西。"
         },
         {
           "w": "else",
+          "src": "else",
           "zh": "其他還有"
         },
         {
           "w": "magic",
+          "src": "magic",
           "zh": "magic"
         },
         {
           "w": "breathing",
+          "src": "breathing",
           "zh": "呼吸"
         },
         {
           "w": "exercise",
+          "src": "exercises",
           "zh": "運動"
         },
         {
-          "w": "will",
-          "zh": "將"
-        },
-        {
           "w": "make",
+          "src": "make",
           "zh": "製作"
         },
         {
           "w": "live",
+          "src": "live",
           "zh": "live"
         }
       ]
@@ -3708,50 +4307,57 @@
       "words": [
         {
           "w": "asked",
+          "src": "asked",
           "zh": "已提問"
         },
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
           "w": "frowning",
+          "src": "frowning",
           "zh": "皺眉"
         },
         {
-          "w": "i'm",
-          "zh": "我"
-        },
-        {
           "w": "interested",
+          "src": "interested",
           "zh": "有興趣"
         },
         {
           "w": "become",
+          "src": "became",
           "zh": "成為"
         },
         {
           "w": "angry",
+          "src": "angry",
           "zh": "生氣, 生氣"
         },
         {
           "w": "stand",
+          "src": "stood",
           "zh": "維持不變 remain"
         },
         {
           "w": "knocked",
+          "src": "knocked",
           "zh": "敲了敲門"
         },
         {
           "w": "head",
+          "src": "head",
           "zh": "頭部"
         }
       ]
@@ -3762,46 +4368,57 @@
       "words": [
         {
           "w": "time",
+          "src": "times",
           "zh": "時間"
         },
         {
           "w": "leave",
+          "src": "left",
           "zh": "歷史"
         },
         {
           "w": "music",
+          "src": "music",
           "zh": "音樂"
         },
         {
           "w": "room",
+          "src": "room",
           "zh": "廳"
         },
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "say",
+          "src": "said",
           "zh": "說"
         },
         {
           "w": "another",
+          "src": "another",
           "zh": "另一"
         },
         {
           "w": "student",
+          "src": "student",
           "zh": "名學員"
         },
         {
           "w": "rude",
+          "src": "rude",
           "zh": "無禮。"
         },
         {
           "w": "master",
+          "src": "master",
           "zh": "主要"
         },
         {
           "w": "agreed",
+          "src": "agreed",
           "zh": "同意。"
         }
       ]
@@ -3812,38 +4429,47 @@
       "words": [
         {
           "w": "wukong",
+          "src": "wukong",
           "zh": "悟空"
         },
         {
           "w": "however",
+          "src": "however",
           "zh": "但是，"
         },
         {
           "w": "smiled",
+          "src": "smiled",
           "zh": "微微一笑"
         },
         {
           "w": "none",
+          "src": "none",
           "zh": "無"
         },
         {
           "w": "student",
+          "src": "students",
           "zh": "名學員"
         },
         {
           "w": "know",
+          "src": "knew",
           "zh": "知道"
         },
         {
           "w": "sabot",
+          "src": "sabot",
           "zh": "sabot"
         },
         {
           "w": "give",
+          "src": "given",
           "zh": "Give"
         },
         {
           "w": "secret",
+          "src": "secret",
           "zh": "祕密"
         }
       ]
@@ -3854,14 +4480,17 @@
       "words": [
         {
           "w": "message",
+          "src": "message",
           "zh": "訊息"
         },
         {
           "w": "little",
+          "src": "little",
           "zh": "小"
         },
         {
           "w": "box",
+          "src": "box",
           "zh": "REST測試框"
         }
       ]

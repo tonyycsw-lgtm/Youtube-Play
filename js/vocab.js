@@ -19,7 +19,7 @@ window.Vocab = (function () {
    'theyll theyre theyve this those through to too under until up very was wasnt we wed well were werent weve ' +
    'what whats when whens where wheres which while who whos whom why whys with wont would wouldnt you youd youll ' +
    'youre youve your yours yourself yourselves also one two three four five six seven eight nine ten mr mrs ms ' +
-   'ok okay oh ah ha hey yeah yes well gonna gotta wanna us').split(/\s+/).forEach(function (w) {
+   'ok okay oh ah ha hey yeah yes well gonna gotta wanna us can may might must shall will').split(/\s+/).forEach(function (w) {
     if (w) STOPWORDS[w] = true;
   });
 
@@ -75,14 +75,32 @@ window.Vocab = (function () {
     return w;
   }
 
+  /* ---------- 收縮詞還原 ---------- */
+  var CONTRACT = {
+    "can't": 'can', "won't": 'will', "shan't": 'shall', "ain't": 'is'
+  };
+  function normalizeToken(src) {
+    if (CONTRACT[src]) return CONTRACT[src];
+    var s = src.replace(/'s$/, '').replace(/'(re|ve|ll|d|m)$/, '');
+    if (/n't$/.test(s)) s = s.replace(/n't$/, '');
+    return s;
+  }
+
   /* ---------- 斷詞（保留內容詞，回傳 lemma 後的字） ---------- */
   function tokenize(text) {
+    return tokenizeDetailed(text).map(function (p) { return p.w; });
+  }
+
+  /* ---------- 斷詞（回傳 { w: 原型, src: 原字 }） ---------- */
+  function tokenizeDetailed(text) {
     var raw = String(text || '').toLowerCase().match(/[a-z][a-z']*/g) || [];
     var out = [];
     for (var i = 0; i < raw.length; i++) {
-      var w = raw[i].replace(/^'+|'+$/g, '');
-      if (!w || w.length < 2 || STOPWORDS[w]) continue;
-      out.push(lemma(w));
+      var src = raw[i].replace(/^'+|'+$/g, '');
+      if (!src || src.length < 2) continue;
+      var base = normalizeToken(src);
+      if (!base || base.length < 2 || STOPWORDS[base]) continue;
+      out.push({ w: lemma(base), src: src });
     }
     return out;
   }
@@ -109,8 +127,8 @@ window.Vocab = (function () {
     var segments = raw.map(function (seg) {
       var seen = {}, words = [];
       seg.texts.forEach(function (t) {
-        tokenize(t).forEach(function (w) {
-          if (!seen[w]) { seen[w] = true; words.push({ w: w, zh: '' }); }
+        tokenizeDetailed(t).forEach(function (p) {
+          if (!seen[p.w]) { seen[p.w] = true; words.push({ w: p.w, src: p.src, zh: '' }); }
         });
       });
       return { start: seg.start, end: seg.end, words: words };
@@ -123,8 +141,9 @@ window.Vocab = (function () {
     if (!data || !Array.isArray(data.segments)) return null;
     var segments = data.segments.map(function (seg) {
       var words = (seg.words || []).map(function (it) {
-        if (typeof it === 'string') return { w: it, zh: '' };
-        return { w: it.w || it.word || '', zh: it.zh || '' };
+        if (typeof it === 'string') return { w: it, src: it, zh: '' };
+        var w = it.w || it.word || '';
+        return { w: w, src: it.src || w, zh: it.zh || '' };
       }).filter(function (it) { return it.w; });
       return { start: +seg.start || 0, end: +seg.end || 0, words: words };
     }).filter(function (seg) { return seg.end > seg.start; });
@@ -157,6 +176,7 @@ window.Vocab = (function () {
   return {
     STOPWORDS: STOPWORDS,
     tokenize: tokenize,
+    tokenizeDetailed: tokenizeDetailed,
     lemma: lemma,
     buildSegments: buildSegments,
     extract: extract,

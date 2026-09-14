@@ -194,7 +194,7 @@ summary:hover{text-decoration:underline}
   background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:7px 8px;
 }
 .vw-row.removed{opacity:.4}
-.vw-word{font-weight:600;color:#dbeafe;flex:0 0 auto;min-width:66px;font-size:13.5px;word-break:break-word}
+.vw-word{font-weight:600;color:#dbeafe;flex:0 0 auto;min-width:92px;font-size:13.5px;word-break:break-word}
 .vw-zh{
   flex:1 1 auto;min-width:0;background:transparent;border:0;border-bottom:1px dashed var(--line);
   color:var(--text);font-family:var(--sans);font-size:13.5px;outline:none;padding:3px 4px;
@@ -794,6 +794,22 @@ summary:hover{text-decoration:underline}
     return list;
   }
 
+  function srcOf(lemma) {
+    var segs = state.vocabSegments || [];
+    for (var i = 0; i < segs.length; i++) {
+      var ws = segs[i].words;
+      for (var j = 0; j < ws.length; j++) {
+        if (ws[j].w === lemma) return ws[j].src || lemma;
+      }
+    }
+    return lemma;
+  }
+
+  function vocabLabel(lemma) {
+    var src = srcOf(lemma);
+    return (src && src !== lemma) ? src + ' (' + lemma + ')' : lemma;
+  }
+
   function buildVocab() {
     if (!state.cues.length) { setStatus('status-vocab', 'error', '請先載入字幕（步驟 1）。'); return; }
     var win = +$('sel-window').value || 10;
@@ -815,7 +831,7 @@ summary:hover{text-decoration:underline}
       row.dataset.w = w;
       var span = document.createElement('span');
       span.className = 'vw-word';
-      span.textContent = w;
+      span.textContent = vocabLabel(w);
       var input = document.createElement('input');
       input.className = 'vw-zh';
       input.type = 'text';
@@ -867,7 +883,7 @@ summary:hover{text-decoration:underline}
     var segs = (state.vocabSegments || []).map(function (seg) {
       var words = seg.words
         .filter(function (it) { return !state.vocabHidden[it.w]; })
-        .map(function (it) { return { w: it.w, zh: state.vocabGloss[it.w] || '' }; });
+        .map(function (it) { return { w: it.w, src: it.src || it.w, zh: state.vocabGloss[it.w] || '' }; });
       return {
         start: Math.round(seg.start * 100) / 100,
         end: Math.round(seg.end * 100) / 100,
