@@ -147,7 +147,15 @@ html, body {
 .player-desc { margin: 4px 0 0; font-size: 13px; color: var(--text-dim); }
 
 /* ---------- 播放頁：影片區 ---------- */
-.player-shell { padding-bottom: 48px; }
+.player-shell { max-width: 1440px; padding-bottom: 48px; }
+.player-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 20px;
+}
+.player-main { min-width: 0; }
+.player-side { min-width: 0; }
+.player-side .transcript-panel { position: sticky; top: 16px; }
 .video-wrap {
   position: relative;
   width: 100%;
@@ -385,13 +393,15 @@ html, body {
 
 /* ---------- 逐句字幕面板 ---------- */
 .transcript-panel {
-  margin-top: 16px;
+  margin-top: 0;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .transcript-head {
   display: flex;
@@ -405,11 +415,53 @@ html, body {
   color: var(--text-dim);
 }
 .hotkey-hint { font-size: 11.5px; color: var(--text-faint); font-family: monospace; }
+
+.transcript-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.sub-filter {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-soft);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.sub-filter::placeholder { color: var(--text-faint); }
+.sub-filter:focus { border-color: var(--accent); }
+
+.now-line {
+  padding: 11px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #fff;
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--border-soft);
+  border-left: 3px solid var(--accent);
+}
+.now-line:empty { display: none; }
+.now-line-time {
+  color: #93C5FD;
+  font-size: 12px;
+  margin-right: 6px;
+}
+
 .transcript-list {
-  max-height: 340px;
+  max-height: calc(100vh - 280px);
   overflow-y: auto;
   padding: 8px 0;
+  flex: 1 1 auto;
 }
+.player-side .transcript-list { max-height: calc(100vh - 300px); }
 .t-line {
   display: flex;
   gap: 14px;
@@ -427,6 +479,7 @@ html, body {
   align-items: baseline;
 }
 .t-line:hover { background: rgba(255, 255, 255, 0.045); }
+.t-line[hidden] { display: none; }
 .t-line.active {
   background: var(--accent-soft);
   border-left-color: var(--accent);
@@ -474,6 +527,12 @@ html, body {
 .osd.active { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
 /* ---------- 響應式 ---------- */
+@media (max-width: 1024px) {
+  .player-layout { grid-template-columns: 1fr; }
+  .player-side .transcript-panel { position: static; }
+  .transcript-list,
+  .player-side .transcript-list { max-height: 380px; }
+}
 @media (max-width: 760px) {
   .container { padding: 0 14px; }
   .program-grid { grid-template-columns: 1fr; }

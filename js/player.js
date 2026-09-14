@@ -35,7 +35,9 @@
     subNote: '',
     tickTimer: null,
     osdTimer: null,
-    lastActiveIdx: -1
+    lastActiveIdx: -1,
+    autoScroll: true,
+    filterText: ''
   };
 
   /* ================= 初始化 ================= */
@@ -198,6 +200,9 @@
 
   function renderTranscript() {
     var list = $('transcript-list');
+    var nowLine = $('now-line');
+    if (nowLine) nowLine.innerHTML = '';
+    App.lastActiveIdx = -1;
     if (!App.subtitles.length) {
       list.innerHTML = '<div class="transcript-empty">目前沒有字幕。' +
         (App.subNote ? '<br>' + escapeHtml(App.subNote) : '') + '</div>';
@@ -218,6 +223,20 @@
     });
     list.innerHTML = '';
     list.appendChild(frag);
+    applyFilter();
+  }
+
+  function applyFilter() {
+    var input = $('sub-filter');
+    if (!input) return;
+    var q = (input.value || '').trim().toLowerCase();
+    App.filterText = q;
+    var lines = document.querySelectorAll('#transcript-list .t-line');
+    for (var i = 0; i < lines.length; i++) {
+      var s = App.subtitles[i];
+      var hit = !q || (s && String(s.text).toLowerCase().indexOf(q) !== -1);
+      lines[i].hidden = !hit;
+    }
   }
 
   function renderSubtitle(t) {
@@ -234,7 +253,7 @@
       overlay.classList.add('visible');
     }
 
-    // 面板高亮 + 自動捲動（只在行改變時觸發，避免抖動）
+    // 面板高亮 + 目前句（只在行改變時觸發，避免抖動）
     var idx = active.length ? App.subtitles.indexOf(active[0]) : -1;
     if (idx !== App.lastActiveIdx) {
       App.lastActiveIdx = idx;
@@ -242,7 +261,14 @@
       for (var i = 0; i < lines.length; i++) {
         lines[i].classList.toggle('active', i === idx);
       }
-      if (idx >= 0 && lines[idx]) {
+      var nowLine = $('now-line');
+      if (nowLine) {
+        nowLine.innerHTML = idx >= 0
+          ? '<span class="now-line-time mono">' + formatTime(App.subtitles[idx].start) + '</span> ' +
+            escapeHtml(App.subtitles[idx].text).replace(/\n/g, ' / ')
+          : '';
+      }
+      if (App.autoScroll && idx >= 0 && lines[idx] && !lines[idx].hidden) {
         lines[idx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
     }
@@ -462,6 +488,19 @@
     });
     $('btn-copy').addEventListener('click', onCopyCard);
     $('btn-csv').addEventListener('click', onDownloadCSV);
+
+    $('sub-filter').addEventListener('input', applyFilter);
+    $('btn-autoscroll').addEventListener('click', function () {
+      App.autoScroll = !App.autoScroll;
+      this.classList.toggle('on', App.autoScroll);
+      showOSD(App.autoScroll ? '自動捲動：開' : '自動捲動：關', '#FFFFFF', 900);
+      if (App.autoScroll && App.lastActiveIdx >= 0) {
+        var lines = document.querySelectorAll('#transcript-list .t-line');
+        if (lines[App.lastActiveIdx]) {
+          lines[App.lastActiveIdx].scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+      }
+    });
 
     bindTimeline();
     bindKeyboard();

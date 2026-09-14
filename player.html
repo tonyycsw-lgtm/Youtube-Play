@@ -19,6 +19,8 @@
   </header>
 
   <main class="container player-shell">
+   <div class="player-layout">
+    <div class="player-main">
     <div class="video-wrap" id="video-wrap">
       <div id="player"></div>
       <div id="subtitle-overlay" class="subtitle-overlay" aria-live="polite"></div>
@@ -78,14 +80,23 @@
     </section>
 
     <div class="sub-note" id="sub-note">字幕載入中…</div>
+    </div>
 
-    <section class="transcript-panel" aria-label="字幕逐句列表">
+    <aside class="player-side" aria-label="逐句字幕">
+    <section class="transcript-panel">
       <div class="transcript-head">
         <span>逐句字幕（點句子 → 單句循環）</span>
-        <span class="hotkey-hint">快捷鍵：Alt+A 循環｜[ ] 設 A/B｜←→ 微調｜A/D 跳句</span>
+        <span class="hotkey-hint">Alt+A 循環｜[ ] 設 A/B｜←→ 微調｜A/D 跳句</span>
       </div>
+      <div class="transcript-tools">
+        <input id="sub-filter" class="sub-filter" type="search" placeholder="搜尋句子…" autocomplete="off">
+        <button class="mini-btn on" id="btn-autoscroll" title="跟隨播放自動捲動到目前句">自動捲動</button>
+      </div>
+      <div class="now-line" id="now-line"></div>
       <div id="transcript-list" class="transcript-list"></div>
     </section>
+    </aside>
+   </div>
   </main>
 
   <div id="osd" class="osd" aria-live="assertive"></div>
