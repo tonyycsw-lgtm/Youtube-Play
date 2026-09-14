@@ -1,0 +1,19 @@
+# 作業系統檔案
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 編輯器
+.vscode/
+.idea/
+
+# 預覽與暫存（非交付物）
+.preview/
+_shots/
+
+# Node
+node_modules/
+
+# 暫用檔案
+*.tmp
+*.log

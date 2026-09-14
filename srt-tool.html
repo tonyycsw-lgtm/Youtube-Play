@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRT 字幕產生工具 — 飛象影片學習站</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563EB'/%3E%3Crect x='10' y='24' width='44' height='6' rx='3' fill='%23fff'/%3E%3Crect x='10' y='38' width='28' height='6' rx='3' fill='%23fff' opacity='.7'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0e1116; --panel:rgba(24,24,30,.88); --panel-2:#141820;
+  --accent:#2563eb; --accent-2:#3b82f6; --accent-soft:rgba(37,99,235,.14);
+  --text:#e8eaed; --muted:#9aa0a6; --faint:#6f7681;
+  --line:rgba(255,255,255,.09);
+  --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
+  --mono:"Consolas","SF Mono",ui-monospace,Menlo,monospace;
+  --sans:"Segoe UI","PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  background:
+    radial-gradient(1100px 520px at 15% -8%, rgba(37,99,235,.13), transparent 60%),
+    var(--bg);
+  min-height:100vh;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent-2);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- 頂部 ---------- */
+.top{max-width:960px;margin:0 auto;padding:30px 20px 6px}
+.brand{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:13px;letter-spacing:.06em;color:var(--muted);
+}
+.brand .mark{
+  width:26px;height:26px;border-radius:8px;background:var(--accent);
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+}
+.brand .mark svg{width:14px;height:14px}
+h1{font-size:clamp(24px,4vw,34px);font-weight:800;margin-top:14px;letter-spacing:.01em}
+.tagline{color:var(--muted);font-size:15px;margin-top:6px;max-width:62ch}
+
+/* ---------- 步驟指示 ---------- */
+.steps{
+  max-width:960px;margin:26px auto 0;padding:0 20px;
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.step{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:999px;
+  background:var(--panel);border:1px solid var(--line);
+  color:var(--faint);font-size:13px;font-weight:600;
+}
+.step .n{
+  width:20px;height:20px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.07);font-size:11px;
+}
+.step.done{color:var(--text);border-color:rgba(37,99,235,.45);background:var(--accent-soft)}
+.step.done .n{background:var(--accent);color:#fff}
+
+/* ---------- 面板 ---------- */
+main{max-width:960px;margin:0 auto;padding:8px 20px 40px}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  margin-top:20px;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.panel h2{
+  font-size:17px;font-weight:700;margin-bottom:4px;
+  display:flex;align-items:center;gap:10px;
+}
+.panel h2 .badge{
+  flex:0 0 auto;font-size:11px;font-weight:800;letter-spacing:.08em;
+  color:var(--accent-2);background:var(--accent-soft);
+  padding:3px 9px;border-radius:6px;
+}
+.panel .desc{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+.panel[hidden]{display:none}
+
+/* ---------- 表單 ---------- */
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row .grow{flex:1 1 240px}
+label.field{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px}
+input[type=text],input[type=email],textarea,select{
+  width:100%;background:var(--panel-2);
+  border:1px solid var(--line);border-radius:10px;
+  color:var(--text);font-family:var(--sans);font-size:14px;
+  padding:11px 13px;outline:none;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.18)}
+textarea{resize:vertical;line-height:1.5}
+select{width:auto;min-width:150px;cursor:pointer}
+input[type=file]{font-size:13px;color:var(--muted);width:auto;max-width:100%}
+.hint{font-size:13px;color:var(--faint);margin-top:8px;line-height:1.6}
+.hint code{
+  font-family:var(--mono);font-size:12px;
+  background:rgba(255,255,255,.07);padding:2px 6px;border-radius:5px;color:#c7d2fe;
+}
+
+/* ---------- 按鈕 ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  background:rgba(255,255,255,.06);color:var(--text);
+  border:1px solid var(--line);border-radius:10px;
+  font-size:14px;font-weight:600;font-family:var(--sans);
+  padding:11px 18px;cursor:pointer;transition:background .15s,border-color .15s;
+}
+.btn:hover{background:rgba(255,255,255,.11)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+.btn.mini{padding:7px 11px;font-size:12.5px;border-radius:8px}
+.btn.danger:hover{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.5)}
+.btn:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+/* ---------- 狀態 ---------- */
+.status{
+  margin-top:14px;padding:11px 14px;border-radius:10px;
+  font-size:13.5px;border-left:3px solid var(--muted);background:rgba(255,255,255,.03);
+}
+.status[hidden]{display:none}
+.status.ok{border-color:var(--ok);color:#bbf7d0;background:rgba(34,197,94,.08)}
+.status.warn{border-color:var(--warn);color:#fde68a;background:rgba(245,158,11,.08)}
+.status.error{border-color:var(--err);color:#fecaca;background:rgba(239,68,68,.08)}
+.status.info{border-color:var(--accent);color:#bfdbfe;background:rgba(37,99,235,.08)}
+
+details{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+summary{cursor:pointer;font-size:13.5px;color:var(--accent-2);font-weight:600;user-select:none}
+summary:hover{text-decoration:underline}
+
+/* ---------- 翻譯 ---------- */
+.translate-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.progress{
+  margin-top:12px;font-size:13px;color:var(--muted);
+  padding:9px 13px;border-radius:9px;background:var(--accent-soft);
+  display:inline-block;
+}
+.progress[hidden]{display:none}
+
+/* ---------- 編輯器 ---------- */
+.cue-head,.cue-row{
+  display:grid;grid-template-columns:118px 1fr 1fr auto;gap:10px;align-items:start;
+}
+.cue-head{
+  font-size:12px;color:var(--faint);letter-spacing:.04em;
+  padding:0 2px 8px;border-bottom:1px solid var(--line);margin-bottom:6px;
+}
+.cue-list{max-height:52vh;overflow:auto;padding-right:4px}
+.cue-row{
+  padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.cue-time{
+  font-family:var(--mono);font-size:12.5px;color:var(--muted);
+  padding-top:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+}
+.cue-time .t-sep{color:var(--faint)}
+.cue-row textarea{font-size:13.5px;padding:9px 11px;min-height:52px}
+.cue-ops{display:flex;flex-direction:column;gap:7px}
+.cue-ops .btn{width:100%}
+
+/* ---------- 輸出 ---------- */
+.out-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.out-meta .count{font-size:13px;color:var(--muted)}
+#out-srt{
+  font-family:var(--mono);font-size:12.5px;min-height:220px;line-height:1.7;
+  white-space:pre;color:#d7dcff;
+}
+.footer{
+  max-width:960px;margin:0 auto;padding:10px 20px 46px;
+  color:var(--faint);font-size:13px;display:flex;gap:16px;flex-wrap:wrap;
+}
+
+@media (max-width:720px){
+  .panel{padding:16px}
+  .cue-head{display:none}
+  .cue-row{grid-template-columns:1fr}
+  .cue-time{padding-top:0}
+  .cue-ops{flex-direction:row}
+  .cue-ops .btn{width:auto}
+  .steps{gap:6px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="index.html">
+    <span class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#fff"/></svg>
+    </span>
+    飛象影片學習站
+  </a>
+  <h1>SRT 字幕產生工具</h1>
+  <p class="tagline">給老師使用：從 YouTube 抓取或貼上英文字幕，一鍵翻譯成繁體中文，逐句修改後匯出 SRT 檔，學生端即可看到中英對照字幕。</p>
+</header>
+
+<div class="steps" aria-label="步驟">
+  <span class="step done" id="step-1"><span class="n">1</span>選擇來源</span>
+  <span class="step" id="step-2"><span class="n">2</span>翻譯繁體中文</span>
+  <span class="step" id="step-3"><span class="n">3</span>逐句編輯</span>
+  <span class="step" id="step-4"><span class="n">4</span>匯出 SRT</span>
+</div>
+
+<main>
+  <!-- ===== 1 · 來源 ===== -->
+  <section class="panel">
+    <h2><span class="badge">步驟 1</span>選擇字幕來源</h2>
+    <p class="desc">貼上 YouTube 網址後按「從 YouTube 抓取字幕」；自動抓取需在 Cloudflare 部署後運作，亦可直接貼上字幕文字或上傳 SRT 檔。</p>
+
+    <div class="row">
+      <input type="text" id="in-url" class="grow" placeholder="貼上 YouTube 網址，例如 https://youtu.be/gj1v-L1bEQc">
+      <button type="button" class="btn primary" id="btn-fetch">從 YouTube 抓取字幕</button>
+    </div>
+    <p class="hint" id="detect-hint"></p>
+    <div class="status" id="status-src" hidden role="status"></div>
+
+    <details>
+      <summary>或使用其他方式：貼上字幕文字／上傳現有 SRT</summary>
+      <label class="field" for="in-paste">貼上字幕文字：可貼 SRT 全文、或 YouTube「顯示轉錄稿」複製的內容（含時間戳）</label>
+      <textarea id="in-paste" rows="6" placeholder="例如：&#10;0:01&#10;Long long ago, a magic stone gave birth to a monkey.&#10;0:07&#10;Everyone called him the Monkey King."></textarea>
+      <div class="btn-row">
+        <button type="button" class="btn" id="btn-parse-paste">解析貼上的文字</button>
+      </div>
+      <label class="field" for="in-file">或上傳現有 .srt 檔（可先上傳舊檔繼續編輯）</label>
+      <div class="row">
+        <input type="file" id="in-file" accept=".srt,text/plain">
+        <button type="button" class="btn" id="btn-load-file">讀取上傳的 SRT</button>
+      </div>
+    </details>
+  </section>
+
+  <!-- ===== 2 · 翻譯 ===== -->
+  <section class="panel" id="panel-translate" hidden>
+    <h2><span class="badge">步驟 2</span>翻譯成繁體中文</h2>
+    <p class="desc">把英文字幕整批翻譯成繁體中文。翻譯使用免費服務 MyMemory；個別句子翻譯不佳可直接在下方修改，翻譯失敗的句子會留空待手動補上。</p>
+    <div class="translate-bar">
+      <label class="field" for="sel-srclang" style="margin:0">來源語言</label>
+      <select id="sel-srclang">
+        <option value="en">英文（English）</option>
+        <option value="zh-CN">簡體中文</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="ja">日文</option>
+        <option value="ko">韓文</option>
+      </select>
+      <input type="email" id="in-email" placeholder="聯絡信箱（選填，提升每日免費額度）" style="flex:1 1 220px;width:auto">
+      <button type="button" class="btn primary" id="btn-translate-all">全部翻譯成繁體中文</button>
+    </div>
+    <p class="hint">填入聯絡信箱可把 MyMemory 免費額度從每日約 5,000 字提升至 50,000 字。翻譯後仍可逐句修改。</p>
+    <div class="progress" id="progress" hidden role="status"><span id="prog-text"></span></div>
+    <div class="status" id="status-tr" hidden role="status"></div>
+  </section>
+
+  <!-- ===== 3 · 編輯 ===== -->
+  <section class="panel" id="panel-edit" hidden>
+    <h2><span class="badge">步驟 3</span>逐句編輯</h2>
+    <p class="desc">上方為英文字幕，下方為繁體中文翻譯，皆可直接修改。時間軸若重疊會在匯出時自動修正。</p>
+    <div class="cue-head">
+      <span>時間</span><span>英文原文</span><span>繁體中文</span><span>操作</span>
+    </div>
+    <div class="cue-list" id="cue-list"></div>
+    <div class="btn-row">
+      <button type="button" class="btn" id="btn-add-cue">＋ 新增一行</button>
+    </div>
+  </section>
+
+  <!-- ===== 4 · 匯出 ===== -->
+  <section class="panel" id="panel-export" hidden>
+    <h2><span class="badge">步驟 4</span>匯出 SRT</h2>
+    <p class="desc">預覽並下載 SRT 檔。下載的檔案含 UTF-8 BOM，可直接用 Windows 記事本開啟。</p>
+    <div class="out-meta">
+      <label class="field" for="sel-mode" style="margin:0">輸出內容</label>
+      <select id="sel-mode">
+        <option value="both">中英雙語（英文在上、中文在下）</option>
+        <option value="zh">只繁體中文</option>
+        <option value="en">只英文</option>
+      </select>
+      <span class="count" id="out-count"></span>
+    </div>
+    <textarea id="out-srt" readonly spellcheck="false"></textarea>
+    <div class="btn-row">
+      <button type="button" class="btn" id="btn-copy">複製 SRT</button>
+      <button type="button" class="btn primary" id="btn-download">下載 SRT 檔</button>
+    </div>
+    <p class="hint">下載後把檔案放到專案 <code>subtitles/</code> 資料夾，檔名為 <code>{影片 ID}.srt</code>，學生端即自動使用（本工具偵測到的 ID 會自動帶入檔名）。也可在 <code>programs.json</code> 的該節目加 <code>"srt": "路徑.srt"</code> 指定其他檔名。</p>
+    <div class="status" id="status-out" hidden role="status"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <a href="index.html">返回影片學習站</a>
+  <a href="README.md">部署與使用說明</a>
+  <span>字幕自動抓取功能需部署至 Cloudflare Pages 後運作</span>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { videoId: '', lang: 'en', cues: [], translating: false };
+
+  /* ---------- 小工具 ---------- */
+  function setStatus(id, kind, msg) {
+    var el = $(id);
+    el.className = 'status ' + kind;
+    el.textContent = msg;
+    el.hidden = false;
+  }
+  function decodeEntities(s) {
+    var el = document.createElement('textarea');
+    el.innerHTML = String(s == null ? '' : s);
+    return el.value;
+  }
+  function fmtTime(sec) {
+    sec = Math.max(0, sec);
+    var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60),
+        s = Math.floor(sec % 60), ms = Math.round((sec - Math.floor(sec)) * 1000);
+    if (ms === 1000) { ms = 0; s += 1; }
+    var p = function (n, l) { return String(n).padStart(l, '0'); };
+    return p(h, 2) + ':' + p(m, 2) + ':' + p(s, 2) + ',' + p(ms, 3);
+  }
+  function toSec(h, m, s, ms) { return (+h || 0) * 3600 + (+m || 0) * 60 + (+s || 0) + ((+ms || 0) / 1000); }
+
+  /* ---------- 影片 ID ---------- */
+  function extractVideoId(url) {
+    if (!url) return '';
+    var m = String(url).match(/(?:youtu\.be\/|v=|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    var t = String(url).trim();
+    return /^[A-Za-z0-9_-]{11}$/.test(t) ? t : '';
+  }
+
+  /* ---------- 字幕解析 ---------- */
+  function parseSrtText(text) {
+    var normalized = String(text).replace(/\r/g, '').replace(/^\uFEFF/, '');
+    var blocks = normalized.split(/\n\s*\n/);
+    var subs = [];
+    for (var i = 0; i < blocks.length; i++) {
+      var lines = blocks[i].split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+      if (lines.length < 2) continue;
+      var ti = lines.findIndex(function (l) { return l.indexOf('-->') !== -1; });
+      if (ti === -1) continue;
+      var m = lines[ti].match(/(\d{1,2}):(\d{2}):(\d{2})[,.](\d{1,3})\s*-->\s*(\d{1,2}):(\d{2}):(\d{2})[,.](\d{1,3})/);
+      if (!m) continue;
+      var start = toSec(m[1], m[2], m[3], m[4]), end = toSec(m[5], m[6], m[7], m[8]);
+      var body = lines.slice(ti + 1).join('\n').trim();
+      if (body && end > start) subs.push({ start: start, end: end, text: body });
+    }
+    return subs;
+  }
+
+  var TS_RE = /^(?:(\d{1,2}):)?(\d{1,2}):(\d{2})(?:[.,](\d{1,3}))?$/;
+  function parseTranscriptText(text) {
+    var lines = String(text).replace(/^\uFEFF/, '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+    var cues = [], cur = null;
+    for (var i = 0; i < lines.length; i++) {
+      var m = lines[i].match(TS_RE);
+      if (m) {
+        if (cur) cues.push(cur);
+        cur = { start: toSec(m[1], m[2], m[3], m[4]), texts: [] };
+      } else if (cur) {
+        cur.texts.push(lines[i]);
+      } else {
+        cues.push({ start: 0, texts: [lines[i]] });
+      }
+    }
+    if (cur) cues.push(cur);
+    var out = [];
+    for (var j = 0; j < cues.length; j++) {
+      var c = cues[j], t = c.texts.join(' ').trim();
+      if (!t) continue;
+      var next = cues[j + 1];
+      var end = next ? next.start : c.start + 5;
+      if (end <= c.start) end = c.start + 1;
+      out.push({ start: c.start, end: end, text: t });
+    }
+    return out;
+  }
+
+  function parsePlainText(text) {
+    var lines = String(text).replace(/^\uFEFF/, '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+    var subs = [], t = 0;
+    for (var i = 0; i < lines.length; i++) {
+      subs.push({ start: t, end: t + 3, text: lines[i] });
+      t += 3;
+    }
+    return subs;
+  }
+
+  function toCues(subs) {
+    return subs.map(function (s) {
+      var parts = String(s.text).split('\n');
+      return { start: s.start, end: s.end, en: parts[0] || '', zh: parts.slice(1).join('\n') };
+    });
+  }
+
+  function loadCues(subs, label) {
+    state.cues = toCues(subs);
+    renderCues();
+    refreshPreview();
+    $('panel-translate').hidden = false;
+    $('panel-edit').hidden = false;
+    $('panel-export').hidden = false;
+    setSteps(2);
+  }
+
+  function setLang(lang) {
+    state.lang = lang;
+    var sel = $('sel-srclang');
+    var found = false;
+    for (var i = 0; i < sel.options.length; i++) { if (sel.options[i].value === lang) { found = true; break; } }
+    if (!found) {
+      var o = document.createElement('option');
+      o.value = lang; o.textContent = '自動（' + lang + '）';
+      sel.appendChild(o);
+    }
+    sel.value = lang;
+  }
+
+  /* ---------- 翻譯 ---------- */
+  function translateText(text) {
+    var pair = encodeURIComponent(state.lang + '|zh-TW');
+    var email = ($('in-email').value || '').trim();
+    var url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) +
+      '&langpair=' + pair + (email ? '&de=' + encodeURIComponent(email) : '');
+    return fetch(url).then(function (r) { return r.json(); }).then(function (data) {
+      var t = data && data.responseData && data.responseData.translatedText;
+      if (!t) return '';
+      t = decodeEntities(t);
+      if (t.indexOf('MYMEMORY WARNING') !== -1 || t.indexOf('QUERY LENGTH') !== -1) return '';
+      return t.trim();
+    });
+  }
+
+  function translateOne(i) {
+    var cue = state.cues[i];
+    if (!cue || !cue.en.trim()) return Promise.resolve('');
+    return translateText(cue.en).then(function (t) {
+      cue.zh = t;
+      var row = $('cue-list').querySelector('[data-i="' + i + '"]');
+      if (row) row.querySelector('.cue-zh').value = t;
+      refreshPreview();
+      return t;
+    });
+  }
+
+  async function translateAll() {
+    if (state.translating) return;
+    state.translating = true;
+    var btn = $('btn-translate-all');
+    btn.disabled = true;
+    var prog = $('progress');
+    prog.hidden = false;
+    var list = state.cues.map(function (c, i) { return { i: i, en: c.en, zh: c.zh }; })
+      .filter(function (c) { return c.en.trim() && !c.zh.trim(); });
+    var ok = 0, fail = 0;
+    for (var n = 0; n < list.length; n++) {
+      var item = list[n];
+      $('prog-text').textContent = (n + 1) + ' / ' + list.length + '（成功 ' + ok + '，略過 ' + fail + '）';
+      var t = await translateText(item.en);
+      if (t) {
+        state.cues[item.i].zh = t;
+        var row = $('cue-list').querySelector('[data-i="' + item.i + '"]');
+        if (row) row.querySelector('.cue-zh').value = t;
+        ok++;
+      } else { fail++; }
+      if (n % 5 === 4) await new Promise(function (r) { setTimeout(r, 150); });
+    }
+    prog.hidden = true;
+    btn.disabled = false;
+    state.translating = false;
+    refreshPreview();
+    setStatus('status-tr', fail ? 'warn' : 'ok',
+      '翻譯完成：成功 ' + ok + ' 句' + (fail ? '，' + fail + ' 句無法自動翻譯（已留空，可手動補上）' : '') + '。');
+  }
+
+  /* ---------- 編輯器 ---------- */
+  function renderCues() {
+    var list = $('cue-list');
+    list.innerHTML = '';
+    state.cues.forEach(function (c, i) {
+      var row = document.createElement('div');
+      row.className = 'cue-row';
+      row.dataset.i = i;
+      row.innerHTML =
+        '<div class="cue-time"><span>' + fmtTime(c.start) + '</span><span class="t-sep">–</span><span>' + fmtTime(c.end) + '</span></div>' +
+        '<textarea class="cue-en" rows="2" placeholder="英文原文"></textarea>' +
+        '<textarea class="cue-zh" rows="2" placeholder="繁體中文翻譯"></textarea>' +
+        '<div class="cue-ops">' +
+          '<button type="button" class="btn mini act-tr">翻譯此行</button>' +
+          '<button type="button" class="btn mini danger act-del">刪除</button>' +
+        '</div>';
+      row.querySelector('.cue-en').value = c.en;
+      row.querySelector('.cue-zh').value = c.zh;
+      list.appendChild(row);
+    });
+  }
+
+  $('cue-list').addEventListener('input', function (e) {
+    var row = e.target.closest('.cue-row');
+    if (!row) return;
+    var i = +row.dataset.i, c = state.cues[i];
+    if (!c) return;
+    if (e.target.classList.contains('cue-en')) c.en = e.target.value;
+    if (e.target.classList.contains('cue-zh')) c.zh = e.target.value;
+    refreshPreviewDebounced();
+  });
+
+  $('cue-list').addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var row = btn.closest('.cue-row');
+    if (!row) return;
+    var i = +row.dataset.i;
+    if (btn.classList.contains('act-del')) {
+      state.cues.splice(i, 1);
+      renderCues();
+      refreshPreview();
+    } else if (btn.classList.contains('act-tr')) {
+      translateOne(i).then(function (t) {
+        setStatus('status-tr', t ? 'ok' : 'warn', t ? '已翻譯此行。' : '此行無法自動翻譯，請手動輸入。');
+      });
+    }
+  });
+
+  $('btn-add-cue').addEventListener('click', function () {
+    var last = state.cues[state.cues.length - 1];
+    var start = last ? last.end : 0;
+    state.cues.push({ start: start, end: start + 3, en: '', zh: '' });
+    renderCues();
+    refreshPreview();
+    var rows = $('cue-list').querySelectorAll('.cue-row');
+    var r = rows[rows.length - 1];
+    if (r) { r.scrollIntoView({ block: 'nearest' }); r.querySelector('.cue-en').focus(); }
+  });
+
+  /* ---------- 來源 ---------- */
+  $('btn-fetch').addEventListener('click', async function () {
+    var vid = extractVideoId($('in-url').value);
+    if (!vid) { setStatus('status-src', 'error', '無法辨識影片 ID：請貼上完整的 YouTube 網址（youtu.be/… 或 watch?v=…）。'); return; }
+    state.videoId = vid;
+    setStatus('status-src', 'info', '偵測到影片 ID：' + vid + '。正在從 YouTube 抓取字幕…');
+    try {
+      var res = await fetch('api/captions', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videoId: vid, lang: 'en' })
+      });
+      var data = await res.json();
+      if (data && data.ok && Array.isArray(data.subtitles) && data.subtitles.length) {
+        setLang(data.lang || 'en');
+        loadCues(data.subtitles);
+        setStatus('status-src', 'ok', '已從 YouTube 取得 ' + data.subtitles.length + ' 行字幕（' + state.lang + '）。');
+      } else {
+        setStatus('status-src', 'warn', (data && data.note ? data.note : '自動抓取失敗') + '。請改用「貼上字幕文字」或上傳 SRT 檔。');
+      }
+    } catch (err) {
+      setStatus('status-src', 'warn', '自動抓取服務目前不可用（本機預覽或尚未部署）。請改用「貼上字幕文字」或上傳 SRT 檔。');
+    }
+  });
+
+  $('btn-parse-paste').addEventListener('click', function () {
+    var text = $('in-paste').value;
+    if (!text.trim()) { setStatus('status-src', 'error', '請先貼上字幕文字。'); return; }
+    var first = text.split('\n').map(function (l) { return l.trim(); }).filter(Boolean)[0] || '';
+    var subs = null;
+    if (text.indexOf('-->') !== -1) subs = parseSrtText(text);
+    else if (TS_RE.test(first)) subs = parseTranscriptText(text);
+    else subs = parsePlainText(text);
+    if (!subs || !subs.length) { setStatus('status-src', 'error', '無法解析貼上的文字：請貼上 SRT 格式、或含時間戳的轉錄稿。'); return; }
+    if (!state.videoId) { var v = extractVideoId($('in-url').value); if (v) state.videoId = v; }
+    loadCues(subs);
+    setStatus('status-src', 'ok', '已解析 ' + subs.length + ' 行字幕。');
+  });
+
+  $('btn-load-file').addEventListener('click', function () {
+    var f = $('in-file').files[0];
+    if (!f) { setStatus('status-src', 'error', '請先選擇一個 .srt 檔案。'); return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var subs = parseSrtText(reader.result);
+      if (!subs || !subs.length) { setStatus('status-src', 'error', '檔案內容無法解析為 SRT。'); return; }
+      if (!state.videoId) { var v = extractVideoId($('in-url').value); if (v) state.videoId = v; }
+      loadCues(subs);
+      setStatus('status-src', 'ok', '已讀取 ' + subs.length + ' 行字幕。');
+    };
+    reader.readAsText(f, 'utf-8');
+  });
+
+  /* ---------- 輸出 ---------- */
+  function generateSrt() {
+    var cues = state.cues.slice().sort(function (a, b) { return a.start - b.start; });
+    for (var i = 1; i < cues.length; i++) {
+      if (cues[i].start < cues[i - 1].end) cues[i].start = cues[i - 1].end;
+      if (cues[i].end <= cues[i].start) cues[i].end = cues[i].start + 0.5;
+    }
+    var mode = $('sel-mode').value;
+    var parts = [];
+    cues.forEach(function (c, idx) {
+      var lines = [];
+      if (mode !== 'zh' && c.en.trim()) lines.push(c.en.trim());
+      if (mode !== 'en' && c.zh.trim()) lines.push(c.zh.trim());
+      if (!lines.length) return;
+      parts.push((idx + 1) + '\n' + fmtTime(c.start) + ' --> ' + fmtTime(c.end) + '\n' + lines.join('\n'));
+    });
+    return parts.join('\n\n') + '\n';
+  }
+
+  var previewTimer = null;
+  function refreshPreviewDebounced() {
+    if (previewTimer) clearTimeout(previewTimer);
+    previewTimer = setTimeout(refreshPreview, 300);
+  }
+  function refreshPreview() {
+    $('out-srt').value = generateSrt();
+    $('out-count').textContent = state.cues.length + ' 行字幕';
+  }
+
+  $('btn-copy').addEventListener('click', function () {
+    var txt = generateSrt();
+    var done = function () { setStatus('status-out', 'ok', 'SRT 已複製到剪貼簿。'); };
+    function legacyCopy(t) {
+      var ta = $('out-srt');
+      ta.focus(); ta.select();
+      try { document.execCommand('copy'); done(); }
+      catch (e) { setStatus('status-out', 'warn', '自動複製失敗，請手動選取並複製下方文字。'); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done).catch(function () { legacyCopy(txt); });
+    } else legacyCopy(txt);
+  });
+
+  $('btn-download').addEventListener('click', function () {
+    var name = (state.videoId || 'subtitles') + '.srt';
+    var content = '\uFEFF' + generateSrt().replace(/\n/g, '\r\n');
+    var blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    setStatus('status-out', 'ok', '已下載 ' + name + '。' +
+      (state.videoId ? '把檔案放到專案 subtitles/ 資料夾，學生端即自動使用。' : '把檔案放到專案 subtitles/ 資料夾，並以影片 ID 命名。'));
+  });
+
+  $('sel-mode').addEventListener('change', refreshPreview);
+
+  /* ---------- 步驟指示 ---------- */
+  function setSteps(step) {
+    for (var i = 1; i <= 4; i++) {
+      var el = $('step-' + i);
+      if (el) el.classList.toggle('done', i <= step);
+    }
+  }
+
+  /* ---------- 初始 ---------- */
+  $('in-url').addEventListener('input', function () {
+    var vid = extractVideoId(this.value);
+    $('detect-hint').textContent = vid ? '偵測到影片 ID：' + vid : '';
+  });
+  $('sel-srclang').addEventListener('change', function () { state.lang = this.value; });
+
+  /* ---------- 測試掛鉤（供自動化驗證） ---------- */
+  window.__srtTool = {
+    state: state,
+    extractVideoId: extractVideoId,
+    parseSrtText: parseSrtText,
+    parseTranscriptText: parseTranscriptText,
+    parsePlainText: parsePlainText,
+    toCues: toCues,
+    generateSrt: generateSrt,
+    translateText: translateText
+  };
+})();
+</script>
+</body>
+</html>

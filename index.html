@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>影片學習站</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-home">
+  <header class="site-header">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-logo">YT</div>
+        <div>
+          <h1 id="site-name">影片學習站</h1>
+          <p class="brand-sub">點選節目，開始 A-B 循環學習</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="program-grid" class="program-grid" aria-label="節目列表">
+      <div class="loading-hint" id="loading-hint">載入節目清單中…</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>老師可於 <code>programs.json</code> 編輯節目清單；字幕支援自動抓取與上傳 SRT 雙軌，詳見 README.md。</p>
+      <p><a href="srt-tool.html">老師工具：產生繁體中文字幕（SRT）</a></p>
+    </div>
+  </footer>
+
+  <script src="js/programs.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>播放中</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-player">
+  <header class="site-header player-header">
+    <div class="container">
+      <a class="back-link" href="index.html" id="btn-back">← 節目清單</a>
+      <div class="player-title-block">
+        <h1 id="page-title">載入中…</h1>
+        <p id="page-desc" class="player-desc"></p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container player-shell">
+    <div class="video-wrap" id="video-wrap">
+      <div id="player"></div>
+      <div id="subtitle-overlay" class="subtitle-overlay" aria-live="polite"></div>
+      <div id="player-error" class="player-error" hidden></div>
+    </div>
+
+    <section class="control-panel" aria-label="學習控制列">
+      <!-- A-B 時間軸 -->
+      <div class="ab-timeline" id="ab-timeline">
+        <div class="ab-track" id="ab-track">
+          <div class="ab-range" id="ab-range"></div>
+          <div class="ab-handle ab-handle-a" id="ab-handle-a" title="拖曳調整 A 點"></div>
+          <div class="ab-handle ab-handle-b" id="ab-handle-b" title="拖曳調整 B 點"></div>
+        </div>
+      </div>
+
+      <div class="control-bar">
+        <div class="cb-left">
+          <button class="loop-pill" id="btn-loop" title="Alt+A 切換 A-B 循環">
+            <span class="loop-dot" id="loop-dot"></span>
+            <span id="loop-text">A-B Off</span>
+          </button>
+          <span class="now-time mono" id="txt-now">00:00.0</span>
+          <span class="time-sep">/</span>
+          <span class="dur-time mono" id="txt-dur">00:00.0</span>
+        </div>
+
+        <div class="cb-center">
+          <span class="anchor mono clickable" id="txt-a" title="點擊：將目前時間設為 A 點">00:00.0</span>
+          <span class="anchor-sep">—</span>
+          <span class="anchor mono clickable" id="txt-b" title="點擊：將目前時間設為 B 點">00:00.0</span>
+          <span class="divider"></span>
+          <button class="mini-btn" id="btn-nudge-a" title="A 點 -0.1 秒">-0.1s</button>
+          <button class="mini-btn" id="btn-nudge-b" title="B 點 +0.1 秒">+0.1s</button>
+        </div>
+
+        <div class="cb-right">
+          <button class="mini-btn" id="btn-prev-sub" title="上一句（A 鍵）">上一句</button>
+          <button class="mini-btn" id="btn-next-sub" title="下一句（D 鍵）">下一句</button>
+          <button class="mini-btn" id="btn-cc" title="字幕開關（C 鍵）">字幕</button>
+          <label class="speed-wrap">
+            <span class="speed-label">速度</span>
+            <select id="speed-select" class="speed-select">
+              <option value="0.5">0.5x</option>
+              <option value="0.75">0.75x</option>
+              <option value="0.85">0.85x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.25">1.25x</option>
+            </select>
+          </label>
+          <span class="divider"></span>
+          <button class="mini-btn strong" id="btn-copy" title="複製 A-B 區間字幕卡片">複製卡片</button>
+          <button class="mini-btn strong" id="btn-csv" title="下載 Anki 可用 CSV">匯出 CSV</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="sub-note" id="sub-note">字幕載入中…</div>
+
+    <section class="transcript-panel" aria-label="字幕逐句列表">
+      <div class="transcript-head">
+        <span>逐句字幕（點句子 → 單句循環）</span>
+        <span class="hotkey-hint">快捷鍵：Alt+A 循環｜[ ] 設 A/B｜←→ 微調｜A/D 跳句</span>
+      </div>
+      <div id="transcript-list" class="transcript-list"></div>
+    </section>
+  </main>
+
+  <div id="osd" class="osd" aria-live="assertive"></div>
+
+  <script src="js/captions.js"></script>
+  <script src="js/anki.js"></script>
+  <script src="js/player.js"></script>
+</body>
+</html>

@@ -1,0 +1,932 @@
+# 'YouTube Clips Playback' — 獨立開發實作聖經 (Manifest V3 商業級架構)
+本文件為 'YouTube Clips Playback' Chrome 擴充功能之完整開發與實作規格書。全書遵循歐美頂級 SaaS 大廠（如 Vercel、Linear、Apple）之設計哲學：功能隱形、體驗無縫、聚焦核心。
+架構完全基於 Chrome Extension Manifest V3 (MV3) 規範，並完美整合「高精視覺、滑鼠幾何拖曳、MV3 異步通訊、捕獲級鍵盤攔截、動態字幕匹配引擎、AnkiConnect 數據對接」六大模組。本聖經不省略任何技術細節、程式碼與架構討論，作為工程實作的唯一權威依據。
+
+------------------------------
+## 📂 第一章：專案目錄結構與設定中心 (Scaffold)
+為了實現模組化（Modular Architecture）與職責分離，專案嚴禁將所有邏輯堆疊於單一檔案中。
+## 1. 檔案目錄樹
+UTube-up-extension/
+├── manifest.json              # 擴充功能指揮中心 (Manifest V3)
+├── background.js              # Service Worker (全域狀態與持久化)
+├── styles.css                 # 頂級磨砂玻璃與 UI 佈局樣式表
+└── scripts/
+    ├── content.js             # 主腳本入口 (SPA 路由調配與生命週期管理)
+    ├── ui-manager.js          # UI 渲染與把手幾何拖曳互動模組
+    └── keyboard-manager.js    # 捕獲階段鍵盤事件感應與攔截模組
+
+## 2. Manifest V3 核心配置 (manifest.json)
+此配置採用 run_at: "document_end"，確保 YouTube 核心 DOM 載入後才執行注入，並宣告 storage 與 tabs 權限。
+> 實務修正備註：原始matches語法錯誤，正式發布替換為 "*://*.youtube.com/*"，避免全域網站注入腳本。
+```json
+{
+  "manifest_version": 3,
+  "name": "'YouTube Clips Playback' — Premium A-B Repeat",
+  "version": "1.0.0",
+  "description": "歐美大廠風格的 YouTube A-B 循環語言學習工具。",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": [
+        "scripts/keyboard-manager.js",
+        "scripts/ui-manager.js",
+        "scripts/content.js"
+      ],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_title": "'YouTube Clips Playback'"
+  }
+}
+```
+------------------------------
+## 🎨 第二章：高精視覺與 CSS 樣式規範 (styles.css)
+歐美大廠的視覺質感來自於 留白、等寬字型、無縫整合、高度容錯的物理熱區。
+## 1. 介面設計規範 (Design Spec)
+* 背景：rgba(23, 23, 23, 0.85) 搭配 20px 高斯模糊，營造暗色系磨砂玻璃。
+* 邊框：1px solid rgba(255, 255, 255, 0.08) 極細邊界。
+* 字型：優先呼叫系統高級無襯線字體 Inter。數字與速度必須採用 font-family: monospace，徹底消除數值變動時的排版抖動。
+* 點綴色：全介面唯一指定電光藍 (#2563EB) 作為激活狀態與選取區顏色。
+
+## 2. 全量核心樣式表 (styles.css)
+```css
+/* 主控制列內嵌容器 - 精確壓在 YouTube 原生控制列正上方 */
+.UTube-rail-container {
+  position: absolute;
+  bottom: 48px;
+  left: 0;
+  width: 100%;
+  z-index: 2147483647; /* 使用最大層級，確保全螢幕、影院模式、網頁模式不被覆蓋 */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  background: transparent;
+  padding: 0;
+}
+/* 磨砂玻璃背板 */
+.en-glass-panel {
+  background: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+/* 智能時間軸容器 - 增加物理觸控熱區 (Hit Target) 至 20px，但視覺保持 4px */
+.en-timeline-wrapper {
+  width: 100%;
+  height: 20px;
+  margin-top: -8px;
+  position: relative;
+  cursor: pointer;
+  background: transparent;
+  display: flex;
+  align-items: center;
+}
+.en-timeline-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  position: relative;
+}
+/* A-B 激活區間選取條 */
+.en-range-bar {
+  position: absolute;
+  height: 100%;
+  background: #2563EB;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+  transition: background 0.2s ease;
+}
+/* 左右時間調整把手 */
+.en-handle {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 16px;
+  background: #FFFFFF;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  cursor: ew-resize;
+  opacity: 0; /* 平時隱形 */
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s ease;
+}
+.en-handle:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+/* 滑鼠移入時間軸時才平滑顯現把手 */
+.en-timeline-wrapper:hover .en-handle {
+  opacity: 1;
+}
+/* 膠囊分段選擇器 (Segmented Control) */
+.en-segmented-capsule {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+/* 快捷鍵提示徽章 */
+.en-hotkey-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 10px;
+  color: #A3A3A3;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+/* 畫面中央大字 OSD 提示動畫 */
+.en-osd-alert {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  color: #FFFFFF;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2147483647;
+}
+.en-osd-alert.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+```
+------------------------------
+## ⌨️ 第三章：捕獲階段鍵盤管理器 (scripts/keyboard-manager.js)
+## 1. 技術壁壘討論：為什麼必須是捕獲階段？
+YouTube 的原生鍵盤事件（如 Space、ArrowLeft/Right）多綁定在 window 或 document 的冒泡階段（Bubble Phase）。若我們也在冒泡階段監聽，當用戶按左鍵時，雖然插件的時間微調會被觸發，但 YouTube 影片同時也會往後跳轉 5 秒，造成雙重觸發。
+本模組將 addEventListener 的第三個參數設定為 true，強制在捕獲階段（Capture Phase）提前截獲事件。一旦確認為插件目標按鍵，立刻呼叫 e.stopImmediatePropagation() 切斷事件鏈，直接將其「擊落」，達成完美接管。同時，內部具備 isUserTyping 的情境感知機制，絕對不誤傷評論區打字。
+
+## 2. 核心代碼實作
+```javascript
+// scripts/keyboard-manager.js
+class KeyboardManager {
+  constructor(onAction) {
+    this.isLoopModeActive = false;
+    this.onAction = onAction; // 聯動 Content Script 的調配中心
+    this.init();
+  }
+  init() {
+    // 強制在捕獲階段監聽 keydown
+    window.addEventListener('keydown', this.handleKeyDown.bind(this), true);
+  }
+  // 情境感知：偵測使用者是否正在輸入內容（防誤傷評論區、搜尋列、可編輯元素）
+  isUserTyping(e) {
+    const activeEl = document.activeElement;
+    if (!activeEl) return false;
+    return (
+      activeEl.isContentEditable ||
+      activeEl.tagName === 'INPUT' ||
+      activeEl.tagName === 'TEXTAREA'
+    );
+  }
+  handleKeyDown(e) {
+    if (this.isUserTyping(e)) return;
+    const key = e.key;
+    const isAlt = e.altKey; // Windows: Alt / Mac: Option
+    // 快捷鍵: Alt + A -> 全局切換 A-B 重複模式
+    if (isAlt && key.toLowerCase() === 'a') {
+      this.hijackEvent(e);
+      this.isLoopModeActive = !this.isLoopModeActive;
+      this.onAction('TOGGLE_MODE', this.isLoopModeActive);
+      return;
+    }
+    // 當 A-B 模式處於激活狀態時，全面接管特定原生按鍵
+    if (this.isLoopModeActive) {
+      switch (key) {
+        case 'ArrowLeft': // 接管方向左鍵：微調 A 點 -0.1 秒
+          this.hijackEvent(e);
+          this.onAction('NUDGE_A', -0.1);
+          break;
+        case 'ArrowRight': // 接管方向右鍵：微調 B 點 +0.1 秒
+          this.hijackEvent(e);
+          this.onAction('NUDGE_B', 0.1);
+          break;
+        case '[': // 按下 [ 鍵：標記當前時間為 A 點
+          this.hijackEvent(e);
+          this.onAction('SET_A_CURRENT');
+          break;
+        case ']': // 按下 ] 鍵：標記當前時間為 B 點
+          this.hijackEvent(e);
+          this.onAction('SET_B_CURRENT');
+          break;
+
+        case ' ': // 嚴格規範：空白鍵交還給 YouTube 處理原生的播放/暫停，不予攔截
+          break;
+      }
+    }
+  }
+  // 斷開事件傳遞鏈的核心技術
+  hijackEvent(e) {
+    e.preventDefault();           // 阻止瀏覽器預設行為
+    e.stopPropagation();          // 阻止事件向父級冒泡
+    e.stopImmediatePropagation(); // 阻止當前節點上綁定的其他相同事件監聽器被觸發
+  }
+}
+// 綁定到全域變數
+window.UTubeKeyboardManager = KeyboardManager;
+```
+------------------------------
+## 📐 第四章：UI 渲染與把手幾何拖曳互動模組 (scripts/ui-manager.js)
+## 1. 技術壁壘討論：幾何坐標與 Scrubber 流暢度
+進度條的物理像素寬度隨視窗縮放動態改變。為了求出精確秒數，必須在 mousedown 觸發時，先以 getBoundingClientRect() 獲取進度條的起點 left 與寬度 width 並進行快取（避免在 mousemove 中重複呼叫導致重繪效能雪崩）。
+將滑鼠相對位移轉換為百分比，再乘以影片總時長（video.duration）。在拖曳過程中，採取 Scrubbing（實時滾動反饋） 機制：一方面以 requestAnimationFrame 節流重繪 UI 把手，另一方面即時將計算後的秒數賦值給 video.currentTime，讓影片畫面隨滑鼠拖曳實時渲染，達成 Apple 剪輯級別的絲滑感。
+
+## 2. 核心代碼實作
+```javascript
+// scripts/ui-manager.js
+class UIManager {
+  constructor(video, onTimeChange, onAnkiClick) {
+    this.video = video;
+    this.onTimeChange = onTimeChange;
+    this.onAnkiClick = onAnkiClick;
+    this.timeA = 0;
+    this.timeB = video ? video.duration * 0.5 : 10; // 預設初始區間為片長的一半
+    this.container = null;
+    this.injectUI();
+  }
+  injectUI() {
+    // 鎖定 YouTube 原生播放器容器，確保全螢幕與影院模式下 UI 依舊附著
+    const ytPlayer = document.querySelector('.html5-video-player');
+    if (!ytPlayer) return;
+    this.container = document.createElement('div');
+    this.container.className = 'UTube-rail-container';
+
+    this.container.innerHTML = `
+      <!-- OSD 提示框 -->
+      <div class="en-osd-alert"></div>
+      <!-- 智能時間軸元件 -->
+      <div class="en-timeline-wrapper">
+        <div class="en-timeline-track">
+          <div class="en-range-bar"></div>
+          <div class="en-handle en-handle-a"></div>
+          <div class="en-handle en-handle-b"></div>
+        </div>
+      </div>
+      <!-- 主控制面板列 -->
+      <div class="en-glass-panel flex items-center justify-between px-4 h-11 text-white select-none">
+        <!-- 左側：狀態區 -->
+        <div class="flex items-center gap-3">
+          <button class="en-status-btn flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-600 text-xs font-medium text-neutral-400 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-neutral-500"></span>
+            <span class="btn-text">A-B Off</span>
+          </button>
+        </div>
+        <!-- 中間：時間與微調膠囊 -->
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2 text-sm font-mono tracking-tight">
+            <span class="txt-a text-white font-medium px-1 py-0.5 rounded hover:bg-neutral-800 cursor-pointer">00:00.0</span>
+            <span class="text-neutral-600 text-xs">──</span>
+            <span class="txt-b text-white font-medium px-1 py-0.5 rounded hover:bg-neutral-800 cursor-pointer">00:00.0</span>
+          </div>
+          <div class="en-segmented-capsule">
+            <button class="btn-nudge-prev px-2 py-0.5 text-xs text-neutral-400 hover:text-white transition-colors">-0.1s</button>
+            <div class="w-[1px] h-3 bg-neutral-700 mx-1"></div>
+            <span class="txt-speed px-2 text-xs font-mono font-medium text-blue-400">1.0x</span>
+            <div class="w-[1px] h-3 bg-neutral-700 mx-1"></div>
+            <button class="btn-nudge-next px-2 py-0.5 text-xs text-neutral-400 hover:text-white transition-colors">+0.1s</button>
+          </div>
+        </div>
+        <!-- 右側：生產力同步區 -->
+        <div class="flex items-center gap-4">
+          <div class="en-hotkey-badge">⌥ A</div>
+          <!-- Anki 匯出按鈕 -->
+          <button class="btn-anki text-neutral-400 hover:text-blue-400 transition-colors flex items-center justify-center" title="匯出當前循環片段至 Anki">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+    ytPlayer.appendChild(this.container);
+    this.initEvents();
+    this.updateUI();
+  }
+  initEvents() {
+    const wrapper = this.container.querySelector('.en-timeline-wrapper');
+    const handleA = this.container.querySelector('.en-handle-a');
+    const handleB = this.container.querySelector('.en-handle-b');
+    const btnAnki = this.container.querySelector('.btn-anki');
+    // 幾何拖曳閉包工廠
+    const createDragHandler = (target) => {
+      return (e) => {
+        e.preventDefault();
+        const rect = wrapper.getBoundingClientRect();
+        const duration = this.video.duration || 100;
+        const onMouseMove = (moveEvent) => {
+          let offsetX = moveEvent.clientX - rect.left;
+          offsetX = Math.max(0, Math.min(offsetX, rect.width));
+          const percentage = offsetX / rect.width;
+          const calculatedTime = percentage * duration;
+          const MIN_GAP = 0.2; // A-B 最小物理間隔 0.2 秒
+          // 利用 requestAnimationFrame 優化重繪效能
+          window.requestAnimationFrame(() => {
+            if (target === 'A') {
+              this.timeA = Math.min(calculatedTime, this.timeB - MIN_GAP);
+            } else {
+              this.timeB = Math.max(calculatedTime, this.timeA + MIN_GAP);
+            }
+            this.updateUI();
+            this.onTimeChange(calculatedTime); // 實時 Scrubbing 連動
+          });
+        };
+        const onMouseUp = () => {
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('mouseup', onMouseUp);
+        };
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+      };
+    };
+    handleA.addEventListener('mousedown', createDragHandler('A'));
+    handleB.addEventListener('mousedown', createDragHandler('B'));
+
+    // Anki 匯出事件對接
+    btnAnki.addEventListener('click', () => this.onAnkiClick());
+    // 解決焦點陷阱：使用者點擊 UI 後，強制將焦點丟回影片，防止 Space 鍵引發二次點擊
+    this.container.addEventListener('mouseup', () => {
+      document.activeElement.blur();
+      this.video.focus();
+    });
+  }
+  updateUI() {
+    const duration = this.video.duration || 100;
+    const pctA = (this.timeA / duration) * 100;
+    const pctB = (this.timeB / duration) * 100;
+    const handleA = this.container.querySelector('.en-handle-a');
+    const handleB = this.container.querySelector('.en-handle-b');
+    const rangeBar = this.container.querySelector('.en-range-bar');
+    handleA.style.left = `${pctA}%`;
+    handleB.style.left = `${pctB}%`;
+    rangeBar.style.left = `${pctA}%`;
+    rangeBar.style.width = `${pctB - pctA}%`;
+    this.container.querySelector('.txt-a').innerText = this.formatTime(this.timeA);
+    this.container.querySelector('.txt-b').innerText = this.formatTime(this.timeB);
+  }
+  setModeVisual(isActive) {
+    const btn = this.container.querySelector('.en-status-btn');
+    const dot = btn.querySelector('span');
+    const txt = btn.querySelector('.btn-text');
+    if (isActive) {
+      btn.className = "en-status-btn flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600 text-xs font-medium text-white transition-all shadow-sm shadow-blue-600/20";
+      dot.className = "w-1.5 h-1.5 rounded-full bg-white animate-pulse";
+      txt.innerText = "Looping";
+    } else {
+      btn.className = "en-status-btn flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-600 text-xs font-medium text-neutral-400 transition-all";
+      dot.className = "w-1.5 h-1.5 rounded-full bg-neutral-500";
+      txt.innerText = "A-B Off";
+    }
+  }
+  showOSD(text) {
+    const alertBox = this.container.querySelector('.en-osd-alert');
+    alertBox.innerText = text;
+    alertBox.classList.add('active');
+    clearTimeout(this.osdTimeout);
+    this.osdTimeout = setTimeout(() => {
+      alertBox.classList.remove('active');
+    }, 1000);
+  }
+  formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    const ms = Math.floor((seconds % 1) * 10);
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${ms}`;
+  }
+}
+window.UTubeUIManager = UIManager;
+```
+------------------------------
+## 🌊 第五章：動態字幕匹配引擎與 AnkiConnect 對接門戶
+## 1. 技術壁壘討論：突破 TimedText 的限制與多行時間軸交集
+YouTube 的字幕不會白白躺在 HTML 結構中。本專案採行大廠的主流黑科技：透過在頁面上下文中執行一小段指令碼，直接撈取 YouTube 全域變數 window.ytInitialPlayerResponse 內的 captionTracks 原始底層網址，並強制拼裝參數 &fmt=json3 向官方索求乾淨的 JSON3 格式字幕流。
+獲取後，將全片字幕快取於記憶體中。當用戶觸發 Anki 匯出時，因為 A-B 區間可能橫跨多行字幕，引擎採用交集數學公式：Subtitle.Start < TimeB && Subtitle.End > TimeA 精準篩選出該範圍內的所有字幕行，將其清洗去空字元、串聯並轉化為高質感內聯 CSS HTML，最後跨域發送至本地 AnkiConnect (127.0.0.1:8765)。
+
+## 2. 核心代碼實作 (字幕預載入與匹配清洗)
+```javascript
+// 該邏輯常駐於 scripts/content.js 或獨立方法中
+// 1. 腳本注入黑科技：抓取底層字幕 JSON3 串流網址
+function prefetchVideoSubtitles() {
+  const scriptContent = `
+    (function() {
+      try {
+        const playerResponse = window.ytInitialPlayerResponse;
+        const captionTracks = playerResponse.captions.playerCaptionsTracklistRenderer.captionTracks;
+        window.dispatchEvent(new CustomEvent('UTube_Subtitles_Hooked', { detail: captionTracks }));
+      } catch(e) {
+        console.log('[YouTube Clips Playback] 無法從頁面變數中撈取原生字幕');
+      }
+    })();
+  `;
+  const script = document.createElement('script');
+  script.textContent = scriptContent;
+  document.documentElement.appendChild(script);
+  script.remove();
+}
+// 監聽回傳並下載解析
+window.addEventListener('UTube_Subtitles_Hooked', async (e) => {
+  const tracks = e.detail;
+  if (!tracks || tracks.length === 0) return;
+  // 優先尋找英文 track，若無則抓取第一條
+  const targetTrack = tracks.find(t => t.languageCode === 'en') || tracks[0];
+  const json3Url = `${targetTrack.baseUrl}&fmt=json3`;
+  try {
+    const res = await fetch(json3Url);
+    const data = await res.json();
+
+    // 清洗結構，轉為全域時間軸快取陣列
+    window.currentVideoSubtitles = data.events.map(event => ({
+      start: event.tStartMs / 1000,
+      end: (event.tStartMs + event.dDurationMs) / 1000,
+      text: event.segs ? event.segs.map(s => s.utf8).join('') : ''
+    }));
+    console.log('[YouTube Clips Playback] 字幕匹配引擎快取就緒，總行數：', window.currentVideoSubtitles.length);
+  } catch (err) {
+    console.error('[YouTube Clips Playback] 下載 JSON3 字幕失敗:', err);
+  }
+});
+
+// 2. 多行時間軸交集匹配算法（大廠級細節：加入 0.1 秒緩衝區 Time Padding 防止字尾斷頭）
+function getMatchedSubtitlesHTML(timeA, timeB) {
+  if (!window.currentVideoSubtitles || window.currentVideoSubtitles.length === 0) {
+    return "<span style='color:#9CA3AF; font-style:italic;'>[無捕捉到字幕數據，請於卡片手動輸入]</span>";
+  }
+  const BUFFER = 0.1; // 100ms 物理語音容錯
+  const paddedA = timeA - BUFFER;
+  const paddedB = timeB + BUFFER;
+  const matched = window.currentVideoSubtitles.filter(sub => {
+    return sub.start < paddedB && sub.end > paddedA;
+  });
+  if (matched.length === 0) {
+    return "<span style='color:#9CA3AF; font-style:italic;'>[此區間無相對應字幕]</span>";
+  }
+  return matched
+    .map(sub => sub.text.trim())
+    .filter(t => t.length > 0)
+    .join('<br>'); // 換行串聯
+}
+```
+------------------------------
+## 🎛️ 第六章：主協調調配中心 (scripts/content.js)
+本模組為整個 Content Script 的核心大腦，負責協調 UI 模組、鍵盤攔截器，以及處理單頁應用程式（SPA，如 YouTube 換片不重整網頁）下的生命週期重新註冊。
+```javascript
+// scripts/content.js
+(function bootstrapUTube() {
+  let video = null;
+  let ui = null;
+  let keyboard = null;
+  let isLoopActive = false;
+  function initApp() {
+    video = document.querySelector('video');
+
+    // SPA 路由安全閥：如果當前頁面找不到 video 元件，代表用戶正待在主頁，延時重試
+    if (!video || !video.duration) {
+      setTimeout(initApp, 1000);
+      return;
+    }
+    // 預加載全片 JSON3 字幕
+    prefetchVideoSubtitles();
+    // 1. 初始化高精 UI 模組
+    ui = new window.UTubeUIManager(
+      video,
+      (targetTime) => {
+        video.currentTime = targetTime; // 滑鼠拖曳 Scrubbing 反饋
+      },
+      () => {
+        executeAnkiExportFlow(); // 點擊 Anki 按鈕
+      }
+    );
+    // 2. 核心播放時間輪詢監聽 (timeupdate)
+    video.addEventListener('timeupdate', onTimeUpdateTick);
+    // 3. 初始化捕獲級鍵盤管理器，接管回呼事件
+    keyboard = new window.UTubeKeyboardManager((action, payload) => {
+      switch (action) {
+        case 'TOGGLE_MODE':
+          isLoopActive = payload;
+          ui.setModeVisual(isLoopActive);
+          ui.showOSD(isLoopActive ? "Loop Mode: ON" : "Loop Mode: OFF");
+          // 激活瞬間，若播放游標不在範圍內，立刻秒回 A 點
+          if (isLoopActive && (video.currentTime < ui.timeA || video.currentTime > ui.timeB)) {
+            video.currentTime = ui.timeA;
+          }
+          break;
+        case 'NUDGE_A':
+          ui.timeA = Math.max(0, ui.timeA + payload);
+          ui.updateUI();
+          break;
+        case 'NUDGE_B':
+          ui.timeB = Math.min(video.duration, ui.timeB + payload);
+          ui.updateUI();
+          break;
+        case 'SET_A_CURRENT':
+          ui.timeA = video.currentTime;
+          ui.updateUI();
+          ui.showOSD("[ Set Anchor A ]");
+          break;
+        case 'SET_B_CURRENT':
+          ui.timeB = video.currentTime;
+          ui.updateUI();
+          ui.showOSD("[ Set Anchor B ]");
+          break;
+      }
+    });
+  }
+  function onTimeUpdateTick() {
+    if (!isLoopActive) return;
+    // 抵達臨界終點時，毫秒級跳回起點 A
+    if (video.currentTime >= ui.timeB) {
+      video.currentTime = ui.timeA;
+    }
+  }
+  // 生產力整合：一鍵匯出 Anki 核心工作流
+  function executeAnkiExportFlow() {
+    const videoId = new URLSearchParams(window.location.search).get('v');
+    const videoTitle = document.title.replace('- YouTube', '').trim();
+
+    const startSec = Math.round(ui.timeA);
+    const endSec = Math.round(ui.timeB);
+    const finalCleanUrl = `https://youtu.be/${videoId}?start=${startSec}&end=${endSec}`;
+    // 呼叫字幕匹配引擎抓取這段區間內的英文字幕
+    const subHTML = getMatchedSubtitlesHTML(ui.timeA, ui.timeB);
+    // 建立大廠級內聯樣式 HTML 卡片佈局
+    const frontHTML = `
+      <div style="font-family: 'Inter', system-ui, sans-serif; color: #111827; line-height: 1.6; font-size: 18px; font-weight: 500; text-align: left;">
+        ${subHTML}
+      </div>
+      <div style="margin-top: 16px; font-size: 11px; color: #9CA3AF; font-family: monospace; border-top: 1px dashed #E5E7EB; padding-top: 8px;">
+        📺 ${videoTitle} (${ui.formatTime(ui.timeA)} - ${ui.formatTime(ui.timeB)})
+      </div>
+    `;
+    const backHTML = `
+      <div style="font-family: 'Inter', system-ui, sans-serif; text-align: center; margin-top: 12px;">
+        <a href="${finalCleanUrl}" style="display: inline-block; padding: 10px 22px; background-color: #2563EB; color: #FFFFFF; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px rgba(37,99,235,0.2); transition: all 0.2s;">
+          🔗 Return to YouTube Loop
+        </a>
+      </div>
+    `;
+    ui.showOSD("⚡ Connecting Anki...");
+    const packageData = {
+      deckName: "UTube_UP_Premium",
+      front: frontHTML,
+      back: backHTML
+    };
+    // 將敏感跨域請求拋給 Service Worker 執行
+    chrome.runtime.sendMessage({ action: 'EXPORT_TO_ANKI', payload: packageData }, (res) => {
+      if (res && res.success) {
+        ui.showOSD("✓ Synced to Anki");
+      } else {
+        ui.showOSD(`✕ Error: ${res ? res.error : 'AnkiConnect Offline'}`);
+      }
+    });
+  }
+  // 監聽 YouTube SPA 網頁換片事件（防死機路由重新激活機制）
+  window.addEventListener('yt-navigate-finish', () => {
+    // 清理舊有的殘留元件與事件監聽
+    const oldContainer = document.querySelector('.UTube-rail-container');
+    if (oldContainer) oldContainer.remove();
+    if (video) video.removeEventListener('timeupdate', onTimeUpdateTick);
+
+    // 重新部署
+    initApp();
+  });
+  // 首次開機執行
+  initApp();
+})();
+```
+------------------------------
+## 📡 第七章：Service Worker 後端異步通訊模組 (background.js)
+## 1. 技術壁壘討論：非持久性睡眠與 CORS 跨域解鎖
+Manifest V3 最具爭議的設計就是 Background Service Worker 會自動進入睡眠。我們不能在此維持常駐的狀態變數。本模組純粹作為資料傳輸橋樑（Stateless Pure Message Router）。
+同時，由於 YouTube Content Script 執行於 youtube.com 網頁環境下，直接向 127.0.0.1:8765 發送請求會遭到嚴厲的 CORS 跨域資源共享限制阻截。因此，大廠規範的做法是利用 chrome.runtime.sendMessage 通訊，將 Payload 送至具備擴充功能特權層級的 background.js 中執行 fetch。因為 Service Worker 發送請求不受網頁沙盒與同源政策限制，可完美無縫連通 Anki 數據庫。
+
+## 2. 核心代碼實作
+```javascript
+// background.js
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  const { action, payload } = message;
+
+  // 關鍵配置：回傳 true 通知 Chrome 此通道為異步，防止 sendResponse 在非同步回調前被強行關閉
+  const IS_ASYNC = true;
+  if (action === 'EXPORT_TO_ANKI') {
+    handleAnkiConnectAPI(payload)
+      .then((cardId) => {
+        sendResponse({ success: true, id: cardId });
+      })
+      .catch((err) => {
+        sendResponse({ success: false, error: err.message });
+      });
+    return IS_ASYNC;
+  }
+  return !IS_ASYNC;
+});
+
+async function handleAnkiConnectAPI(card) {
+  const TARGET_URL = 'http://127.0.0.1:8765';
+  // 步驟一：呼叫 Anki 自動建立專屬牌組（防呆設計：若牌組已存在，Anki 會自動略過）
+  try {
+    await fetch(TARGET_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: "createDeck",
+        version: 6,
+        params: { deck: card.deckName }
+      })
+    });
+  } catch (e) {
+    throw new Error("Anki 軟體未開啟，或未安裝 AnkiConnect 插件。");
+  }
+  // 步驟二：正式發送 addNote 建立卡片（使用 Anki 原生內置之 Basic 模板型態）
+  const notePayload = {
+    action: "addNote",
+    version: 6,
+    params: {
+      note: {
+        deckName: card.deckName,
+        modelName: "Basic",
+        fields: {
+          Front: card.front,
+          Back: card.back
+        },
+        options: {
+          allowDuplicate: false // 防禦性設計：拒絕同一時間重複匯出相同的字卡，維持牌組乾淨度
+        },
+        tags: ["UTube_UP_Premium", "YouTube_Language_Flow"]
+      }
+    }
+  };
+  const response = await fetch(TARGET_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(notePayload)
+  });
+  const jsonResult = await response.json();
+  // 捕捉 AnkiConnect 內部的邏輯報錯 (例如模板不符合)
+  if (jsonResult.error) {
+    throw new Error(jsonResult.error);
+  }
+  return jsonResult.result; // 回傳新增成功的卡片 ID
+}
+```
+------------------------------
+## 🛠️ 第八章：開發環境聯調與測試流程
+1. 本地建立名為 UTube-up-extension 的資料夾。
+2. 將上述各章節之完整程式碼分別存入對應的路徑檔案中（確保路徑字元完全無誤）。
+3. 開啟 Google Chrome 瀏覽器，於網址列輸入 chrome://extensions/。
+4. 點選啟動右側的 「開發者模式 (Developer mode)」 切換鈕。
+5. 點擊左上方 「載入解壓縮擴充功能 (Load unpacked)」 按鈕，選中你的專案主資料夾。
+6. 打開任何一個自帶 CC 字幕的 YouTube 影片網頁，按下 Alt + A (Mac 下為 Option + A)，即刻啟動這款頂級大廠風格的 A-B 循環生產力神兵利器。
+
+------------------------------
+## ⚙️ 附錄一：持久化與設定系統（Configuration & Storage）
+### 1. 全量設定項清單（Configuration Schema）
+所有設定項必須在 chrome.storage 中有明確的型別與預設值：
+
+| 設定項鍵名 (Key) | 資料型別 (Type) | 預設值 (Default) | 儲存層級 (Storage) | 歐美大廠級 UX 定義說明 |
+|---|---|---|---|---|
+| autoFade | boolean | true | sync (跨裝置) | A-B 跳回時，加入 50ms 音量淡出淡入，消除物理爆音。 |
+| defaultSpeed | number | 1.0 | sync | 新影片載入時的初始速度。可選：0.5, 0.75, 0.85, 1.0, 1.25。 |
+| minLoopGap | number | 0.2 | sync | 限制 A 點與 B 點的最小物理距離（單位：秒），防止硬體死機。 |
+| osdDuration | number | 1000 | sync | 畫面中央 HUD OSD 提示框的滯留時間（單位：毫秒）。 |
+| autoCaptureSub | boolean | true | sync | 匯出 Anki 時是否主動撈取時間軸字幕。關閉則留空。 |
+| preferredLang | string | "en" | sync | 優先偵測的字幕語言代碼（如 en, zh-TW, ja）。 |
+| savedSegments | array | [] | local (僅本機) | 儲存用戶收藏的片段陣列。因體積較大，不走 sync 限制。 |
+| pendingSyncAnki | array | [] | local | Anki 離線時，暫存於本機待同步的片段佇列。 |
+
+### 2. 已保存片段（Saved Segments）管理 UI 規格
+放棄獨立頁面（Options Page）的割裂感，管理介面直接整合在後述的 Popup 彈窗中，採雙標籤頁（Tabs）切換設計。
+
+* 資料結構（Data Structure）：
+```javascript
+interface SavedSegment {
+  id: string;          // crypto.randomUUID() 生成
+  videoId: string;     // YouTube 影片 ID
+  videoTitle: string;  // 影片標題
+  timeA: number;       // 起點秒數
+  timeB: number;       // 終點秒數
+  subtitle: string;    // 當時抓取的字幕文本
+  createdAt: number;   // 時間戳
+}
+```
+* 交互定義（Interactions）：
+* 查看：點擊清單中的片段，若當前分頁是 YouTube，主動跳轉至該 videoId 並自動磁吸設定 A-B 點。
+* 刪除：滑鼠 Hover 時，右側滑出極簡紅色線性垃圾桶圖標（Lucide: Trash2），點擊後立刻從 chrome.storage.local 移除，清單觸發動態縮起動畫。
+* 重新匯出：保留一個小卡片按鈕，允許用戶在 Anki 重開後，再次手動觸發該片段的 EXPORT_TO_ANKI 工作流。
+
+------------------------------
+## 📱 附錄二：Popup 彈窗規格設計（The Popup Interface）
+點擊瀏覽器右上角圖標時彈出的面板，寬度固定為 360px，高度固定為 480px。採用磨砂玻璃與 Linear 風格的極簡雙標籤頁（Tabs）切換：[片段清單 (Segments)] │ [偏好設定 (Settings)]。
+
+### 1. 視覺佈局與 Wireframe
+```
++---------------------------------------+
+|  EnTube UP               [⚙️ Premium] | -> 頂欄：商標與付費狀態
++---------------------------------------+
+|    [ Segments ]    │    [ Settings ]   | -> 導覽標籤頁 (Tabs)
++---------------------------------------+
+| 🔍 Search saved segments...          | -> 搜尋欄（僅在 Segments 頁顯示）
++---------------------------------------+
+| 🎬 Advanced Python Tutorial          |
+|    01:23 - 01:45  [✓ Anki]  [🗑️]      | -> 歷史卡片清單 (Flex 佈局)
+|    "Hello world in Python..."         |
+| ───────────────────────────────────── |
+| 🎬 IELTS Listening Practice          |
+|    00:42 - 00:55  [⏳ Retry] [🗑️]     | -> 待重試卡片（暗橙色提示）
++---------------------------------------+
+```
+### 2. 設定標籤頁（Settings Tab）控制項排版
+不使用粗暴的 HTML 原生 Checkbox，一律使用 iOS 風格的微型滑塊開關（Toggle Switch）：
+* Audio Crossfade (50ms) -> [開關]
+* Auto-Capture Subtitles -> [開關]
+* Preferred Language -> [下拉選單: English / 繁體中文 / 日本語]
+
+------------------------------
+## 🛡️ 附錄三：降級與容錯場景（Robustness & Error Handling）
+### 1. Anki 離線暫存與批量同步規格（Offline Fallback）
+* 觸發條件：當 background.js 向 127.0.0.1:8765 發送 fetch 請求，在 timeout: 1500ms 內無響應，或拋出 TypeError: Failed to fetch 時，判定 Anki 離線。
+* 數據結構：將該次失敗的 packageData 壓入 chrome.storage.local 的 pendingSyncAnki 陣列中。
+* 使用者介面與手動同步：在 Popup 彈窗的 Segments 標籤頁頂部，若 pendingSyncAnki.length > 0，則常駐一條暗橙色（Warning Yellow）的橫幅提示：⚠️ 有 ${N} 個片段尚未同步至 Anki [立即同步]。
+* 點擊 [立即同步]：Background 遍歷佇列，逐一重新執行 handleAnkiConnectAPI。成功建立的項目自佇列中彈出（Pop），若全部成功，橫幅平滑淡出，OSD 提示 ✓ 批量同步成功。
+* 上限與清理策略：佇列上限固定為 50 筆。超過 50 筆時，採用 FIFO（先進先出） 策略，自動丟棄最早的暫存，並在 OSD 顯示警告 ⚠️ 暫存空間已滿，舊片段已遺失。暫存資料永不過期，除非手動清空。
+
+### 2. YouTube DOM 變更的優雅降級（DOM Change Protection）
+* 痛點：YouTube 一旦改版，.html5-video-player 或字幕類名可能會在一夜之間失效。
+* 防禦策略（大廠標準防禦）：在 ui-manager.js 中，尋找掛載點時實作「多級回退選擇器（Multi-level Selectors）」：
+```javascript
+const playerTarget = document.querySelector('.html5-video-player') ||
+                     document.querySelector('#movie_player') ||
+                     document.querySelector('video')?.parentElement;
+```
+如果上述選擇器全部失效（playerTarget === null），插件觸發安全島機制（Safe Island）：不再嘗試內嵌進度條到影片下方，而是改為在網頁右下角固定定位（position: fixed; bottom: 20px; right: 20px;）渲染一個獨立的微型懸浮方塊（Floating Widget）。雖然不再融入原生網頁，但能保證核心 A-B 循環與 Anki 匯出功能 100% 依然可用，絕不完全死機。
+
+### 3. 多分頁狀態隔離與全域設定同步
+* 狀態隔離：每個 YouTube 分頁的 timeA、timeB 以及 isLoopActive 開關屬於分頁級別的私有狀態（存於各分頁 Content Script 的記憶體實例中），完全隔離，互不干涉。
+* 設定同步：如第四章所述，若使用者在 Popup 或 A 分頁修改了全域偏好（例如關閉了 autoFade），Background 透過 chrome.storage.onChanged 捕獲，並利用 chrome.tabs.sendMessage 向所有開啟的 YouTube 分頁進行全域廣播。各分頁收到訊息後，動態更新記憶體設定，達成「設定一處修改，全部分頁即時生效」的大廠動態體驗。
+
+### 4. 語系字幕變更動態跟隨
+* 痛點：用戶在 YouTube 齒輪選單中將字幕從「英文」切換為「日文」，插件若只執著於初次載入的網頁變數，就會抓錯語言。
+* 解決方案：YouTube 原生在切換字幕時，會向 timedtext API 發送一條全新的網路請求。我們在 background.js 中部署網路監聽網（Web Request Listener）；Content Script 接收到新的 details.url 後，自動將結尾替換為 &fmt=json3 並重新 fetch 覆蓋 window.currentVideoSubtitles 快取。
+> V1版本決策：V1不實作webRequest攔截方案，V1僅在影片載入時抓取一次字幕；使用者切換字幕需要刷新頁面；webRequest方案移至V2迭代。
+
+------------------------------
+## 💬 附錄四：錯誤提示與 OSD 字彙全清單（UI Copywriting）
+所有面向使用者的提示語必須語氣專業、克制（避免驚嘆號濫用），嚴格遵守以下對照表：
+
+| 觸發情境 (Event) | 提示字彙 (Copywriting) | 視覺色彩 (Theme) | 顯示時長 (Duration) |
+|---|---|---|---|
+| 成功開啟 A-B 循環 | Loop Mode: ON | 電光藍 (#2563EB) | 1000ms |
+| 關閉 A-B 循環 | Loop Mode: OFF | 灰色 (#A3A3A3) | 1000ms |
+| 設定 A 點成功 | [ Anchor A Set ] | 純白 (#FFFFFF) | 800ms |
+| 設定 B 點成功 | [ Anchor B Set ] | 純白 (#FFFFFF) | 800ms |
+| 開始連線 Anki 匯出 | ⚡ Syncing to Anki... | 藍色閃爍 | 持續至非同步結束 |
+| Anki 匯出成功 | ✓ Card Synced | 螢光綠 (#34C759) | 1200ms |
+| Anki 未開啟 / 連線失敗 | ✕ Anki Offline. Saved to local. | 暗橙色 (#F59E0B) | 2000ms |
+| 觸發批量同步成功 | ✓ Batch Sync Complete | 螢光綠 (#34C759) | 1500ms |
+| 重複匯出被 Anki 拒絕 | ⚠️ Card already exists | 暗橙色 (#F59E0B) | 1500ms |
+| 插件在背景自動更新 | ⚠️ Extension updated. Please refresh. | 紅色橫幅常駐 | 需手動重新整理網頁 |
+
+------------------------------
+## 💰 附錄五：商業化授權與付費邏輯（Premium Monetization）
+為了確保長期的開發動力，產品採取 Freemium（免費增值） 商業模式，功能劃分如下，嚴格限制代碼邏輯：
+
+### 1. 免費版（Free Tier）—— 核心體驗完整
+* 無縫融入 YouTube 播放器的 4px 智能進度條與主控制列。
+* 滑鼠 Handles 幾何拖曳調整與微調膠囊（-0.1s / +0.1s）。
+* 完整的捕獲階段鍵盤快捷鍵接管（[、]、⌥A）。
+* 限制：不支援字幕自動抓取與 Anki 一鍵導出。點擊 Anki 圖標時，會跳出高質感彈窗引導訂閱。
+
+### 2. 進階版（Premium Tier）—— 高能生產力解鎖
+* 解鎖功能：
+* 解鎖 JSON3 字幕匹配引擎（自動抓取 A-B 區間內的文字）。
+* 解鎖 1‑Click AnkiConnect 靜態一鍵同步與 Anki 離線暫存佇列。
+* 解鎖智慧上一句/下一句（A/D 鍵）字幕磁吸自動跳轉功能。
+
+* 定價策略：採用歐美獨立開發者常見的兩種定價：
+* $2.99 / 月（訂閱制）
+* $29.00（終身買斷制，Lifetime Access，這極受極客圈歡迎）
+
+* 驗證機制：在 background.js 初始化時，呼叫 一個輕量級的外部授權伺服器（如 Gumroad 或 Lemonsqueezy API），驗證用戶輸入的 License Key，並將激活狀態儲存於 chrome.storage.sync.set({ isPremium: true }) 中。各模組讀取此布林值來決定是否解鎖進階核心代碼。
+
+> V1版本決策：V1保留全部Premium UI程式分支，但關閉外部License伺服器網路請求，全部功能開放；授權驗證骨架保留，對接Gumroad/Lemon Squeezy移至V2版本。
+
+------------------------------
+# 附錄六：剩餘缺口正式規格補充（接原開發聖經附錄一～五之後）
+> 本附錄為《YouTube Clips Playback 開發聖經》官方補充，解決前期分析識別出的3項未決缺口：字幕即時切換權限決策、Premium授權後端介面定義、QA回歸測試檢查清單。所有條目為可直接交付開發的確定規格，消除實作階段的模糊決策空間。
+
+## 6.1 缺口1：字幕語言動態切換 — WebRequest 權限方案抉擇
+### 業務背景
+原始附錄三提出透過`chrome.webRequest`攔截字幕網路請求，實現用戶在YouTube頁面手動切換字幕語言時，插件自動刷新字幕快取；但Manifest V3下`webRequest`會增加擴充權限範圍，提升Chrome Web Store審核說明成本，因此提供二選一強制決策，**專案第一版採【方案1：不引入webRequest權限】**
+
+#### 方案1（V1正式採用，低權限、商店審核友好）
+1. 權限：不新增`webRequest`相關任何權限，維持現有`storage`、`tabs`權限集合。
+2. 字幕抓取時機：僅在影片初始載入完成時，透過頁面注入script讀取`ytInitialPlayerResponse`取得當時預設字幕軌，下載`json3`字幕並快取於記憶體`window.currentVideoSubtitles`。
+3. 用戶手動切換字幕語言之後：**插件不會自動偵測與刷新字幕快取**。
+4. 使用者降級UX：
+   - OSD彈出提示：`⚠️ 已切換字幕語言，請重新整理影片頁面更新字幕快取`
+   - Popup設定面板增加提示文字：「切換字幕語言後需重新載入影片頁面才可生效」
+5. 優點：最小權限原則，降低商店審核風險，程式碼簡化。
+6. 缺點：無法做到切換字幕即時跟隨，需要使用者手動刷新頁面。
+
+#### 方案2（保留為後續迭代選項，V1不實作）
+> 僅在後續迭代版本評估開啟，需補齊商店審核用途說明。
+- 引入`chrome.webRequest`權限，監聽youtube timedtext字幕請求；攔截新的字幕url，傳送給content‑script，重新下載json3覆蓋記憶體字幕快取，做到無需刷新頁面即時切換字幕。
+- 發布Chrome商店時，需在商店說明明確解釋此權限僅用於讀取字幕API網址，不會讀取使用者瀏覽其他網站流量。
+
+> **V1版本決策記錄：選擇方案1；方案2放入V2迭代路線圖，本次交付不實作。**
+
+## 6.2 缺口2：Premium付費授權驗證 — Background 授權介面規格
+### 業務背景
+原附錄五僅概念描述透過Gumroad / Lemon Squeezy做License Key驗證，缺少介面約束、資料結構、失敗容錯，現補充完整可實作介面規格。
+> V1版本決策：**第一版不對接外部授權伺服器，全部功能開放；授權驗證邏輯完整保留程式骨架，但關閉網路請求；授權對接放到V2迭代。**
+
+1. **存儲Schema（chrome.storage.sync）**
+
+| Key | Type | Default | 說明 |
+|---|---|---|---|
+| `licenseKey` | string | `""` | 用戶手動輸入的授權序號 |
+| `isPremium` | boolean | `false` | 本地緩存的高級功能開關狀態 |
+| `licenseLastCheckTs` | number | `0` | 上次遠端驗證時間戳（毫秒） |
+
+2. **Background 內部函數：`validateLicenseKey(licenseKey:string) → Promise<{valid:boolean,msg:string}>`**
+- V1實作：骨架函數，直接返回`{valid:true, msg:"V1全功能開放，授權驗證待V2實作"}`，**不發起任何外部網路請求**。
+- V2後續實作協議（僅做規格留存）：
+  - HTTP POST呼叫 Lemon Squeezy / Gumroad 授權API，攜帶`licenseKey`；
+  - 請求timeout：8000ms；
+  - 成功：寫入`isPremium:true`，更新`licenseLastCheckTs`；
+  - 失敗（網路異常 / license無效）：`valid:false`，返回對應錯誤訊息。
+
+3. **全域狀態廣播**
+授權狀態發生變化時，background透過`chrome.tabs.sendMessage`廣播`SYNC_PREMIUM_STATUS`事件給所有YouTube分頁，各content‑script接收後更新本機記憶體的premium開關，UI即時解鎖/鎖定進階功能。
+
+4. **容錯UX規範**
+- Popup設定頁提供License Key輸入框；V1輸入框保留UI，但點擊驗證僅彈OSD提示「授權驗證功能將於後續版本上線」。
+- 網路離線狀態：V2版本設計緩存上次驗證結果，7天內可離線使用Premium，超過7天未連網則降級為免費版。
+
+> **V1版本決策記錄：保留全部Premium UI與程式分支，但關閉外部授權API調用；全部功能開放給使用者；完整遠端驗證移至V2迭代。**
+
+## 6.3 缺口3：QA回歸測試Checklist（商業版交付必備回歸用例）
+> 作為開發完畢後的驗證清單，開發者/測試人員逐項勾選，確保功能、UI、異常場景全部符合規格。分四大模組：核心播放器UI、鍵盤系統、字幕&Anki匯出、容錯降級與擴充生命週期。
+
+### 模組A｜核心播放器UI與A‑B循環
+- [ ] YouTube一般網頁模式：控制列正確渲染在播放器上方，z-index正常，不會被原生元件遮蓋。
+- [ ] YouTube影院模式：UI跟隨播放器，不丟失、不錯位。
+- [ ] YouTube全螢幕模式：UI完整可見，拖拽把手、按鈕可正常點擊。
+- [ ] 滑鼠hover時間軸：把手平滑顯示；離開後把手平滑隱藏。
+- [ ] 拖拽A把手：不能越過B把手，維持最小間隔`minLoopGap`配置值；UI時間數字同步更新；拖拽過程影片scrub即時跟進畫面。
+- [ ] 拖拽B把手：不能越過A把手；UI時間數字同步更新。
+- [ ] A‑B Loop開啟：播放到B點時間，準確跳回A點；OSD正確彈出`Loop Mode: ON`。
+- [ ] A‑B Loop關閉：不再自動跳回A點；OSD彈出`Loop Mode: OFF`。
+- [ ] SPA YT換片事件`yt‑navigate‑finish`：舊UI元件銷毀，新影片頁面重新完整初始化全部UI。
+- [ ] 點擊插件內按鈕後，焦點被強制返回video元素，Space鍵可以正常播放暫停，不會重複觸發按鈕點擊。
+
+### 模組B｜捕獲階段鍵盤管理器
+- [ ] `Alt+A`（Mac Option+A）：正確切換Loop模式，不觸發YouTube原生快捷鍵。
+- [ ] Loop開啟狀態：`[`設定A點，`]`設定B點，OSD提示正確；YouTube原生按鍵行為被攔截，不會額外跳轉時間。
+- [ ] Loop開啟狀態：方向鍵左右執行A/B微調，YouTube原生5秒跳轉被攔截。
+- [ ] Loop開啟狀態：Space鍵**不被攔截**，保留YouTube原生播放暫停。
+- [ ] 游標位於評論區/搜尋框/輸入框打字時：所有插件快捷鍵全部失效，不攔截輸入。
+
+### 模組C｜字幕引擎 & AnkiConnect匯出（Premium功能）
+- [ ] 影片有可用英文字幕：頁面載入完成後成功抓取json3，記憶體`currentVideoSubtitles`被填充。
+- [ ] A‑B片段跨多條字幕：匹配引擎正確交集過濾，合併區間內全部字幕，加入0.1s時間緩衝避免斷頭。
+- [ ] 影片無字幕：Anki卡片正面顯示預設提示文字`[無捕捉到字幕，請於卡片手動輸入]`。
+- [ ] Anki未啟動，AnkiConnect 8765端口無回應：觸發離線邏輯，片段推入`pendingSyncAnki`佇列；OSD彈出離線提示。
+- [ ] Anki開啟狀態：點擊Anki按鈕成功建立Basic卡片；牌組`UTube_UP_Premium`自動建立；tag正確寫入；`allowDuplicate`重複卡片攔截生效。
+- [ ] Popup Segments頁面：存在pending待同步項目時顯示橙色警告橫幅，點擊「立即同步」逐個重試Anki匯出；成功項目從pending佇列移除。
+- [ ] pendingSyncAnki佇列達上限50筆：FIFO丟棄最舊項目，OSD彈出空間已滿警告。
+
+### 模組D｜容錯、設定同步、擴充生命週期
+- [ ] DOM選擇器全部失效（YouTube改版類名）：觸發Safe Island安全島，右下角浮動小組件升起，核心A‑B、Anki功能可用，不完全崩潰。
+- [ ] Popup修改設定（autoFade / defaultSpeed等sync配置）：透過`chrome.storage.onChanged`廣播給所有YouTube分頁，各分頁即時讀取新設定，無需刷新頁面。
+- [ ] 擴充重新載入/更新，發生`Extension context invalidated`：content‑script捕獲異常，畫面顯示提示橫幅「擴充已更新，請重新整理頁面」，不報錯卡死。
+- [ ] savedSegments本機存儲：新增、刪除片段；點擊片段跳轉對應影片並載入A‑B時間；數據持久化存在`chrome.storage.local`。
+- [ ] Popup刪除儲存片段：動畫收縮，storage數據同步刪除。
+
+> 備註：每個測試用例如出現不符合規格現象，視為Bug，需修復後才可交付。
+
+---
+> 附錄六完結。
+> 備註：開發啟動前會議議題即對照本附錄6.1、6.2的V1決策做確認；交付前測試人員完整跑一遍6.3 QA Checklist。
+
+這份附錄將所有潛在的需求模糊地帶徹底轉化為可量化、可實作的確定規格。開發者現在可以 100% 關閉猜測模式，直接對照本聖經進行代碼封裝。祝實作順利，期待這款極具大廠質感的產品上線！
+
+---
+說明：本文檔可直接全選複製，儲存為 `YouTube Clips Playback — 開發聖經.txt` UTF‑8編碼純文字檔案。程式碼區塊可單獨複製對應到各個專案檔。
