@@ -260,6 +260,13 @@ html, body {
   margin-top: 2px;
 }
 .subtitle-en:empty, .subtitle-zh:empty { display: none; }
+.sub-word {
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+.sub-word:hover { color: var(--green); background: rgba(52, 199, 89, 0.14); }
+.sub-word:active { color: var(--green); background: rgba(52, 199, 89, 0.26); }
 .subtitle-size { flex: 0 0 auto; display: flex; gap: 6px; align-items: center; }
 .subtitle-size .mini-btn { padding: 4px 9px; font-size: 12px; }
 .subtitle-resize {

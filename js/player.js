@@ -284,9 +284,87 @@
     list.appendChild(frag);
   }
 
+  /* ---------- 字幕詞匯：斷詞、比對、渲染 ---------- */
+  var IRREGULAR = {
+    brought: 'bring', gave: 'give', given: 'give', shook: 'shake', shaken: 'shake',
+    sold: 'sell', sank: 'sink', sunk: 'sink', sent: 'send', left: 'leave',
+    felt: 'feel', kept: 'keep', held: 'hold', told: 'tell', thought: 'think',
+    found: 'find', made: 'make', took: 'take', came: 'come', got: 'get',
+    went: 'go', saw: 'see', said: 'say', knew: 'know', wrote: 'write',
+    spoke: 'speak', grew: 'grow', fell: 'fall', met: 'meet', built: 'build',
+    spent: 'spend', heard: 'hear', meant: 'mean', lost: 'lose', won: 'win',
+    became: 'become', began: 'begin', ran: 'run', sat: 'sit', stood: 'stand',
+    children: 'child', men: 'man', women: 'woman', feet: 'foot', teeth: 'tooth',
+    mice: 'mouse', people: 'person', shelves: 'shelf', wolves: 'wolf',
+    leaves: 'leaf', lives: 'life', knives: 'knife', wives: 'wife'
+  };
+
+  function tokenCandidates(tok) {
+    var s = String(tok || '').toLowerCase().replace(/^'+|'+$/g, '');
+    var out = {};
+    function add(x) { if (x && x.length >= 2) out[x] = true; }
+    add(s);
+    if (IRREGULAR[s]) add(IRREGULAR[s]);
+    add(s.replace(/'s$/, ''));
+    if (/ies$/.test(s)) add(s.slice(0, -3) + 'y');
+    if (/(sses|shes|ches|xes|zes)$/.test(s)) add(s.slice(0, -2));
+    if (/s$/.test(s) && !/(ss|us|is)$/.test(s)) add(s.slice(0, -1));
+    if (/ied$/.test(s)) add(s.slice(0, -3) + 'y');
+    if (/([bdfglmnprt])\1ed$/.test(s)) add(s.slice(0, -3));
+    if (/ed$/.test(s)) { add(s.slice(0, -2)); add(s.slice(0, -1)); }
+    if (/([bdfglmnprt])\1ing$/.test(s)) add(s.slice(0, -4));
+    if (/ing$/.test(s)) { add(s.slice(0, -3)); add(s.slice(0, -3) + 'e'); }
+    return Object.keys(out);
+  }
+
+  function buildWordMap(seg) {
+    var map = {};
+    ((seg && seg.words) || []).forEach(function (w) {
+      if (!w) return;
+      if (w.w) map[String(w.w).toLowerCase()] = w;
+      if (w.src) map[String(w.src).toLowerCase()] = w;
+    });
+    return map;
+  }
+
+  function findWord(map, tok) {
+    var cands = tokenCandidates(tok);
+    for (var i = 0; i < cands.length; i++) {
+      if (map[cands[i]]) return map[cands[i]];
+    }
+    return null;
+  }
+
   function renderSubtitle(seg) {
     if (!App.hasSubtitle) return;
-    $('subtitle-en').textContent = (seg && seg.en) || '';
+    var enEl = $('subtitle-en');
+    var en = (seg && seg.en) || '';
+    enEl.textContent = '';
+    if (en) {
+      var map = buildWordMap(seg);
+      var re = /[A-Za-z][A-Za-z']*/g;
+      var last = 0, m;
+      while ((m = re.exec(en)) !== null) {
+        if (m.index > last) enEl.appendChild(document.createTextNode(en.slice(last, m.index)));
+        var tok = m[0];
+        var word = findWord(map, tok);
+        if (word) {
+          var span = document.createElement('span');
+          span.className = 'sub-word';
+          span.textContent = tok;
+          span.title = wordLabel(word) + (word.zh ? '：' + word.zh : '');
+          span.addEventListener('click', function (ev) {
+            ev.stopPropagation();
+            selectWord(word);
+          });
+          enEl.appendChild(span);
+        } else {
+          enEl.appendChild(document.createTextNode(tok));
+        }
+        last = re.lastIndex;
+      }
+      if (last < en.length) enEl.appendChild(document.createTextNode(en.slice(last)));
+    }
     $('subtitle-zh').textContent = (seg && seg.zh) || '';
     fitSubtitle();
   }
@@ -671,6 +749,13 @@
     });
     $('btn-sub-smaller').addEventListener('click', function () { changeSubtitleFont(-SUB_FONT_STEP); });
     $('btn-sub-larger').addEventListener('click', function () { changeSubtitleFont(SUB_FONT_STEP); });
+    $('subtitle-text').addEventListener('click', function (e) {
+      if (e.target.closest('.sub-word')) return;
+      if (!App.ready) return;
+      var st = App.player.getPlayerState();
+      if (st === 1) pauseVideo();
+      else App.player.playVideo();
+    });
 
     bindTimeline();
     bindSubtitleResize();
