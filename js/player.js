@@ -19,6 +19,10 @@
   var SUB_FONT_STEP = 2;
   var SUB_FONT_DEFAULT = 20;
   var LS_SUBFONT = LS_PREFIX + 'subfont';
+  var SUB_HEIGHT_MIN = 48;
+  var SUB_HEIGHT_MAX = 220;
+  var SUB_HEIGHT_DEFAULT = 76;
+  var LS_SUBHEIGHT = LS_PREFIX + 'subheight';
 
   var App = {
     program: null,
@@ -40,6 +44,7 @@
     pinned: null,
     offset: 0,
     subFontSize: SUB_FONT_DEFAULT,
+    subHeight: SUB_HEIGHT_DEFAULT,
     hasSubtitle: false,
     pendingSeek: null,
     pendingUntil: 0,
@@ -96,6 +101,7 @@
       $('page-desc').textContent = App.program.description;
     }
     loadSubFont();
+    loadSubHeight();
     bindUI();
     loadPlayer();
   }
@@ -156,7 +162,7 @@
     restoreState();
     setLoopUI(App.loopActive);
     applySpeed();
-    applySubtitleFont();
+    applySubtitleHeight();
     updateTimelineUI();
     updateTimeLabels();
     updatePlayhead(0);
@@ -224,11 +230,13 @@
   function segmentIndexAt(st) {
     var segs = App.vocab;
     if (!segs.length) return -1;
-    if (st < segs[0].start) return 0;
+    if (st < segs[0].start) return -1;
+    var idx = -1;
     for (var i = 0; i < segs.length; i++) {
-      if (st >= segs[i].start - 0.001 && st < segs[i].end) return i;
+      if (st >= segs[i].start) idx = i;
+      else break;
     }
-    return segs.length - 1;
+    return idx;
   }
 
   function updateSegment(t) {
@@ -280,6 +288,7 @@
     if (!App.hasSubtitle) return;
     $('subtitle-en').textContent = (seg && seg.en) || '';
     $('subtitle-zh').textContent = (seg && seg.zh) || '';
+    fitSubtitle();
   }
 
   function renderPinned() {
@@ -376,6 +385,13 @@
     saveState();
   }
 
+  function replayFromA() {
+    if (!App.ready) return;
+    seekTo(App.timeA);
+    try { App.player.playVideo(); } catch (e) { /* ignore */ }
+    showOSD('▶ 從 A 點重播', '#F59E0B', 900);
+  }
+
   function nudgeA(delta) {
     App.timeA = clamp(App.timeA + delta, 0, Math.max(0, App.timeB - MIN_GAP));
     updateTimelineUI();
@@ -431,15 +447,37 @@
     $('speed-select').value = String(App.speed);
   }
 
-  function applySubtitleFont() {
-    var bar = $('subtitle-bar');
-    if (bar) bar.style.setProperty('--sub-font', App.subFontSize + 'px');
-  }
-
   function changeSubtitleFont(delta) {
     App.subFontSize = clamp(App.subFontSize + delta, SUB_FONT_MIN, SUB_FONT_MAX);
-    applySubtitleFont();
+    fitSubtitle();
     saveSubFont();
+  }
+
+  /* 依容器高度自動縮字：內容放不下就縮小字級，避免溢出與版面跳動 */
+  function fitSubtitle() {
+    var text = $('subtitle-text');
+    if (!text) return;
+    var en = $('subtitle-en'), zh = $('subtitle-zh');
+    var avail = text.clientHeight;
+    if (!avail) return;
+    var size = App.subFontSize;
+    function apply(s) {
+      en.style.fontSize = s + 'px';
+      zh.style.fontSize = Math.round(s * 0.85) + 'px';
+    }
+    apply(size);
+    var guard = 0;
+    while ((en.scrollHeight + zh.scrollHeight) > avail && size > SUB_FONT_MIN && guard < 80) {
+      size -= 1;
+      apply(size);
+      guard++;
+    }
+  }
+
+  function applySubtitleHeight() {
+    var bar = $('subtitle-bar');
+    if (bar) bar.style.setProperty('--sub-height', App.subHeight + 'px');
+    fitSubtitle();
   }
 
   function loadSubFont() {
@@ -451,6 +489,41 @@
 
   function saveSubFont() {
     try { localStorage.setItem(LS_SUBFONT, String(App.subFontSize)); } catch (e) { /* ignore */ }
+  }
+
+  function loadSubHeight() {
+    try {
+      var v = parseInt(localStorage.getItem(LS_SUBHEIGHT), 10);
+      if (isFinite(v)) App.subHeight = clamp(v, SUB_HEIGHT_MIN, SUB_HEIGHT_MAX);
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveSubHeight() {
+    try { localStorage.setItem(LS_SUBHEIGHT, String(App.subHeight)); } catch (e) { /* ignore */ }
+  }
+
+  function bindSubtitleResize() {
+    var handle = $('subtitle-resize');
+    if (!handle) return;
+    handle.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var startY = e.clientY;
+      var startH = App.subHeight;
+      handle.classList.add('dragging');
+      function onMove(ev) {
+        App.subHeight = clamp(startH + (ev.clientY - startY), SUB_HEIGHT_MIN, SUB_HEIGHT_MAX);
+        applySubtitleHeight();
+      }
+      function onUp() {
+        handle.classList.remove('dragging');
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onUp);
+        saveSubHeight();
+      }
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+    });
   }
 
   /* ================= 時間軸 UI ================= */
@@ -569,10 +642,10 @@
   /* ================= UI 事件綁定 ================= */
   function bindUI() {
     $('btn-loop').addEventListener('click', toggleLoop);
-    $('txt-a').addEventListener('click', setA);
+    $('txt-a').addEventListener('click', replayFromA);
     $('txt-b').addEventListener('click', setB);
-    $('btn-nudge-a').addEventListener('click', function () { nudgeA(-0.1); });
-    $('btn-nudge-b').addEventListener('click', function () { nudgeB(0.1); });
+    $('btn-nudge-a').addEventListener('click', function () { nudgeA(-1); });
+    $('btn-nudge-b').addEventListener('click', function () { nudgeB(1); });
     $('speed-select').addEventListener('change', function () {
       App.speed = parseFloat(this.value) || 1;
       applySpeed();
@@ -600,8 +673,10 @@
     $('btn-sub-larger').addEventListener('click', function () { changeSubtitleFont(SUB_FONT_STEP); });
 
     bindTimeline();
+    bindSubtitleResize();
     bindKeyboard();
     bindFocusRetention();
+    window.addEventListener('resize', fitSubtitle);
   }
 
   /* ================= 快捷鍵（捕獲階段） ================= */
@@ -630,10 +705,10 @@
         case ']':
           e.preventDefault(); setB(); break;
         case 'ArrowLeft':
-          if (App.loopActive) { e.preventDefault(); nudgeA(-0.1); }
+          if (App.loopActive) { e.preventDefault(); nudgeA(-1); }
           break;
         case 'ArrowRight':
-          if (App.loopActive) { e.preventDefault(); nudgeB(0.1); }
+          if (App.loopActive) { e.preventDefault(); nudgeB(1); }
           break;
         case 'a': case 'A':
           e.preventDefault(); gotoSegment(App.segIndex - 1); break;

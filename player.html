@@ -31,7 +31,7 @@
     <section class="control-panel" aria-label="學習控制列">
       <!-- 字幕（來自詞匯 JSON 的 englishSentence / chineseTranslation） -->
       <div class="subtitle-bar" id="subtitle-bar" hidden>
-        <div class="subtitle-text">
+        <div class="subtitle-text" id="subtitle-text">
           <div class="subtitle-en" id="subtitle-en"></div>
           <div class="subtitle-zh" id="subtitle-zh"></div>
         </div>
@@ -39,6 +39,7 @@
           <button class="mini-btn" type="button" id="btn-sub-smaller" title="縮小字幕">A−</button>
           <button class="mini-btn" type="button" id="btn-sub-larger" title="放大字幕">A＋</button>
         </div>
+        <div class="subtitle-resize" id="subtitle-resize" title="上下拖曳調整字幕高度"></div>
       </div>
 
       <!-- A-B 時間軸 -->
@@ -63,12 +64,12 @@
         </div>
 
         <div class="cb-center">
-          <span class="anchor mono clickable" id="txt-a" title="點擊：將目前時間設為 A 點">00:00.0</span>
+          <span class="anchor mono clickable" id="txt-a" title="滑過變黃；點擊從 A 點重播">00:00.0</span>
           <span class="anchor-sep">—</span>
           <span class="anchor mono clickable" id="txt-b" title="點擊：將目前時間設為 B 點">00:00.0</span>
           <span class="divider"></span>
-          <button class="mini-btn" id="btn-nudge-a" title="A 點 -0.1 秒">-0.1s</button>
-          <button class="mini-btn" id="btn-nudge-b" title="B 點 +0.1 秒">+0.1s</button>
+          <button class="mini-btn" id="btn-nudge-a" title="A 點 -1 秒">-1s</button>
+          <button class="mini-btn" id="btn-nudge-b" title="B 點 +1 秒">+1s</button>
         </div>
 
         <div class="cb-right">

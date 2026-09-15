@@ -235,16 +235,18 @@ html, body {
 
 /* ---------- 播放頁：字幕列（進度條上方、影片視窗外） ---------- */
 .subtitle-bar {
+  position: relative;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   gap: 14px;
-  padding: 4px 2px 12px;
+  height: var(--sub-height, 76px);
+  padding: 6px 2px 14px;
   margin-bottom: 6px;
   border-bottom: 1px solid var(--border-soft);
 }
 .subtitle-bar[hidden] { display: none; }
-.subtitle-text { flex: 1 1 auto; min-width: 0; }
+.subtitle-text { flex: 1 1 auto; min-width: 0; overflow: hidden; }
 .subtitle-en {
   font-size: var(--sub-font, 20px);
   font-weight: 600;
@@ -258,8 +260,25 @@ html, body {
   margin-top: 2px;
 }
 .subtitle-en:empty, .subtitle-zh:empty { display: none; }
-.subtitle-size { flex: 0 0 auto; display: flex; gap: 6px; }
+.subtitle-size { flex: 0 0 auto; display: flex; gap: 6px; align-items: center; }
 .subtitle-size .mini-btn { padding: 4px 9px; font-size: 12px; }
+.subtitle-resize {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ns-resize;
+}
+.subtitle-resize::before {
+  content: '';
+  width: 46px; height: 3px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.18);
+  transition: background 0.15s;
+}
+.subtitle-resize:hover::before, .subtitle-resize.dragging::before { background: var(--accent); }
 
 .ab-timeline {
   height: 22px;
@@ -387,6 +406,11 @@ html, body {
 }
 .anchor.clickable { cursor: pointer; }
 .anchor.clickable:hover { background: rgba(37, 99, 235, 0.25); border-color: rgba(37, 99, 235, 0.5); }
+#txt-a:hover {
+  color: var(--amber);
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.55);
+}
 .anchor-sep { color: var(--text-faint); font-size: 13px; }
 
 .divider { width: 1px; height: 18px; background: rgba(255, 255, 255, 0.12); }
@@ -695,6 +719,23 @@ body.modal-open { overflow: hidden; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
 .modal-actions .mini-btn { padding: 9px 18px; font-size: 13.5px; }
 .modal-actions .mini-btn:disabled { opacity: 0.55; cursor: default; }
+
+/* ---------- 按鈕按下回饋 ---------- */
+.mini-btn:active,
+.tool-btn:active,
+.add-btn:active,
+.loop-pill:active,
+.modal-tab:active,
+.modal-x:active,
+.vocab-chip:active,
+.anchor.clickable:active,
+.back-link:active,
+.program-card:active {
+  transform: scale(0.95);
+  filter: brightness(1.18);
+}
+.program-card:active { transform: scale(0.99); }
+.tool-btn:active, .add-btn:active { box-shadow: none; }
 
 /* ---------- 響應式 ---------- */
 @media (max-width: 1024px) {
