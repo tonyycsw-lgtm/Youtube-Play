@@ -333,7 +333,9 @@
     var title = titleEl.value.trim() || state.jsonTitle || '';
     if (!title) {
       var info = await fetchOembed(resolved);
-      title = (info && info.title) || (resolved.source === 'file' ? fileNameFromUrl(resolved.src) : resolved.id);
+      title = (info && info.title) ||
+        (resolved.source === 'file' ? fileNameFromUrl(resolved.src) :
+          (resolved.source === 'tiktok' ? 'TikTok 影片' : resolved.id));
       titleEl.value = title;
     }
 
