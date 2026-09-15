@@ -125,11 +125,41 @@ html, body {
 .program-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .thumb-icon {
   position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 44px;
-  color: #64748B;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px;
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(15, 15, 15, 0.6));
 }
+.thumb-glyph { font-size: 42px; line-height: 1; }
+.thumb-brand { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: #CBD5E1; }
+.thumb-tiktok, .thumb-douyin { background: linear-gradient(135deg, #111, #2b2b2b); }
+.thumb-tiktok .thumb-glyph, .thumb-douyin .thumb-glyph {
+  color: #fff;
+  text-shadow: 1px 1px 0 #25F4EE, -1px -1px 0 #FE2C55;
+}
+.thumb-file .thumb-glyph { color: #93C5FD; }
+.thumb-youtube .thumb-glyph { color: #F87171; }
+
+.program-item { position: relative; display: flex; }
+.program-item .program-card { flex: 1 1 auto; }
+.program-delete {
+  position: absolute;
+  top: 8px; right: 8px;
+  z-index: 3;
+  width: 26px; height: 26px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+}
+.program-item:hover .program-delete { opacity: 1; }
+.program-delete:hover { background: var(--red); border-color: var(--red); }
+.program-delete:active { transform: scale(0.92); }
 .program-thumb::after {
   content: '';
   position: absolute; inset: 0;

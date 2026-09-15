@@ -2,8 +2,9 @@
    Cloudflare Pages Function — /api/programs
    自訂節目清單（存在 KV；與靜態 programs.json 並存）
 
-   - GET  /api/programs            列出所有自訂節目
-   - POST /api/programs            新增或更新節目（同 id 直接覆寫；可同時存入詞匯 JSON）
+   - GET    /api/programs          列出所有自訂節目
+   - POST   /api/programs          新增或更新節目（同 id 直接覆寫；可同時存入詞匯 JSON）
+   - DELETE /api/programs?id=<id>  刪除節目（同時刪除其詞匯）
      來源 source：youtube | tiktok | douyin | file
        youtube：需 videoId
        tiktok ：需 videoId（貼文 ID）
@@ -39,7 +40,7 @@ function json(data, status, headers) {
 function corsHeaders() {
   return {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type'
   };
 }
@@ -73,6 +74,17 @@ async function listPrograms(env) {
 async function handleGet(env, headers) {
   const programs = await listPrograms(env);
   return json({ ok: true, programs: programs }, 200, headers);
+}
+
+async function handleDelete(env, request, headers) {
+  const url = new URL(request.url);
+  const id = String(url.searchParams.get('id') || '').trim();
+  if (!ID_RE.test(id)) {
+    return json({ ok: false, error: 'invalid_id', note: '缺少或無效的 id。' }, 400, headers);
+  }
+  await env.KV_BINDING.delete(PREFIX_PROGRAM + id);
+  try { await env.KV_BINDING.delete(PREFIX_VOCAB + id); } catch (e) { /* 詞匯不存在也無妨 */ }
+  return json({ ok: true, id: id }, 200, headers);
 }
 
 async function handlePost(env, request, headers) {
@@ -119,6 +131,8 @@ async function handlePost(env, request, headers) {
   const title = String((body && body.title) || '').trim() || id;
   const lang = String((body && body.lang) || 'en').trim() || 'en';
   const description = String((body && body.description) || '').trim();
+  const rawThumb = String((body && body.thumbnail) || '').trim();
+  const thumbnail = /^https?:\/\//i.test(rawThumb) ? rawThumb : '';
 
   const existingRaw = await env.KV_BINDING.get(PREFIX_PROGRAM + id);
   let createdAt = new Date().toISOString();
@@ -138,6 +152,7 @@ async function handlePost(env, request, headers) {
     title: title,
     lang: lang,
     description: description,
+    thumbnail: thumbnail,
     custom: true,
     createdAt: createdAt
   };
@@ -167,6 +182,7 @@ export async function onRequest(context) {
 
   if (request.method === 'GET') return handleGet(env, headers);
   if (request.method === 'POST') return handlePost(env, request, headers);
+  if (request.method === 'DELETE') return handleDelete(env, request, headers);
 
   return json({ ok: false, error: 'method_not_allowed' }, 405, headers);
 }

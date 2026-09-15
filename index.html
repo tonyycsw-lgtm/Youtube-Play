@@ -11,11 +11,7 @@
   <header class="site-header">
     <div class="container home-header-inner">
       <div class="brand">
-        <div class="brand-logo">YT</div>
-        <div>
-          <h1 id="site-name">影片學習站</h1>
-          <p class="brand-sub">點選節目，開始 A-B 循環學習</p>
-        </div>
+        <h1 id="site-name">影片學習站</h1>
       </div>
       <div class="header-actions">
         <button class="tool-btn add-btn" id="btn-add-video" type="button" title="新增影片（貼 YouTube 連結或上載詞匯 JSON）">＋ 新增影片</button>
@@ -29,12 +25,6 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>老師可用右上角「＋ 新增影片」加入節目（YouTube 連結或詞匯 JSON），或於 <code>programs.json</code> 編輯內建清單；詳見 README.md。</p>
-    </div>
-  </footer>
-
   <div class="modal" id="add-modal" hidden>
     <div class="modal-backdrop" data-close></div>
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="add-modal-title">
@@ -44,7 +34,7 @@
       </div>
 
       <div class="modal-tabs">
-        <button class="modal-tab on" type="button" data-tab="link">YouTube 連結</button>
+        <button class="modal-tab on" type="button" data-tab="link">連結</button>
         <button class="modal-tab" type="button" data-tab="json">上載 JSON</button>
       </div>
 
@@ -68,6 +58,11 @@
         <label class="field">
           <span class="field-label">標題</span>
           <input id="add-title" type="text" placeholder="影片標題" autocomplete="off">
+        </label>
+
+        <label class="field">
+          <span class="field-label">封面圖 URL（選填）</span>
+          <input id="add-thumb" type="text" placeholder="https://.../cover.jpg" autocomplete="off">
         </label>
 
         <div class="field-row">

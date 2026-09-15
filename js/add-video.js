@@ -16,6 +16,7 @@
   var fileEl = document.getElementById('add-json-file');
   var jsonHint = document.getElementById('json-hint');
   var titleEl = document.getElementById('add-title');
+  var thumbEl = document.getElementById('add-thumb');
   var langEl = document.getElementById('add-lang');
   var descEl = document.getElementById('add-desc');
 
@@ -322,6 +323,8 @@
       state.jsonVocab = vocab;
 
       if (title && !titleEl.value.trim()) titleEl.value = title;
+      var thumb = (data.videoInfo && (data.videoInfo.thumbnail || data.videoInfo.cover)) || data.thumbnail || data.cover || '';
+      if (thumb && !thumbEl.value.trim()) thumbEl.value = thumb;
       if (resolved && !urlEl.value.trim()) {
         urlEl.value = resolved.source === 'file'
           ? resolved.src
@@ -395,6 +398,8 @@
     };
     if (resolved.videoId) payload.videoId = resolved.videoId;
     if (resolved.src) { payload.src = resolved.src; payload.mediaType = resolved.mediaType; }
+    var thumb = thumbEl.value.trim();
+    if (thumb) payload.thumbnail = thumb;
     if (state.jsonVocab) payload.vocab = state.jsonVocab;
 
     setBusy(true);

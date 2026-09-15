@@ -79,7 +79,8 @@ python -m http.server 8000
 
 - 支援兩種詞匯 JSON 格式：`{ segments:[{start,end,words:[{w,src,zh}]}] }` 與 `{ wordSegments:[{timeRange, vocabularies:[{word,meaning}]}] }`（會自動轉換）。
 - 播放頁的詞匯**唯一來源是 KV**（`api/vocab/{videoId}`）；不再讀取 repo 內的 JSON。沒有上載 JSON 的影片不會顯示詞匯。
-- 同一影片**可重新上載覆寫**（更新標題／說明與詞匯）；沒有獨立的編輯／刪除介面，要刪除需到 Cloudflare Dashboard → KV 刪除 `program:{videoId}` 與 `vocab:{videoId}`。
+- 可選填**封面圖 URL**；上載 JSON 時若含 `videoInfo.thumbnail`／`thumbnail`／`cover` 會自動帶入。卡片優先顯示封面圖，其次 YouTube 自動縮圖，否則顯示品牌圖示。
+- 同一影片**可重新上載覆寫**（更新標題／說明／封面與詞匯）；自訂卡片右上角有「✕」可**刪除**（同時刪除其詞匯）。靜態 `programs.json` 的節目無法從介面刪除。
 - **不設保護**：任何取得網址的人（含學生）都能新增，KV 寫入端點公開，請自行評估風險。
 - KV 為最終一致性，新增後可能數十秒才全球生效；重新整理即可。
 
@@ -180,7 +181,7 @@ python -m http.server 8000
 
 - 詞匯完全取決於老師上載的 JSON；沒有 JSON 時播放頁不顯示任何詞匯。
 - 無登入/班級管理；所有學生共用同一清單。
-- 首頁「新增影片」不設保護；任何取得網址的人都能新增或覆寫（資料存 KV），且沒有刪除介面。
+- 首頁「新增影片」不設保護；任何取得網址的人都能新增、覆寫或**刪除**（資料存 KV）。
 - 影片若為年齡/地區限制，iframe 可能無法播放（會在頁面顯示錯誤）。
 - 媒體檔 URL 需允許直連與 CORS／range，否則讀不到播放時間，A-B 與詞匯同步會失效。
 - TikTok 不支援變速；部分影片可能不允許嵌入。

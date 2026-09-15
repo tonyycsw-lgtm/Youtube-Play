@@ -16,33 +16,72 @@
     return div.innerHTML;
   }
 
+  function thumbInner(source, program) {
+    if (program.thumbnail) {
+      return '<img src="' + esc(program.thumbnail) + '" alt="' + esc(program.title) + ' 封面" loading="lazy" onerror="this.style.opacity=0.25">';
+    }
+    if (source === 'youtube' && program.videoId) {
+      return '<img src="https://i.ytimg.com/vi/' + encodeURIComponent(program.videoId) + '/hqdefault.jpg" alt="' + esc(program.title) + ' 縮圖" loading="lazy" onerror="this.style.opacity=0.25">';
+    }
+    var isAudio = (source === 'file' && program.mediaType === 'audio');
+    var glyph = (source === 'tiktok' || source === 'douyin' || isAudio) ? '♪' : '▶';
+    var label = source === 'tiktok' ? 'TikTok'
+      : source === 'douyin' ? '抖音'
+        : source === 'file' ? (isAudio ? '音頻' : '影片檔') : '';
+    return '<div class="thumb-icon thumb-' + esc(source) + '">' +
+      '<span class="thumb-glyph">' + glyph + '</span>' +
+      (label ? '<span class="thumb-brand">' + label + '</span>' : '') +
+      '</div>';
+  }
+
   function renderCard(program) {
-    const lang = program.lang || window.__DEFAULT_LANG__ || 'en';
     const href = 'player.html?id=' + encodeURIComponent(program.id);
     const desc = program.description || '';
-
     const source = program.source || 'youtube';
-    let thumb;
-    if (source === 'youtube' && program.videoId) {
-      thumb = '<img src="https://i.ytimg.com/vi/' + encodeURIComponent(program.videoId) + '/hqdefault.jpg" alt="' + esc(program.title) + ' 縮圖" loading="lazy" onerror="this.style.opacity=0.25">';
-    } else {
-      const icon = (source === 'file' && program.mediaType === 'audio') ? '♪' : '▶';
-      thumb = '<div class="thumb-icon">' + icon + '</div>';
-    }
 
     const card = document.createElement('a');
     card.className = 'program-card';
     card.href = href;
     card.innerHTML =
-      '<div class="program-thumb">' + thumb +
-        '<span class="program-lang">' + esc(lang) + '</span>' +
-        (program.custom ? '<span class="program-badge">自訂</span>' : '') +
-      '</div>' +
+      '<div class="program-thumb">' + thumbInner(source, program) + '</div>' +
       '<div class="program-body">' +
         '<h3>' + esc(program.title) + '</h3>' +
         (desc ? '<p>' + esc(desc) + '</p>' : '') +
       '</div>';
-    return card;
+
+    const item = document.createElement('div');
+    item.className = 'program-item';
+    item.appendChild(card);
+
+    if (program.custom) {
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'program-delete';
+      del.title = '刪除此節目';
+      del.textContent = '✕';
+      del.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        deleteProgram(program);
+      });
+      item.appendChild(del);
+    }
+    return item;
+  }
+
+  async function deleteProgram(program) {
+    if (!window.confirm('確定刪除「' + program.title + '」？')) return;
+    try {
+      const res = await fetch('api/programs?id=' + encodeURIComponent(program.id), { method: 'DELETE' });
+      const data = await res.json().catch(function () { return {}; });
+      if (!res.ok || !data.ok) {
+        window.alert('刪除失敗：' + (data.note || data.error || ('HTTP ' + res.status)));
+        return;
+      }
+      await reload();
+    } catch (err) {
+      window.alert('刪除失敗：' + err.message);
+    }
   }
 
   async function fetchStatic() {
@@ -94,7 +133,7 @@
     if (!programs.length) {
       const hint = document.createElement('div');
       hint.className = 'loading-hint error';
-      hint.textContent = '節目清單是空的。請在 programs.json 加入節目，或用右上角「新增影片」加入。';
+      hint.textContent = '節目清單是空的。請用右上角「新增影片」加入。';
       grid.appendChild(hint);
       return;
     }
