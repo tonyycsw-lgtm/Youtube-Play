@@ -659,12 +659,43 @@
   function bindTimeline() {
     var wrapper = $('ab-timeline');
     var track = $('ab-track');
-    wrapper.addEventListener('click', function (e) {
+    var playhead = $('ab-playhead');
+    var scrubbing = false;
+    var wasPlaying = false;
+
+    function timeAt(clientX) {
       var rect = track.getBoundingClientRect();
-      var offsetX = e.clientX - rect.left;
-      offsetX = Math.max(0, Math.min(offsetX, rect.width));
-      seekTo((offsetX / rect.width) * App.duration);
+      if (!rect.width) return 0;
+      var x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+      return (x / rect.width) * App.duration;
+    }
+
+    wrapper.addEventListener('pointerdown', function (e) {
+      if (!App.ready || !App.player || !App.duration) return;
+      e.preventDefault();
+      scrubbing = true;
+      wasPlaying = (App.player.getState() === 'playing');
+      if (wasPlaying) App.player.pause();
+      if (playhead) playhead.classList.add('dragging');
+      try { wrapper.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      seekTo(timeAt(e.clientX));
     });
+
+    wrapper.addEventListener('pointermove', function (e) {
+      if (!scrubbing) return;
+      e.preventDefault();
+      seekTo(timeAt(e.clientX));
+    });
+
+    function endScrub() {
+      if (!scrubbing) return;
+      scrubbing = false;
+      if (playhead) playhead.classList.remove('dragging');
+      if (wasPlaying) { try { App.player.play(); } catch (e) { /* ignore */ } }
+      wasPlaying = false;
+    }
+    wrapper.addEventListener('pointerup', endScrub);
+    wrapper.addEventListener('pointercancel', endScrub);
   }
 
   /* ================= UI 事件綁定 ================= */

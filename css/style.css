@@ -435,6 +435,12 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
   transition: height 0.12s ease;
 }
 .ab-timeline:hover .ab-playhead { height: 16px; }
+.ab-timeline .ab-playhead.dragging {
+  width: 5px;
+  height: 30px;
+  background: var(--amber);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.9);
+}
 
 /* 觸控：拖曳時不要觸發頁面捲動 */
 .ab-timeline, .subtitle-resize { touch-action: none; }
