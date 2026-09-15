@@ -16,9 +16,6 @@
   var LS_PREFIX = 'utube_web_v1:';
   var SUB_FONT_MIN = 14;
   var SUB_FONT_MAX = 34;
-  var SUB_FONT_STEP = 2;
-  var SUB_FONT_DEFAULT = 20;
-  var LS_SUBFONT = LS_PREFIX + 'subfont';
   var SUB_HEIGHT_MIN = 48;
   var SUB_HEIGHT_MAX = 220;
   var SUB_HEIGHT_DEFAULT = 76;
@@ -48,7 +45,6 @@
     segIndex: -1,
     pinned: null,
     searching: false,
-    subFontSize: SUB_FONT_DEFAULT,
     subHeight: SUB_HEIGHT_DEFAULT,
     hasSubtitle: false,
     pendingSeek: null,
@@ -112,7 +108,6 @@
       $('page-desc').textContent = App.program.description;
     }
     setupMediaArea();
-    loadSubFont();
     loadSubHeight();
     bindUI();
     loadPlayer();
@@ -649,20 +644,14 @@
     sel.value = String(App.speed);
   }
 
-  function changeSubtitleFont(delta) {
-    App.subFontSize = clamp(App.subFontSize + delta, SUB_FONT_MIN, SUB_FONT_MAX);
-    fitSubtitle();
-    saveSubFont();
-  }
-
-  /* 依容器高度自動縮字：內容放不下就縮小字級，避免溢出與版面跳動 */
+  /* 依容器高度自動決定字級：先依高度取基準，內容放不下再逐步縮小 */
   function fitSubtitle() {
     var text = $('subtitle-text');
     if (!text) return;
     var en = $('subtitle-en'), zh = $('subtitle-zh');
     var avail = text.clientHeight;
     if (!avail) return;
-    var size = App.subFontSize;
+    var size = clamp(Math.floor(avail / 2.9), SUB_FONT_MIN, SUB_FONT_MAX);
     function apply(s) {
       en.style.fontSize = s + 'px';
       zh.style.fontSize = Math.round(s * 0.85) + 'px';
@@ -682,17 +671,6 @@
     fitSubtitle();
   }
 
-  function loadSubFont() {
-    try {
-      var v = parseInt(localStorage.getItem(LS_SUBFONT), 10);
-      if (isFinite(v)) App.subFontSize = clamp(v, SUB_FONT_MIN, SUB_FONT_MAX);
-    } catch (e) { /* ignore */ }
-  }
-
-  function saveSubFont() {
-    try { localStorage.setItem(LS_SUBFONT, String(App.subFontSize)); } catch (e) { /* ignore */ }
-  }
-
   function loadSubHeight() {
     try {
       var v = parseInt(localStorage.getItem(LS_SUBHEIGHT), 10);
@@ -707,7 +685,7 @@
   function bindSubtitleResize() {
     var handle = $('subtitle-resize');
     if (!handle) return;
-    handle.addEventListener('mousedown', function (e) {
+    handle.addEventListener('pointerdown', function (e) {
       e.preventDefault();
       e.stopPropagation();
       var startY = e.clientY;
@@ -719,12 +697,12 @@
       }
       function onUp() {
         handle.classList.remove('dragging');
-        window.removeEventListener('mousemove', onMove);
-        window.removeEventListener('mouseup', onUp);
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
         saveSubHeight();
       }
-      window.addEventListener('mousemove', onMove);
-      window.addEventListener('mouseup', onUp);
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
     });
   }
 
@@ -785,22 +763,22 @@
         }
         function onUp() {
           handle.classList.remove('dragging');
-          window.removeEventListener('mousemove', onMove);
-          window.removeEventListener('mouseup', onUp);
+          window.removeEventListener('pointermove', onMove);
+          window.removeEventListener('pointerup', onUp);
           if (which === 'A' && !moved) replayFromA();
           saveState();
         }
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onUp);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
       };
     }
 
-    $('ab-handle-a').addEventListener('mousedown', makeDrag('A'));
-    $('ab-handle-b').addEventListener('mousedown', makeDrag('B'));
+    $('ab-handle-a').addEventListener('pointerdown', makeDrag('A'));
+    $('ab-handle-b').addEventListener('pointerdown', makeDrag('B'));
 
     // 拖曳藍色 A-B 區段：整段平移，畫面跟隨 A 點
     var range = $('ab-range');
-    range.addEventListener('mousedown', function (e) {
+    range.addEventListener('pointerdown', function (e) {
       e.preventDefault();
       e.stopPropagation();
       var rect = track.getBoundingClientRect();
@@ -824,16 +802,16 @@
       }
       function onUp(ev) {
         range.classList.remove('dragging');
-        window.removeEventListener('mousemove', onMove);
-        window.removeEventListener('mouseup', onUp);
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
         if (!moved) {
           var x = Math.max(0, Math.min(ev.clientX - rect.left, rect.width));
           seekTo((x / rect.width) * App.duration);
         }
         saveState();
       }
-      window.addEventListener('mousemove', onMove);
-      window.addEventListener('mouseup', onUp);
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
     });
 
     wrapper.addEventListener('click', function (e) {
@@ -868,8 +846,6 @@
       var i = App.segIndex >= 0 ? App.segIndex : segmentIndexAt(App.player ? App.player.getCurrentTime() : 0);
       if (i >= 0) renderSegment(i); else clearSegment();
     });
-    $('btn-sub-smaller').addEventListener('click', function () { changeSubtitleFont(-SUB_FONT_STEP); });
-    $('btn-sub-larger').addEventListener('click', function () { changeSubtitleFont(SUB_FONT_STEP); });
     $('subtitle-text').addEventListener('click', function (e) {
       if (e.target.closest('.sub-word')) return;
       if (!App.ready || !App.player) return;

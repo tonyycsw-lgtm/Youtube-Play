@@ -1,6 +1,6 @@
-/* ============================================================
-   飛象影片學習站 — 共用樣式
-   設計語彙：暗色磨砂玻璃 / 電光藍 #2563EB / 等寬數字 / 大量留白
+﻿/* ============================================================
+   憌情敶梁?摮貊?蝡????梁璅??
+   閮剛?隤?嚗??脩ㄗ???/ ?餃???#2563EB / 蝑祝?詨? / 憭折??
    ============================================================ */
 :root {
   --bg: #0F0F0F;
@@ -29,6 +29,8 @@ html, body {
   color: var(--text);
   font-family: var(--font);
   line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 .container {
@@ -40,7 +42,7 @@ html, body {
 
 .mono { font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
 
-/* ---------- 首頁：頂欄 ---------- */
+/* ---------- 擐?嚗?甈?---------- */
 .site-header {
   padding: 28px 0 18px;
   border-bottom: 1px solid var(--border-soft);
@@ -66,7 +68,8 @@ html, body {
   justify-content: space-between;
   gap: 16px;
 }
-.player-header-main { min-width: 0; }
+.player-header-main { min-width: 0; flex: 1 1 auto; }
+.player-title-block { min-width: 0; }
 .tool-btn {
   flex: 0 0 auto;
   display: inline-flex;
@@ -90,7 +93,7 @@ html, body {
   box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
 }
 
-/* ---------- 首頁：節目卡片 ---------- */
+/* ---------- 擐?嚗??桀??---------- */
 .program-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -200,7 +203,7 @@ html, body {
   color: var(--text-dim);
 }
 
-/* ---------- 播放頁：頂欄 ---------- */
+/* ---------- ?剜???? ---------- */
 .player-header { padding: 18px 0 14px; }
 .back-link {
   display: inline-flex;
@@ -218,10 +221,26 @@ html, body {
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 .back-link:hover { color: #fff; border-color: var(--accent); background: var(--accent-soft); }
+.mobile-back {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  padding: 7px 14px;
+  border-radius: 9999px;
+  width: fit-content;
+}
+.mobile-back:hover { border-color: var(--accent); background: var(--accent-soft); }
 .player-title-block h1 { margin: 0; font-size: 20px; font-weight: 600; }
-.player-desc { margin: 4px 0 0; font-size: 13px; color: var(--text-dim); }
+.player-desc { margin: 4px 0 0; font-size: 13px; color: var(--text-dim); overflow-wrap: anywhere; }
 
-/* ---------- 播放頁：影片區 ---------- */
+/* ---------- ?剜??敶梁?? ---------- */
 .player-shell { max-width: 1440px; padding-bottom: 48px; }
 .player-layout {
   display: grid;
@@ -276,7 +295,7 @@ html, body {
 .audio-player-slot { width: min(560px, 90%); }
 .audio-player-slot audio { width: 100%; }
 
-/* ---------- 僅供觀看來源（如抖音） ---------- */
+/* ---------- ??閫??皞?憒??喉? ---------- */
 .watch-only-note {
   margin-top: 16px;
   padding: 14px 18px;
@@ -304,7 +323,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 }
 .player-error[hidden] { display: none; }
 
-/* ---------- 播放頁：控制面板 ---------- */
+/* ---------- ?剜???批?Ｘ ---------- */
 .control-panel {
   margin-top: 16px;
   background: var(--panel);
@@ -315,7 +334,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
   padding: 14px 18px 16px;
 }
 
-/* ---------- 播放頁：字幕列（進度條上方、影片視窗外） ---------- */
+/* ---------- ?剜??摮????脣漲璇??嫘蔣??蝒?嚗?---------- */
 .subtitle-bar {
   position: relative;
   display: flex;
@@ -349,8 +368,6 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 }
 .sub-word:hover { color: var(--green); background: rgba(52, 199, 89, 0.14); }
 .sub-word:active { color: var(--green); background: rgba(52, 199, 89, 0.26); }
-.subtitle-size { flex: 0 0 auto; display: flex; gap: 6px; align-items: center; }
-.subtitle-size .mini-btn { padding: 4px 9px; font-size: 12px; }
 .subtitle-resize {
   position: absolute;
   left: 0; right: 0; bottom: 0;
@@ -414,7 +431,12 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.1s ease;
-  z-index: 2;
+  z-index: 4;
+}
+.ab-handle::after {
+  content: '';
+  position: absolute;
+  left: -10px; right: -10px; top: -10px; bottom: -10px;
 }
 .ab-playhead {
   position: absolute;
@@ -436,6 +458,9 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 .ab-handle.dragging { opacity: 1; transform: translate(-50%, -50%) scale(1.25); }
 .ab-handle-a:hover { background: var(--amber); transform: translate(-50%, -50%) scale(1.5); }
 .ab-handle-a.dragging { background: var(--amber); transform: translate(-50%, -50%) scale(1.5); }
+
+/* 閫豢嚗??單?銝?閫貊??脣? */
+.ab-timeline, .ab-handle, .ab-range, .subtitle-resize { touch-action: none; }
 
 .control-bar {
   display: flex;
@@ -539,7 +564,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 }
 .speed-select:focus { border-color: var(--accent); }
 
-/* ---------- 詞匯面板 ---------- */
+/* ---------- 閰?Ｘ ---------- */
 .vocab-panel {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -667,7 +692,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 .search-result .sr-word { font-weight: 600; }
 .search-result .sr-time { color: var(--text-faint); font-size: 12px; white-space: nowrap; }
 
-/* ---------- OSD 提示 ---------- */
+/* ---------- OSD ?內 ---------- */
 .osd {
   position: fixed;
   top: 42%;
@@ -692,7 +717,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 }
 .osd.active { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-/* ---------- 首頁：新增影片 ---------- */
+/* ---------- 擐?嚗憓蔣??---------- */
 .header-actions { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
 .add-btn {
   background: var(--accent);
@@ -808,7 +833,7 @@ body.modal-open { overflow: hidden; }
 .modal-actions .mini-btn { padding: 9px 18px; font-size: 13.5px; }
 .modal-actions .mini-btn:disabled { opacity: 0.55; cursor: default; }
 
-/* ---------- 按鈕按下回饋 ---------- */
+/* ---------- ?????? ---------- */
 .mini-btn:active,
 .tool-btn:active,
 .add-btn:active,
@@ -825,8 +850,15 @@ body.modal-open { overflow: hidden; }
 .program-card:active { transform: scale(0.99); }
 .tool-btn:active, .add-btn:active { box-shadow: none; }
 
-/* ---------- 響應式 ---------- */
+/* ---------- 閫豢鋆蔭嚗??虜擏＊蝷綽???hover嚗?---------- */
+@media (hover: none) {
+  .ab-handle { opacity: 1; }
+}
+
+/* ---------- ?踵?撘?---------- */
 @media (max-width: 1024px) {
+  .player-header { display: none; }
+  .mobile-back { display: inline-flex; }
   .player-layout { grid-template-columns: 1fr; }
   .player-side .vocab-panel { position: static; }
   .vocab-list { max-height: 380px; }
@@ -834,11 +866,23 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 760px) {
   .container { padding: 0 14px; }
   .program-grid { grid-template-columns: 1fr; }
+  .player-header-inner { display: block; }
+  .back-link { font-size: 17px; padding: 7px 14px; }
+  .player-title-block h1 { font-size: 18px; }
+  .control-panel { padding: 12px 12px 14px; }
   .control-bar { flex-direction: column; align-items: stretch; }
-  .cb-center, .cb-right { justify-content: flex-start; }
+  .cb-left, .cb-center, .cb-right { justify-content: flex-start; }
   .seg-nav { justify-content: flex-start; }
+  .vocab-list { max-height: 320px; }
   .home-header-inner { flex-wrap: wrap; }
   .header-actions { width: 100%; justify-content: flex-start; }
   .modal { padding: 12px; }
   .modal-card { padding: 18px 16px; }
+  .player-side { display: none; }
 }
+
+/* ??璈怠?嚗?摨虫?頞喉?銋??渲??臬 */
+@media (max-height: 520px) {
+  .player-side { display: none; }
+}
+
