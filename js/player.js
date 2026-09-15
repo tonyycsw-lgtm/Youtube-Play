@@ -46,9 +46,8 @@
     vocab: [],            // [ { start, end, words: [ { w, zh } ] } ]
     vocabSource: 'none',  // json | none
     segIndex: -1,
-    follow: true,
     pinned: null,
-    offset: 0,
+    searching: false,
     subFontSize: SUB_FONT_DEFAULT,
     subHeight: SUB_HEIGHT_DEFAULT,
     hasSubtitle: false,
@@ -277,7 +276,7 @@
     if (App.loopActive && App.duration && t >= App.timeB) {
       seekTo(App.timeA);
     }
-    if (App.follow) updateSegment(t);
+    updateSegment(t);
   }
 
   /* ================= 詞匯載入（唯一來源：KV / api/vocab/{id}） ================= */
@@ -298,7 +297,7 @@
       return;
     }
     var t = App.player ? App.player.getCurrentTime() : 0;
-    var idx = segmentIndexAt(t - App.offset);
+    var idx = segmentIndexAt(t);
     if (idx >= 0) renderSegment(idx); else clearSegment();
   }
 
@@ -316,8 +315,8 @@
   }
 
   function updateSegment(t) {
-    if (!App.follow || !App.vocab.length) return;
-    var i = segmentIndexAt(t - App.offset);
+    if (App.searching || !App.vocab.length) return;
+    var i = segmentIndexAt(t);
     if (i < 0) {
       if (App.segIndex !== -1) clearSegment();
       return;
@@ -340,6 +339,7 @@
   /* ---------- 渲染目前段落 ---------- */
   function renderSegment(i) {
     if (!App.vocab.length) return;
+    App.searching = false;
     i = clamp(i, 0, App.vocab.length - 1);
     var changed = i !== App.segIndex;
     App.segIndex = i;
@@ -494,28 +494,60 @@
   /* ---------- 段導覽 ---------- */
   function gotoSegment(i) {
     if (!App.vocab.length) return;
+    App.searching = false;
     i = clamp(i, 0, App.vocab.length - 1);
     renderSegment(i);
     var seg = App.vocab[i];
-    seekTo(seg.start + App.offset);
+    seekTo(seg.start);
     pauseVideo();
   }
 
-  /* ---------- 詞匯搜尋（Enter 跳到含該詞的段） ---------- */
+  /* ---------- 詞匯搜尋：列出所有符合的片段，點擊跳到該段 ---------- */
   function searchWord() {
     var q = ($('vocab-search').value || '').trim().toLowerCase();
-    if (!q) return;
+    if (!q) {
+      if (App.vocab.length) renderSegment(App.segIndex >= 0 ? App.segIndex : 0);
+      return;
+    }
+    var matches = [];
     for (var i = 0; i < App.vocab.length; i++) {
       var words = App.vocab[i].words;
       for (var j = 0; j < words.length; j++) {
-        if (words[j].w.indexOf(q) !== -1 || (words[j].src || '').indexOf(q) !== -1) {
-          gotoSegment(i);
-          showOSD('找到「' + wordLabel(words[j]) + '」於 ' + formatClock(App.vocab[i].start), '#2563EB', 1500);
-          return;
+        var w = words[j];
+        if ((w.w || '').indexOf(q) !== -1 || (w.src || '').indexOf(q) !== -1) {
+          matches.push({ seg: i, word: w });
+          break;
         }
       }
     }
-    showOSD('✕ 找不到「' + q + '」', '#F59E0B', 1500);
+    if (!matches.length) {
+      showOSD('✕ 找不到「' + q + '」', '#F59E0B', 1500);
+      return;
+    }
+    renderSearchResults(q, matches);
+  }
+
+  function renderSearchResults(q, matches) {
+    App.searching = true;
+    $('seg-label').textContent = '搜尋「' + q + '」：' + matches.length + ' 段';
+    var list = $('vocab-list');
+    list.innerHTML = '';
+    var frag = document.createDocumentFragment();
+    matches.forEach(function (m) {
+      var seg = App.vocab[m.seg];
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'search-result';
+      btn.innerHTML =
+        '<span class="sr-word">' + escapeHtml(wordLabel(m.word)) + '</span>' +
+        '<span class="sr-time mono">' + formatClock(seg.start) + ' – ' + formatClock(seg.end) + '</span>';
+      btn.addEventListener('click', function () {
+        $('vocab-search').value = '';
+        gotoSegment(m.seg);
+      });
+      frag.appendChild(btn);
+    });
+    list.appendChild(frag);
   }
 
   /* ================= A-B 循環核心 ================= */
@@ -591,7 +623,7 @@
     $('txt-now').textContent = formatTime(t);
     updatePlayhead(t);
     if (!App.vocab.length) return;
-    var i = segmentIndexAt(t - App.offset);
+    var i = segmentIndexAt(t);
     if (i < 0) {
       if (App.segIndex !== -1) clearSegment();
       return;
@@ -828,20 +860,13 @@
 
     $('btn-prev-seg').addEventListener('click', function () { gotoSegment(App.segIndex - 1); });
     $('btn-next-seg').addEventListener('click', function () { gotoSegment(App.segIndex + 1); });
-    $('btn-follow').addEventListener('click', function () {
-      App.follow = !App.follow;
-      this.classList.toggle('on', App.follow);
-      showOSD(App.follow ? '自動跟隨：開' : '自動跟隨：關（已鎖定）', '#FFFFFF', 900);
-      if (App.follow && App.ready) updateSegment(App.player.getCurrentTime());
-      saveState();
-    });
     $('vocab-search').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); searchWord(); }
     });
-    $('sub-offset').addEventListener('input', function () {
-      App.offset = parseFloat(this.value) || 0;
-      if (App.ready) renderSegment(segmentIndexAt(App.player.getCurrentTime() - App.offset));
-      saveState();
+    $('vocab-search').addEventListener('input', function () {
+      if (this.value.trim() || !App.vocab.length) return;
+      var i = App.segIndex >= 0 ? App.segIndex : segmentIndexAt(App.player ? App.player.getCurrentTime() : 0);
+      if (i >= 0) renderSegment(i); else clearSegment();
     });
     $('btn-sub-smaller').addEventListener('click', function () { changeSubtitleFont(-SUB_FONT_STEP); });
     $('btn-sub-larger').addEventListener('click', function () { changeSubtitleFont(SUB_FONT_STEP); });
@@ -921,9 +946,7 @@
         timeA: App.timeA,
         timeB: App.timeB,
         loopActive: App.loopActive,
-        speed: App.speed,
-        offset: App.offset,
-        follow: App.follow
+        speed: App.speed
       }));
     } catch (e) { /* ignore */ }
   }
@@ -937,11 +960,7 @@
       else App.timeB = App.duration;
       if (SPEEDS.indexOf(d.speed) !== -1) App.speed = d.speed;
       if (typeof d.loopActive === 'boolean') App.loopActive = d.loopActive;
-      if (isFinite(d.offset)) App.offset = d.offset;
-      if (typeof d.follow === 'boolean') App.follow = d.follow;
       setLoopUI(App.loopActive);
-      $('sub-offset').value = App.offset;
-      $('btn-follow').classList.toggle('on', App.follow);
       return true;
     } catch (e) { /* ignore */ }
     return false;
