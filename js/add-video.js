@@ -308,17 +308,13 @@
       var data = await res.json().catch(function () { return {}; });
 
       if (!res.ok || !data.ok) {
-        if (data.error === 'duplicate') {
-          showMsg('此影片已在清單中（' + videoId + '）。', 'error');
-        } else {
-          showMsg((data.note || '新增失敗') + '（' + (data.error || ('HTTP ' + res.status)) + '）', 'error');
-        }
+        showMsg((data.note || '新增失敗') + '（' + (data.error || ('HTTP ' + res.status)) + '）', 'error');
         setBusy(false);
         return;
       }
 
       closeModal();
-      showToast('已新增：' + title + (data.vocabSaved ? '（含詞匯）' : ''));
+      showToast((data.updated ? '已更新：' : '已新增：') + title + (data.vocabSaved ? '（含詞匯）' : ''));
       if (window.Programs && window.Programs.reload) await window.Programs.reload();
     } catch (err) {
       showMsg('網路錯誤：' + (err && err.message ? err.message : err), 'error');

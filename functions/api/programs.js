@@ -3,7 +3,7 @@
    自訂節目清單（存在 KV；與靜態 programs.json 並存）
 
    - GET  /api/programs            列出所有自訂節目
-   - POST /api/programs            新增一個節目（可同時存入詞匯 JSON）
+   - POST /api/programs            新增或更新節目（同 videoId 直接覆寫；可同時存入詞匯 JSON）
 
    KV binding：KV_BINDING
    key：program:<videoId>（節目資料）、vocab:<videoId>（詞匯 JSON 字串）
@@ -79,9 +79,13 @@ async function handlePost(env, request, headers) {
   const lang = String((body && body.lang) || 'en').trim() || 'en';
   const description = String((body && body.description) || '').trim();
 
-  const existing = await env.KV_BINDING.get(PREFIX_PROGRAM + videoId);
-  if (existing) {
-    return json({ ok: false, error: 'duplicate', note: '此影片已在清單中。', videoId: videoId }, 409, headers);
+  const existingRaw = await env.KV_BINDING.get(PREFIX_PROGRAM + videoId);
+  let createdAt = new Date().toISOString();
+  if (existingRaw) {
+    try {
+      const prev = JSON.parse(existingRaw);
+      if (prev && prev.createdAt) createdAt = prev.createdAt;
+    } catch (e) { /* 舊資料壞掉時忽略 */ }
   }
 
   const program = {
@@ -91,7 +95,7 @@ async function handlePost(env, request, headers) {
     lang: lang,
     description: description,
     custom: true,
-    createdAt: new Date().toISOString()
+    createdAt: createdAt
   };
 
   await env.KV_BINDING.put(PREFIX_PROGRAM + videoId, JSON.stringify(program));
@@ -104,7 +108,7 @@ async function handlePost(env, request, headers) {
     } catch (e) { /* 詞匯存檔失敗不影響節目新增 */ }
   }
 
-  return json({ ok: true, program: program, vocabSaved: vocabSaved }, 200, headers);
+  return json({ ok: true, updated: !!existingRaw, program: program, vocabSaved: vocabSaved }, 200, headers);
 }
 
 export async function onRequest(context) {

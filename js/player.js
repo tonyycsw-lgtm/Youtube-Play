@@ -153,7 +153,6 @@
     App.duration = App.player.getDuration() || 0;
     App.timeA = 0;
     App.timeB = App.duration ? Math.min(10, App.duration) : 0;
-    App.loopActive = true;
     restoreState();
     setLoopUI(App.loopActive);
     applySpeed();
