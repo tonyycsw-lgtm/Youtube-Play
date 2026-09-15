@@ -1,17 +1,17 @@
 # 飛象影片學習站（Web App 版）
 
-學生打開一個網址 → 看到老師編輯的節目列表 → 點擊觀看 → 依時間片段顯示老師提供的詞匯與中文、A-B 循環學習。
+學生打開一個網址 → 看到老師編輯的節目列表 → 點擊觀看 → 依時間片段顯示老師提供的詞匯與字幕。
 以 Cloudflare Pages 免費部署，**學生端零安裝、零設定**。
 
 ## 架構
 
 ```
 index.html              首頁：節目清單（內建 programs.json + 雲端自訂清單）
-player.html             播放頁：影片 + A-B 循環 + 詞匯面板
+player.html             播放頁：影片 + 詞匯面板
 css/style.css           共用樣式（暗色磨砂玻璃 + 電光藍）
 js/programs.js          首頁邏輯（合併靜態與雲端節目、渲染卡片）
 js/add-video.js         首頁「新增影片」：連結解析／JSON 轉換／呼叫 API
-js/player.js            播放頁主邏輯（A-B、詞匯片段、快捷鍵、持久化）
+js/player.js            播放頁主邏輯（詞匯片段、快捷鍵、持久化）
 js/player-adapters.js   播放器轉接層（YouTube IFrame／HTML5 媒體／TikTok Embed）
 js/vocab.js             詞匯引擎（只從 Cloudflare KV 載入詞匯 JSON）
 functions/api/programs.js    Function：/api/programs（GET 列出、POST 新增自訂節目）
@@ -51,7 +51,7 @@ python -m http.server 8000
       "title": "Journey to the West 1-3（西遊記）",
       "videoId": "gj1v-L1bEQc",
       "lang": "en",
-      "description": "Little Fox 經典故事動畫，適合 A-B 循環練聽力。"
+      "description": "Little Fox 經典故事動畫，適合練聽力。"
     }
   ]
 }
@@ -72,7 +72,7 @@ python -m http.server 8000
 | 方式 | 輸入 | 說明 |
 |---|---|---|
 | YouTube 連結 | 例如 `https://youtu.be/KTCJC4GMPzg?si=...` | 自動解析影片 ID、透過 oEmbed 帶入標題 |
-| TikTok 連結 | 例如 `https://www.tiktok.com/@user/video/123...` | 使用官方 Embed Player（postMessage），可 A-B 循環 |
+| TikTok 連結 | 例如 `https://www.tiktok.com/@user/video/123...` | 使用官方 Embed Player（postMessage），可詞匯同步 |
 | 抖音連結 | 例如 `https://www.douyin.com/video/123...` 或短連結 `https://v.douyin.com/xxxx/` | 官方 open player 嵌入，**僅供觀看**；短連結會自動解析 |
 | 媒體檔 URL | 例如 `https://.../clip.mp4`、`https://.../song.mp3` | 直接用 HTML5 `<video>`／`<audio>` 播放 |
 | 上載 JSON | 例如 `Beauty_and_the_beast_Ep1-3.json` | 自動讀取 `videoInfo.url` 與 `videoInfo.title`，並把詞匯轉成播放頁格式存入 KV |
@@ -102,9 +102,9 @@ python -m http.server 8000
 
 ## 播放來源（YouTube／TikTok／媒體檔）
 
-播放頁以「播放器轉接層」支援多種來源；學習功能（A-B 循環、詞匯／字幕依時間同步、校時）只要來源能回報播放時間就能運作：
+播放頁以「播放器轉接層」支援多種來源；詞匯／字幕依時間同步，只要來源能回報播放時間就能運作：
 
-| 來源 | 播放方式 | A-B 循環 | 變速 | 備註 |
+| 來源 | 播放方式 | 時間同步 | 變速 | 備註 |
 |---|---|---|---|---|
 | YouTube | IFrame API | ✅ | ✅ | 預設 |
 | TikTok | 官方 Embed Player（postMessage） | ✅ | ❌ | 播放器不提供變速 |
@@ -116,7 +116,7 @@ python -m http.server 8000
 - 詞匯 key 用節目 `id`：YouTube 用 `videoId`、TikTok 用 `tt_<貼文ID>`、媒體檔用 `f_<URL 短雜湊>`。
 - 舊資料（只有 `videoId`）會視為 YouTube，完全相容。
 - 目前媒體檔**只支援貼 URL**，尚未提供上載（R2）功能。
-- 抖音（Douyin）為「僅供觀看」嵌入，播放頁不顯示 A-B 與詞匯面板。
+- 抖音（Douyin）為「僅供觀看」嵌入，播放頁不顯示詞匯面板。
 - 尚未支援：Facebook、Instagram；Vimeo 規劃於 Phase 2。貼上這些連結會顯示明確的「不支援」訊息（不會誤判成 YouTube）。
 
 ## 詞匯面板（播放頁）
@@ -127,7 +127,7 @@ python -m http.server 8000
 - 每個詞顯示為 `原形 (原型)`（例如 `thought (think)`）；點詞會把中文釘在上方固定高度的區塊並**暫停影片**。
 - 進度條上方（影片視窗外）顯示該段**字幕**：上行為 `en`、下行 `zh`；拖曳字幕下緣可調整容器高度（會記住）；字級會**依容器高度自動調整**，內容放不下時再縮小，版面不跳動。
 - 字幕中的**詞**可互動：滑過變綠；點擊會**暫停影片**並在右側詞匯面板顯示該詞翻譯；點字幕空白處則切換播放／暫停。
-- 播放時自動跟隨切換片段；另有 `‹ 上一段`／`下一段 ›`（快捷鍵 `A`／`D`）。
+- 播放時自動跟隨切換片段；`‹ 上一段`／`下一段 ›` 位於進度條下方（快捷鍵 `A`／`D`）。
 - 搜尋框輸入詞按 `Enter` → **列出所有含該詞的片段**，點擊任一項即跳到該時段。
 - 拖曳／點擊時間軸時，字幕與詞匯會**立即更新**，不受影片載入或緩衝速度影響。
 
@@ -167,14 +167,10 @@ python -m http.server 8000
 
 | 按鍵 | 功能 |
 |---|---|
-| `Alt+A`（Mac: `Option+A`） | 切換 A-B 循環 |
-| `[` / `]` | 把目前時間設為 A 點 / B 點 |
-| `←` / `→` | 循環開啟時，A / B 點微調 1 秒 |
 | `A` / `D` | 上一段 / 下一段詞匯 |
 | `Space` | 播放 / 暫停 |
 
-點擊時間軸可跳轉；拖曳左右白色把手調整 A-B 區間；點詞匯 → 暫停並顯示中文；點擊 B 時間數字 → 設為目前時間；滑過 A 時間數字會變黃，點擊即從 A 點重播。
-開場預設 A-B 為前 10 秒、循環預設關閉（曾調整過則沿用上次設定）；左上「← 節目清單」為放大按鈕。
+點擊進度條可跳轉；`‹ 上一段`／`下一段 ›` 在進度條下方；點詞匯 → 暫停並顯示中文；點字幕詞 → 顯示該詞翻譯；點字幕空白處切換播放／暫停。
 
 ## 已知限制（V1）
 
@@ -182,7 +178,7 @@ python -m http.server 8000
 - 無登入/班級管理；所有學生共用同一清單。
 - 首頁「新增影片」不設保護；任何取得網址的人都能新增、覆寫或**刪除**（資料存 KV）。
 - 影片若為年齡/地區限制，iframe 可能無法播放（會在頁面顯示錯誤）。
-- 媒體檔 URL 需允許直連與 CORS／range，否則讀不到播放時間，A-B 與詞匯同步會失效。
+- 媒體檔 URL 需允許直連與 CORS／range，否則讀不到播放時間，詞匯同步會失效。
 - TikTok 不支援變速；部分影片可能不允許嵌入。
 - 手機／平板（寬 ≤1024px）播放頁不顯示頂部標題列，影片置頂、返回鈕改在影片下方；小螢幕（寬 ≤760px 或高 ≤520px）會隱藏右側詞匯面板。
 
@@ -190,4 +186,4 @@ python -m http.server 8000
 
 - 班級帳號與進度統計；首頁自訂節目的編輯／刪除與排序（目前僅能新增）。
 - 詞匯「跟讀／測驗」模式（聽一段 → 選詞義 → 錄音對比）。
-- 已保存片段庫（收藏 A-B 區間，跨影片管理）。
+- 收藏／筆記（跨影片管理）。

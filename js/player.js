@@ -10,7 +10,6 @@
   var programId = params.get('id');
   var directV = params.get('v');
 
-  var MIN_GAP = 0.2;          // A-B 最小間隔（秒）
   var TICK_MS = 250;          // 時間輪詢週期
   var SPEEDS = [0.5, 0.75, 0.85, 1.0, 1.25];
   var LS_PREFIX = 'utube_web_v1:';
@@ -32,12 +31,8 @@
     lang: 'en',
     player: null,         // 播放器轉接器（Player Adapter）
     ready: false,
-    abDefaultPending: false,
     noTimeControl: false,
     duration: 0,
-    timeA: 0,
-    timeB: 0,
-    loopActive: false,
     speed: 1,
     fadeEnabled: true,
     vocab: [],            // [ { start, end, words: [ { w, zh } ] } ]
@@ -210,14 +205,9 @@
       return;
     }
     App.duration = App.player.getDuration() || 0;
-    App.timeA = 0;
-    App.timeB = App.duration ? Math.min(10, App.duration) : 10;
-    var hadSaved = restoreState();
-    if (!hadSaved && !App.duration) App.abDefaultPending = true;
-    setLoopUI(App.loopActive);
+    restoreState();
     applySpeed();
     applySubtitleHeight();
-    updateTimelineUI();
     updateTimeLabels();
     updatePlayhead(0);
     window.focus();
@@ -226,9 +216,7 @@
     App.tickTimer = setInterval(tick, TICK_MS);
   }
 
-  function onPlayerStateChange(state) {
-    if (state === 'ended' && App.loopActive && App.duration) seekTo(App.timeA);
-  }
+  function onPlayerStateChange() { /* A-B 循環已移除 */ }
 
   function onPlayerError() {
     showOSD('✕ 影片無法播放（可能受地區或年齡限制，或連結不允許嵌入）', '#F59E0B', 2600);
@@ -240,14 +228,6 @@
     var d = App.player.getDuration() || 0;
     if (d <= 0 || Math.abs(d - App.duration) < 0.5) return;
     App.duration = d;
-    if (App.abDefaultPending) {
-      App.abDefaultPending = false;
-      App.timeA = 0;
-      App.timeB = Math.min(10, d);
-    } else if (App.timeB > d) {
-      App.timeB = d;
-    }
-    updateTimelineUI();
     updateTimeLabels();
   }
 
@@ -267,10 +247,6 @@
 
     $('txt-now').textContent = formatTime(t);
     updatePlayhead(t);
-
-    if (App.loopActive && App.duration && t >= App.timeB) {
-      seekTo(App.timeA);
-    }
     updateSegment(t);
   }
 
@@ -545,64 +521,6 @@
     list.appendChild(frag);
   }
 
-  /* ================= A-B 循環核心 ================= */
-  function toggleLoop() {
-    App.loopActive = !App.loopActive;
-    setLoopUI(App.loopActive);
-    showOSD(App.loopActive ? 'Loop Mode: ON' : 'Loop Mode: OFF',
-      App.loopActive ? '#2563EB' : '#A3A3A3', 1000);
-    if (App.loopActive && App.ready) {
-      var t = App.player.getCurrentTime();
-      if (t < App.timeA || t > App.timeB) seekTo(App.timeA);
-    }
-    saveState();
-  }
-
-  function setLoopUI(on) {
-    var pill = $('btn-loop');
-    pill.classList.toggle('on', on);
-    $('loop-text').textContent = on ? 'Looping' : 'A-B Off';
-  }
-
-  function setA() {
-    if (!App.ready) return;
-    App.timeA = clamp(App.player.getCurrentTime(), 0, Math.max(0, App.timeB - MIN_GAP));
-    updateTimelineUI();
-    updateTimeLabels();
-    showOSD('[ A 點已設定 ]', '#FFFFFF', 800);
-    saveState();
-  }
-
-  function setB() {
-    if (!App.ready) return;
-    App.timeB = clamp(App.player.getCurrentTime(), Math.min(App.duration, App.timeA + MIN_GAP), App.duration);
-    updateTimelineUI();
-    updateTimeLabels();
-    showOSD('[ B 點已設定 ]', '#FFFFFF', 800);
-    saveState();
-  }
-
-  function replayFromA() {
-    if (!App.ready) return;
-    seekTo(App.timeA);
-    try { App.player.play(); } catch (e) { /* ignore */ }
-    showOSD('▶ 從 A 點重播', '#F59E0B', 900);
-  }
-
-  function nudgeA(delta) {
-    App.timeA = clamp(App.timeA + delta, 0, Math.max(0, App.timeB - MIN_GAP));
-    updateTimelineUI();
-    updateTimeLabels();
-    saveState();
-  }
-
-  function nudgeB(delta) {
-    App.timeB = clamp(App.timeB + delta, Math.min(App.duration, App.timeA + MIN_GAP), App.duration);
-    updateTimelineUI();
-    updateTimeLabels();
-    saveState();
-  }
-
   /* ================= 播放控制 ================= */
   function seekTo(t) {
     if (!App.ready || !App.player) return;
@@ -630,6 +548,27 @@
     if (!App.ready || !App.player) return;
     if (App.player.getState() === 'playing') App.player.pause();
     else App.player.play();
+  }
+
+  function toggleFullscreen() {
+    var el = $('video-wrap');
+    if (!el) return;
+    var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!fsEl) {
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+
+  function updateFullscreenIcon() {
+    var b = $('btn-fullscreen');
+    if (!b) return;
+    var on = document.fullscreenElement || document.webkitFullscreenElement;
+    b.textContent = on ? '⤢' : '⛶';
   }
 
   function applySpeed() {
@@ -707,19 +646,6 @@
   }
 
   /* ================= 時間軸 UI ================= */
-  function pct(t) {
-    return App.duration ? (t / App.duration) * 100 : 0;
-  }
-
-  function updateTimelineUI() {
-    var pa = pct(App.timeA);
-    var pb = pct(App.timeB);
-    $('ab-range').style.left = pa + '%';
-    $('ab-range').style.width = Math.max(0, pb - pa) + '%';
-    $('ab-handle-a').style.left = pa + '%';
-    $('ab-handle-b').style.left = pb + '%';
-  }
-
   function updatePlayhead(t) {
     if (!App.duration) return;
     var p = clamp((t / App.duration) * 100, 0, 100);
@@ -727,95 +653,13 @@
   }
 
   function updateTimeLabels() {
-    $('txt-a').textContent = formatTime(App.timeA);
-    $('txt-b').textContent = formatTime(App.timeB);
     $('txt-dur').textContent = formatTime(App.duration);
   }
 
   function bindTimeline() {
     var wrapper = $('ab-timeline');
     var track = $('ab-track');
-
-    function makeDrag(which) {
-      return function (e) {
-        e.preventDefault();
-        var rect = track.getBoundingClientRect();
-        var handle = which === 'A' ? $('ab-handle-a') : $('ab-handle-b');
-        var startX = e.clientX;
-        var moved = false;
-        handle.classList.add('dragging');
-
-        function onMove(ev) {
-          if (Math.abs(ev.clientX - startX) > 2) moved = true;
-          var offsetX = ev.clientX - rect.left;
-          offsetX = Math.max(0, Math.min(offsetX, rect.width));
-          var t = (offsetX / rect.width) * App.duration;
-          window.requestAnimationFrame(function () {
-            if (which === 'A') {
-              App.timeA = clamp(t, 0, Math.max(0, App.timeB - MIN_GAP));
-            } else {
-              App.timeB = clamp(t, Math.min(App.duration, App.timeA + MIN_GAP), App.duration);
-            }
-            updateTimelineUI();
-            updateTimeLabels();
-            seekTo(which === 'A' ? App.timeA : App.timeB);
-          });
-        }
-        function onUp() {
-          handle.classList.remove('dragging');
-          window.removeEventListener('pointermove', onMove);
-          window.removeEventListener('pointerup', onUp);
-          if (which === 'A' && !moved) replayFromA();
-          saveState();
-        }
-        window.addEventListener('pointermove', onMove);
-        window.addEventListener('pointerup', onUp);
-      };
-    }
-
-    $('ab-handle-a').addEventListener('pointerdown', makeDrag('A'));
-    $('ab-handle-b').addEventListener('pointerdown', makeDrag('B'));
-
-    // 拖曳藍色 A-B 區段：整段平移，畫面跟隨 A 點
-    var range = $('ab-range');
-    range.addEventListener('pointerdown', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var rect = track.getBoundingClientRect();
-      var startX = e.clientX;
-      var a0 = App.timeA;
-      var span = Math.max(MIN_GAP, App.timeB - App.timeA);
-      var maxA = Math.max(0, (App.duration || 0) - span);
-      var moved = false;
-      range.classList.add('dragging');
-
-      function onMove(ev) {
-        if (Math.abs(ev.clientX - startX) > 2) moved = true;
-        var delta = ((ev.clientX - startX) / rect.width) * App.duration;
-        window.requestAnimationFrame(function () {
-          App.timeA = clamp(a0 + delta, 0, maxA);
-          App.timeB = Math.min(App.duration || (App.timeA + span), App.timeA + span);
-          updateTimelineUI();
-          updateTimeLabels();
-          seekTo(App.timeA);
-        });
-      }
-      function onUp(ev) {
-        range.classList.remove('dragging');
-        window.removeEventListener('pointermove', onMove);
-        window.removeEventListener('pointerup', onUp);
-        if (!moved) {
-          var x = Math.max(0, Math.min(ev.clientX - rect.left, rect.width));
-          seekTo((x / rect.width) * App.duration);
-        }
-        saveState();
-      }
-      window.addEventListener('pointermove', onMove);
-      window.addEventListener('pointerup', onUp);
-    });
-
     wrapper.addEventListener('click', function (e) {
-      if (e.target.closest('.ab-handle') || e.target.closest('.ab-range')) return;
       var rect = track.getBoundingClientRect();
       var offsetX = e.clientX - rect.left;
       offsetX = Math.max(0, Math.min(offsetX, rect.width));
@@ -825,11 +669,9 @@
 
   /* ================= UI 事件綁定 ================= */
   function bindUI() {
-    $('btn-loop').addEventListener('click', toggleLoop);
-    $('txt-a').addEventListener('click', replayFromA);
-    $('txt-b').addEventListener('click', setB);
-    $('btn-nudge-a').addEventListener('click', function () { nudgeA(-1); });
-    $('btn-nudge-b').addEventListener('click', function () { nudgeB(1); });
+    $('btn-fullscreen').addEventListener('click', toggleFullscreen);
+    document.addEventListener('fullscreenchange', updateFullscreenIcon);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
     $('speed-select').addEventListener('change', function () {
       App.speed = parseFloat(this.value) || 1;
       applySpeed();
@@ -872,25 +714,10 @@
   function bindKeyboard() {
     window.addEventListener('keydown', function (e) {
       if (isTyping(e)) return;
-      if (e.altKey && (e.key === 'a' || e.key === 'A')) {
-        e.preventDefault();
-        toggleLoop();
-        return;
-      }
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (!App.ready) return;
 
       switch (e.key) {
-        case '[':
-          e.preventDefault(); setA(); break;
-        case ']':
-          e.preventDefault(); setB(); break;
-        case 'ArrowLeft':
-          if (App.loopActive) { e.preventDefault(); nudgeA(-1); }
-          break;
-        case 'ArrowRight':
-          if (App.loopActive) { e.preventDefault(); nudgeB(1); }
-          break;
         case 'a': case 'A':
           e.preventDefault(); gotoSegment(App.segIndex - 1); break;
         case 'd': case 'D':
@@ -919,9 +746,6 @@
   function saveState() {
     try {
       localStorage.setItem(lsKey(), JSON.stringify({
-        timeA: App.timeA,
-        timeB: App.timeB,
-        loopActive: App.loopActive,
         speed: App.speed
       }));
     } catch (e) { /* ignore */ }
@@ -931,12 +755,7 @@
     try {
       var d = JSON.parse(localStorage.getItem(lsKey()));
       if (!d) return false;
-      if (isFinite(d.timeA)) App.timeA = clamp(d.timeA, 0, App.duration);
-      if (isFinite(d.timeB)) App.timeB = clamp(d.timeB, Math.min(App.duration, App.timeA + MIN_GAP), App.duration);
-      else App.timeB = App.duration;
       if (SPEEDS.indexOf(d.speed) !== -1) App.speed = d.speed;
-      if (typeof d.loopActive === 'boolean') App.loopActive = d.loopActive;
-      setLoopUI(App.loopActive);
       return true;
     } catch (e) { /* ignore */ }
     return false;

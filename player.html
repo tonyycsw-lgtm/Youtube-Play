@@ -32,6 +32,7 @@
           <div id="audio-player-slot" class="audio-player-slot"></div>
         </div>
       </div>
+      <button class="fs-btn" id="btn-fullscreen" type="button" title="全螢幕" aria-label="全螢幕">⛶</button>
       <div id="player-error" class="player-error" hidden></div>
     </div>
 
@@ -47,34 +48,25 @@
         <div class="subtitle-resize" id="subtitle-resize" title="上下拖曳調整字幕高度"></div>
       </div>
 
-      <!-- A-B 時間軸 -->
+      <!-- 進度條 -->
       <div class="ab-timeline" id="ab-timeline">
         <div class="ab-track" id="ab-track">
-          <div class="ab-range" id="ab-range"></div>
           <div class="ab-playhead" id="ab-playhead" title="目前播放位置"></div>
-          <div class="ab-handle ab-handle-a" id="ab-handle-a" title="拖曳調整 A 點"></div>
-          <div class="ab-handle ab-handle-b" id="ab-handle-b" title="拖曳調整 B 點"></div>
         </div>
+      </div>
+
+      <!-- 片段導覽（進度條下方） -->
+      <div class="seg-nav">
+        <button class="mini-btn" id="btn-prev-seg" title="上一段">‹ 上一段</button>
+        <span class="seg-label mono" id="seg-label">--:-- – --:--</span>
+        <button class="mini-btn" id="btn-next-seg" title="下一段">下一段 ›</button>
       </div>
 
       <div class="control-bar">
         <div class="cb-left">
-          <button class="loop-pill" id="btn-loop" title="Alt+A 切換 A-B 循環">
-            <span class="loop-dot" id="loop-dot"></span>
-            <span id="loop-text">A-B Off</span>
-          </button>
           <span class="now-time mono" id="txt-now">00:00.0</span>
           <span class="time-sep">/</span>
           <span class="dur-time mono" id="txt-dur">00:00.0</span>
-        </div>
-
-        <div class="cb-center">
-          <span class="anchor mono clickable" id="txt-a" title="滑過變黃；點擊從 A 點重播">00:00.0</span>
-          <span class="anchor-sep">—</span>
-          <span class="anchor mono clickable" id="txt-b" title="點擊：將目前時間設為 B 點">00:00.0</span>
-          <span class="divider"></span>
-          <button class="mini-btn" id="btn-nudge-a" title="A 點 -1 秒">-1s</button>
-          <button class="mini-btn" id="btn-nudge-b" title="B 點 +1 秒">+1s</button>
         </div>
 
         <div class="cb-right">
@@ -100,11 +92,6 @@
     <section class="vocab-panel">
       <div class="vocab-head">
         <span>詞匯（依片段）</span>
-      </div>
-      <div class="seg-nav">
-        <button class="mini-btn" id="btn-prev-seg" title="上一段">‹ 上一段</button>
-        <span class="seg-label mono" id="seg-label">--:-- – --:--</span>
-        <button class="mini-btn" id="btn-next-seg" title="下一段">下一段 ›</button>
       </div>
       <div class="pinned-word" id="pinned-word"><span class="pinned-placeholder">點下方詞匯，這裡會顯示中文解釋</span></div>
       <div class="vocab-search-wrap">
