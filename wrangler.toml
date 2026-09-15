@@ -1,0 +1,7 @@
+name = "youtube-play-cyj"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "KV_BINDING"
+id = "2802e15b9ba44253baf6efee5bf882c2"

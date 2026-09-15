@@ -1,0 +1,1364 @@
+{
+  "videoInfo": {
+    "title": "Beauty and the Beast: The Curse | Episodes 1-3 | Little Fox",
+    "url": "https://youtu.be/KTCJC4GMPzg?si=NEn3BZfLI7mVx-I2",
+    "purpose": "兒童英語學習，影片播放時老師展示對應詞彙與例句"
+  },
+  "wordSegments": [
+    {
+      "timeRange": "00:00-00:08",
+      "englishSentence": "Two years passed.",
+      "chineseTranslation": "兩年過去了。",
+      "vocabularies": [
+        {
+          "word": "pass",
+          "phonetic": "/pɑːs/",
+          "meaning": "（時間）過去"
+        },
+        {
+          "word": "year",
+          "phonetic": "/jɪə(r)/",
+          "meaning": "年"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:08-00:17",
+      "englishSentence": "Beauty made the cottage a home. She made curtains.",
+      "chineseTranslation": "貝兒把小屋變成家。她做了窗簾。",
+      "vocabularies": [
+        {
+          "word": "cottage",
+          "phonetic": "/ˈkɒtɪdʒ/",
+          "meaning": "小屋；村舍"
+        },
+        {
+          "word": "curtain",
+          "phonetic": "/ˈkɜːtn/",
+          "meaning": "窗簾"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:17-00:21",
+      "englishSentence": "She planted a garden.",
+      "chineseTranslation": "她開闢了一座花園。",
+      "vocabularies": [
+        {
+          "word": "plant",
+          "phonetic": "/plɑːnt/",
+          "meaning": "種植"
+        },
+        {
+          "word": "garden",
+          "phonetic": "/ˈɡɑːdn/",
+          "meaning": "花園"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:21-00:33",
+      "englishSentence": "Beauty loved cooking. But she loved her flowers best of all.",
+      "chineseTranslation": "貝兒喜歡烹飪。但她最愛她的花。",
+      "vocabularies": [
+        {
+          "word": "cook",
+          "phonetic": "/kʊk/",
+          "meaning": "烹飪；煮飯"
+        },
+        {
+          "word": "flower",
+          "phonetic": "/ˈflaʊə(r)/",
+          "meaning": "花"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:33-00:39",
+      "englishSentence": "Her favorite was a small rose bush.",
+      "chineseTranslation": "她最喜歡的是一小叢玫瑰。",
+      "vocabularies": [
+        {
+          "word": "favorite",
+          "phonetic": "/ˈfeɪvərɪt/",
+          "meaning": "最喜愛的"
+        },
+        {
+          "word": "rose",
+          "phonetic": "/rəʊz/",
+          "meaning": "玫瑰"
+        },
+        {
+          "word": "bush",
+          "phonetic": "/bʊʃ/",
+          "meaning": "灌木叢"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:39-00:46",
+      "englishSentence": "One day, Beauty was in the garden. Her roses were ready to bloom.",
+      "chineseTranslation": "有一天，貝兒在花園裡。她的玫瑰準備要開花了。",
+      "vocabularies": [
+        {
+          "word": "ready",
+          "phonetic": "/ˈredi/",
+          "meaning": "準備好的"
+        },
+        {
+          "word": "bloom",
+          "phonetic": "/bluːm/",
+          "meaning": "開花"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:46-00:56",
+      "englishSentence": "Father came outside and sat down. He looks so tired, Beauty thought.",
+      "chineseTranslation": "爸爸走到外面坐下。貝兒心想，他看起來好疲倦。",
+      "vocabularies": [
+        {
+          "word": "outside",
+          "phonetic": "/ˌaʊtˈsaɪd/",
+          "meaning": "在外面"
+        },
+        {
+          "word": "tired",
+          "phonetic": "/ˈtaɪəd/",
+          "meaning": "疲倦的"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:01-01:06",
+      "englishSentence": "You should go live in town. A young girl needs friends.",
+      "chineseTranslation": "你應該搬到鎮上住。年輕女孩需要朋友。",
+      "vocabularies": [
+        {
+          "word": "town",
+          "phonetic": "/taʊn/",
+          "meaning": "小鎮；市鎮"
+        },
+        {
+          "word": "friend",
+          "phonetic": "/frend/",
+          "meaning": "朋友"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:06-01:13",
+      "englishSentence": "\"But I do have friends,\" Beauty said.",
+      "chineseTranslation": "貝兒說：「可是我有朋友。」",
+      "vocabularies": [
+        {
+          "word": "have",
+          "phonetic": "/hæv/",
+          "meaning": "擁有"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:13-01:15",
+      "englishSentence": "Father was surprised.",
+      "chineseTranslation": "爸爸很驚訝。",
+      "vocabularies": [
+        {
+          "word": "surprised",
+          "phonetic": "/səˈpraɪzd/",
+          "meaning": "感到驚訝的"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:15-01:21",
+      "englishSentence": "\"Who?\" Beauty pointed to the edge of the forest.",
+      "chineseTranslation": "「誰？」貝兒指向森林邊緣。",
+      "vocabularies": [
+        {
+          "word": "point",
+          "phonetic": "/pɔɪnt/",
+          "meaning": "指"
+        },
+        {
+          "word": "edge",
+          "phonetic": "/edʒ/",
+          "meaning": "邊緣"
+        },
+        {
+          "word": "forest",
+          "phonetic": "/ˈfɒrɪst/",
+          "meaning": "森林"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:21-01:30",
+      "englishSentence": "A deer stood watching them. Her big brown eyes were soft and gentle.",
+      "chineseTranslation": "一隻鹿站著看著他們。牠大大的棕色眼睛溫柔又柔和。",
+      "vocabularies": [
+        {
+          "word": "deer",
+          "phonetic": "/dɪə(r)/",
+          "meaning": "鹿"
+        },
+        {
+          "word": "gentle",
+          "phonetic": "/ˈdʒentl/",
+          "meaning": "溫柔的"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:30-01:37",
+      "englishSentence": "Father laughed. You're very funny, beauty. I'm going fishing.",
+      "chineseTranslation": "爸爸笑了。貝兒，你真有趣。我要去釣魚。",
+      "vocabularies": [
+        {
+          "word": "laugh",
+          "phonetic": "/lɑːf/",
+          "meaning": "大笑"
+        },
+        {
+          "word": "funny",
+          "phonetic": "/ˈfʌni/",
+          "meaning": "有趣的；好笑的"
+        },
+        {
+          "word": "fish",
+          "phonetic": "/fɪʃ/",
+          "meaning": "釣魚"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:37-01:45",
+      "englishSentence": "I'll try to catch us some dinner.",
+      "chineseTranslation": "我試著抓點東西當我們的晚餐。",
+      "vocabularies": [
+        {
+          "word": "catch",
+          "phonetic": "/kætʃ/",
+          "meaning": "捕捉；抓到"
+        },
+        {
+          "word": "dinner",
+          "phonetic": "/ˈdɪnə(r)/",
+          "meaning": "晚餐"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:45-01:53",
+      "englishSentence": "Father thinks I'm joking, Beauty thought. But the deer was her friend.",
+      "chineseTranslation": "貝兒心想，爸爸以為我在開玩笑，但這隻鹿是她的朋友。",
+      "vocabularies": [
+        {
+          "word": "joke",
+          "phonetic": "/dʒəʊk/",
+          "meaning": "開玩笑"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:53-01:57",
+      "englishSentence": "Sometimes she brought beauty fruit.",
+      "chineseTranslation": "有時候牠會帶水果給貝兒。",
+      "vocabularies": [
+        {
+          "word": "sometimes",
+          "phonetic": "/ˈsʌmtaɪmz/",
+          "meaning": "有時候"
+        },
+        {
+          "word": "bring",
+          "phonetic": "/brɪŋ/",
+          "meaning": "帶來"
+        },
+        {
+          "word": "fruit",
+          "phonetic": "/fruːt/",
+          "meaning": "水果"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:57-02:03",
+      "englishSentence": "Other times she brought flowers.",
+      "chineseTranslation": "其他時候牠會帶花。",
+      "vocabularies": [
+        {
+          "word": "other",
+          "phonetic": "/ˈʌðə(r)/",
+          "meaning": "其他的"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:05-02:09",
+      "englishSentence": "Beauty gave the deer food from her garden.",
+      "chineseTranslation": "貝兒給鹿吃她花園裡種的食物。",
+      "vocabularies": [
+        {
+          "word": "give",
+          "phonetic": "/ɡɪv/",
+          "meaning": "給"
+        },
+        {
+          "word": "food",
+          "phonetic": "/fuːd/",
+          "meaning": "食物"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:13-02:20",
+      "englishSentence": "Beauty went over to the deer. Did you bring me something today?",
+      "chineseTranslation": "貝兒走向鹿。你今天有帶東西給我嗎？",
+      "vocabularies": [
+        {
+          "word": "something",
+          "phonetic": "/ˈsʌmθɪŋ/",
+          "meaning": "某樣東西"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:20-02:26",
+      "englishSentence": "The deer shook her head. That's okay, Beauty said.",
+      "chineseTranslation": "鹿搖搖頭。貝兒說：「沒關係。」",
+      "vocabularies": [
+        {
+          "word": "shake",
+          "phonetic": "/ʃeɪk/",
+          "meaning": "搖動"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:26-02:35",
+      "englishSentence": "I'm happy to see you. Beauty stroked the deer's nose.",
+      "chineseTranslation": "很高興見到你。貝兒輕撫鹿的鼻子。",
+      "vocabularies": [
+        {
+          "word": "happy",
+          "phonetic": "/ˈhæpi/",
+          "meaning": "開心的"
+        },
+        {
+          "word": "stroke",
+          "phonetic": "/strəʊk/",
+          "meaning": "輕撫"
+        },
+        {
+          "word": "nose",
+          "phonetic": "/nəʊz/",
+          "meaning": "鼻子"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:35-02:41",
+      "englishSentence": "The deer gently pushed Beauty's hand. Then she nodded toward the forest.",
+      "chineseTranslation": "鹿輕輕推了推貝兒的手，接著朝森林點頭。",
+      "vocabularies": [
+        {
+          "word": "push",
+          "phonetic": "/pʊʃ/",
+          "meaning": "推"
+        },
+        {
+          "word": "nod",
+          "phonetic": "/nɒd/",
+          "meaning": "點頭"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:41-02:49",
+      "englishSentence": "\"You want me to follow you?\" The deer nodded. Beauty smiled.",
+      "chineseTranslation": "「你想要我跟著你嗎？」鹿點點頭。貝兒笑了。",
+      "vocabularies": [
+        {
+          "word": "follow",
+          "phonetic": "/ˈfɒləʊ/",
+          "meaning": "跟隨"
+        },
+        {
+          "word": "smile",
+          "phonetic": "/smaɪl/",
+          "meaning": "微笑"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:49-02:54",
+      "englishSentence": "It seemed like the deer wanted to show her something.",
+      "chineseTranslation": "看起來鹿想要展示某樣東西給她看。",
+      "vocabularies": [
+        {
+          "word": "seem",
+          "phonetic": "/siːm/",
+          "meaning": "似乎；好像"
+        },
+        {
+          "word": "show",
+          "phonetic": "/ʃəʊ/",
+          "meaning": "展示"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:54-03:01",
+      "englishSentence": "She wanted to go, but father always warned her.",
+      "chineseTranslation": "她很想去，但是爸爸總是警告她。",
+      "vocabularies": [
+        {
+          "word": "warn",
+          "phonetic": "/wɔːn/",
+          "meaning": "警告"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:01-03:11",
+      "englishSentence": "The forest is cursed. A monster lives there.",
+      "chineseTranslation": "這片森林被下了詛咒。有一隻怪獸住在那裡。",
+      "vocabularies": [
+        {
+          "word": "curse",
+          "phonetic": "/kɜːs/",
+          "meaning": "詛咒"
+        },
+        {
+          "word": "monster",
+          "phonetic": "/ˈmɒnstə(r)/",
+          "meaning": "怪獸"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:11-03:14",
+      "englishSentence": "I'm sorry. I can't go.",
+      "chineseTranslation": "對不起，我不能去。",
+      "vocabularies": [
+        {
+          "word": "sorry",
+          "phonetic": "/ˈsɒri/",
+          "meaning": "抱歉的"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:22-03:33",
+      "englishSentence": "Suddenly father came running. He was jumping for joy.",
+      "chineseTranslation": "突然爸爸跑過來，他高興得跳起來。",
+      "vocabularies": [
+        {
+          "word": "suddenly",
+          "phonetic": "/ˈsʌdənli/",
+          "meaning": "突然"
+        },
+        {
+          "word": "joy",
+          "phonetic": "/dʒɔɪ/",
+          "meaning": "喜悅；快樂"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:33-03:42",
+      "englishSentence": "I have the best news. Finally, my ship came in.",
+      "chineseTranslation": "我有最好的消息！我的船終於抵港了。",
+      "vocabularies": [
+        {
+          "word": "news",
+          "phonetic": "/njuːz/",
+          "meaning": "消息；新聞"
+        },
+        {
+          "word": "finally",
+          "phonetic": "/ˈfaɪnəli/",
+          "meaning": "終於"
+        },
+        {
+          "word": "ship",
+          "phonetic": "/ʃɪp/",
+          "meaning": "船"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:50-04:01",
+      "englishSentence": "Once upon another time, there was a girl named Beauty.",
+      "chineseTranslation": "從前，有一個名叫貝兒的女孩。",
+      "vocabularies": [
+        {
+          "word": "once upon a time",
+          "phonetic": "/wʌns əˈpɒn ə taɪm/",
+          "meaning": "從前（故事開頭）"
+        },
+        {
+          "word": "name",
+          "phonetic": "/neɪm/",
+          "meaning": "名字；名叫"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:01-04:09",
+      "englishSentence": "She lived above her father's shop. He sold fine cloth from far away lands.",
+      "chineseTranslation": "她住在爸爸的店鋪樓上。爸爸販售來自遙遠國度的精美布料。",
+      "vocabularies": [
+        {
+          "word": "shop",
+          "phonetic": "/ʃɒp/",
+          "meaning": "店鋪"
+        },
+        {
+          "word": "sell",
+          "phonetic": "/sel/",
+          "meaning": "販賣"
+        },
+        {
+          "word": "cloth",
+          "phonetic": "/klɒθ/",
+          "meaning": "布料"
+        },
+        {
+          "word": "land",
+          "phonetic": "/lænd/",
+          "meaning": "國土；地方"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:11-04:23",
+      "englishSentence": "Beauty helped father in the shop.",
+      "chineseTranslation": "貝兒在店裡幫爸爸的忙。",
+      "vocabularies": [
+        {
+          "word": "help",
+          "phonetic": "/help/",
+          "meaning": "幫助"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:23-04:29",
+      "englishSentence": "One day the shelves were bare. \"Father,\" Beauty said. \"Where's our cloth?\"",
+      "chineseTranslation": "有一天架子上空空如也。貝兒說：「爸爸，我們的布料在哪？」",
+      "vocabularies": [
+        {
+          "word": "shelf",
+          "phonetic": "/ʃelf/",
+          "meaning": "架子（複數 shelves）"
+        },
+        {
+          "word": "bare",
+          "phonetic": "/beə(r)/",
+          "meaning": "空的；沒有東西的"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:34-04:42",
+      "englishSentence": "The ship carrying it is lost at sea.",
+      "chineseTranslation": "載著布料的船在海上失蹤了。",
+      "vocabularies": [
+        {
+          "word": "carry",
+          "phonetic": "/ˈkæri/",
+          "meaning": "運載；攜帶"
+        },
+        {
+          "word": "lost",
+          "phonetic": "/lɒst/",
+          "meaning": "丟失的；失踪的"
+        },
+        {
+          "word": "sea",
+          "phonetic": "/siː/",
+          "meaning": "大海"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:42-04:50",
+      "englishSentence": "Later, Beauty was working alone. The sheriff came in.",
+      "chineseTranslation": "後來，貝兒獨自工作，警長走了進來。",
+      "vocabularies": [
+        {
+          "word": "alone",
+          "phonetic": "/əˈləʊn/",
+          "meaning": "獨自一人"
+        },
+        {
+          "word": "sheriff",
+          "phonetic": "/ˈʃerɪf/",
+          "meaning": "警長"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:50-04:55",
+      "englishSentence": "\"Where's your father?\" \"He's at the dock,\" Beauty said.",
+      "chineseTranslation": "「你爸爸在哪？」貝兒說：「他在碼頭。」",
+      "vocabularies": [
+        {
+          "word": "dock",
+          "phonetic": "/dɒk/",
+          "meaning": "碼頭"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:55-05:07",
+      "englishSentence": "\"May I help you?\" The sheriff scowlled. He owes money to everyone in town.",
+      "chineseTranslation": "「我可以幫你嗎？」警長皺起眉頭。他欠鎮上所有人錢。",
+      "vocabularies": [
+        {
+          "word": "scowl",
+          "phonetic": "/skaʊl/",
+          "meaning": "皺眉；面露怒色"
+        },
+        {
+          "word": "owe",
+          "phonetic": "/əʊ/",
+          "meaning": "欠（錢）"
+        },
+        {
+          "word": "everyone",
+          "phonetic": "/ˈevriwʌn/",
+          "meaning": "每個人"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:07-05:13",
+      "englishSentence": "If he doesn't pay, I'll put him in jail.",
+      "chineseTranslation": "如果他不還錢，我就要把他關進監牢。",
+      "vocabularies": [
+        {
+          "word": "pay",
+          "phonetic": "/peɪ/",
+          "meaning": "付款；償還"
+        },
+        {
+          "word": "jail",
+          "phonetic": "/dʒeɪl/",
+          "meaning": "監牢"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:13-05:24",
+      "englishSentence": "The sheriff crossed his arms. He has two months or jail.",
+      "chineseTranslation": "警長交叉手臂。他有兩個月時間，否則就要坐牢。",
+      "vocabularies": [
+        {
+          "word": "cross",
+          "phonetic": "/krɒs/",
+          "meaning": "交叉"
+        },
+        {
+          "word": "month",
+          "phonetic": "/mʌnθ/",
+          "meaning": "月份"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:24-05:32",
+      "englishSentence": "When father returned, beauty rushed toward him. Did the ship arrive?",
+      "chineseTranslation": "爸爸回來時，貝兒奔向他。船抵達了嗎？",
+      "vocabularies": [
+        {
+          "word": "return",
+          "phonetic": "/rɪˈtɜːn/",
+          "meaning": "回來"
+        },
+        {
+          "word": "rush",
+          "phonetic": "/rʌʃ/",
+          "meaning": "奔衝；快速跑"
+        },
+        {
+          "word": "arrive",
+          "phonetic": "/əˈraɪv/",
+          "meaning": "抵達"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:32-05:39",
+      "englishSentence": "Oh, maybe tomorrow. Weeks passed.",
+      "chineseTranslation": "噢，也許明天。幾個禮拜過去了。",
+      "vocabularies": [
+        {
+          "word": "maybe",
+          "phonetic": "/ˈmeɪbi/",
+          "meaning": "也許"
+        },
+        {
+          "word": "tomorrow",
+          "phonetic": "/təˈmɒrəʊ/",
+          "meaning": "明天"
+        },
+        {
+          "word": "week",
+          "phonetic": "/wiːk/",
+          "meaning": "星期"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:47-06:00",
+      "englishSentence": "The ship still didn't arrive. Father grew more worried.",
+      "chineseTranslation": "船仍然沒有抵達。爸爸越來越擔心。",
+      "vocabularies": [
+        {
+          "word": "still",
+          "phonetic": "/stɪl/",
+          "meaning": "仍然"
+        },
+        {
+          "word": "worried",
+          "phonetic": "/ˈwʌrid/",
+          "meaning": "擔心的"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:03-06:07",
+      "englishSentence": "Beauty, you deserve a better life.",
+      "chineseTranslation": "貝兒，你值得更好的生活。",
+      "vocabularies": [
+        {
+          "word": "deserve",
+          "phonetic": "/dɪˈzɜːv/",
+          "meaning": "值得"
+        },
+        {
+          "word": "life",
+          "phonetic": "/laɪf/",
+          "meaning": "生活；生命"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:07-06:20",
+      "englishSentence": "Go stay with your sister. She married a rich man.",
+      "chineseTranslation": "去和你姐姐住。她嫁給了有錢人。",
+      "vocabularies": [
+        {
+          "word": "sister",
+          "phonetic": "/ˈsɪstə(r)/",
+          "meaning": "姐姐；妹妹"
+        },
+        {
+          "word": "marry",
+          "phonetic": "/ˈmæri/",
+          "meaning": "結婚；嫁"
+        },
+        {
+          "word": "rich",
+          "phonetic": "/rɪtʃ/",
+          "meaning": "富有的"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:20-06:24",
+      "englishSentence": "\"I'm staying here,\" she said.",
+      "chineseTranslation": "她說：「我要留在這裡。」",
+      "vocabularies": [
+        {
+          "word": "stay",
+          "phonetic": "/steɪ/",
+          "meaning": "停留；留下"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:27-06:32",
+      "englishSentence": "Then one day a letter came.",
+      "chineseTranslation": "然後有一天，一封信送來了。",
+      "vocabularies": [
+        {
+          "word": "letter",
+          "phonetic": "/ˈletə(r)/",
+          "meaning": "信件"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:32-06:43",
+      "englishSentence": "Oh no, father cried. The ship sank. We lost everything.",
+      "chineseTranslation": "爸爸大喊：「噢不！船沉了。我們失去所有東西。」",
+      "vocabularies": [
+        {
+          "word": "sink",
+          "phonetic": "/sɪŋk/",
+          "meaning": "沉沒"
+        },
+        {
+          "word": "everything",
+          "phonetic": "/ˈevriθɪŋ/",
+          "meaning": "所有事物"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:43-06:57",
+      "englishSentence": "That's awful. Beauty said. Father made a plan.",
+      "chineseTranslation": "貝兒說：「太糟糕了。」爸爸擬定一個計畫。",
+      "vocabularies": [
+        {
+          "word": "awful",
+          "phonetic": "/ˈɔːfl/",
+          "meaning": "糟糕的"
+        },
+        {
+          "word": "plan",
+          "phonetic": "/plæn/",
+          "meaning": "計畫"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:57-07:06",
+      "englishSentence": "I'll go to my cottage in the forest. The sheriff won't find me there.",
+      "chineseTranslation": "我要去森林裡我的小屋。警長在那裡找不到我。",
+      "vocabularies": [
+        {
+          "word": "find",
+          "phonetic": "/faɪnd/",
+          "meaning": "找到"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:06-07:12",
+      "englishSentence": "He looked at beauty. The forest is cursed.",
+      "chineseTranslation": "他看著貝兒。這片森林被下了詛咒。",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "07:12-07:20",
+      "englishSentence": "The wood cutters say a monster lives there now. You'll stay with your sister.",
+      "chineseTranslation": "樵夫說現在有怪獸住在那裡。你要和姐姐一起住。",
+      "vocabularies": [
+        {
+          "word": "wood cutter",
+          "phonetic": "/wʊd ˈkʌtə(r)/",
+          "meaning": "樵夫"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:20-07:27",
+      "englishSentence": "A monster. Beauty laughed. Nonsense.",
+      "chineseTranslation": "怪獸？貝兒笑了。胡說八道。",
+      "vocabularies": [
+        {
+          "word": "nonsense",
+          "phonetic": "/ˈnɒnsns/",
+          "meaning": "胡說"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:27-07:34",
+      "englishSentence": "I'm coming with you, father. He sighed.",
+      "chineseTranslation": "爸爸，我跟你一起去。他嘆了一口氣。",
+      "vocabularies": [
+        {
+          "word": "sigh",
+          "phonetic": "/saɪ/",
+          "meaning": "嘆氣"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:34-07:42",
+      "englishSentence": "Fine.",
+      "chineseTranslation": "好吧。",
+      "vocabularies": [
+        {
+          "word": "fine",
+          "phonetic": "/faɪn/",
+          "meaning": "好吧；可以"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:42-07:49",
+      "englishSentence": "That night, Beauty and Father went to the cottage.",
+      "chineseTranslation": "那天晚上，貝兒和爸爸前往小屋。",
+      "vocabularies": [
+        {
+          "word": "night",
+          "phonetic": "/naɪt/",
+          "meaning": "夜晚"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:49-07:56",
+      "englishSentence": "It was small and dark, but beauty looked around and smiled.",
+      "chineseTranslation": "小屋又小又暗，但貝兒環顧四周並笑了。",
+      "vocabularies": [
+        {
+          "word": "dark",
+          "phonetic": "/dɑːk/",
+          "meaning": "黑暗的"
+        },
+        {
+          "word": "around",
+          "phonetic": "/əˈraʊnd/",
+          "meaning": "到處；四周"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:56-08:02",
+      "englishSentence": "Looks aren't everything. I like it here.",
+      "chineseTranslation": "外表不是一切。我喜歡這裡。",
+      "vocabularies": [
+        {
+          "word": "look",
+          "phonetic": "/lʊk/",
+          "meaning": "外表；樣子"
+        },
+        {
+          "word": "everything",
+          "phonetic": "/ˈevriθɪŋ/",
+          "meaning": "所有事物"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:17-08:26",
+      "englishSentence": "Once upon a time there was a queen. She was very kind.",
+      "chineseTranslation": "從前有一位王后。她非常善良。",
+      "vocabularies": [
+        {
+          "word": "queen",
+          "phonetic": "/kwiːn/",
+          "meaning": "王后；女王"
+        },
+        {
+          "word": "kind",
+          "phonetic": "/kaɪnd/",
+          "meaning": "善良的"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:26-08:35",
+      "englishSentence": "But her son was unkind. The queen gave people food. She helped the poor.",
+      "chineseTranslation": "但是她的兒子很不友善。王后給人食物，幫助窮人。",
+      "vocabularies": [
+        {
+          "word": "son",
+          "phonetic": "/sʌn/",
+          "meaning": "兒子"
+        },
+        {
+          "word": "unkind",
+          "phonetic": "/ʌnˈkaɪnd/",
+          "meaning": "不友善的"
+        },
+        {
+          "word": "poor",
+          "phonetic": "/pʊə(r)/",
+          "meaning": "貧窮的"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:41-08:49",
+      "englishSentence": "The prince sent them away.",
+      "chineseTranslation": "王子把他們趕走。",
+      "vocabularies": [
+        {
+          "word": "prince",
+          "phonetic": "/prɪns/",
+          "meaning": "王子"
+        },
+        {
+          "word": "send away",
+          "phonetic": "/send əˈweɪ/",
+          "meaning": "趕走；打發走"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:49-08:54",
+      "englishSentence": "One day, a fairy was passing the castle.",
+      "chineseTranslation": "有一天，一位仙女經過城堡。",
+      "vocabularies": [
+        {
+          "word": "fairy",
+          "phonetic": "/ˈfeəri/",
+          "meaning": "仙女"
+        },
+        {
+          "word": "pass",
+          "phonetic": "/pɑːs/",
+          "meaning": "經過"
+        },
+        {
+          "word": "castle",
+          "phonetic": "/ˈkɑːsl/",
+          "meaning": "城堡"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:01-09:09",
+      "englishSentence": "A man was asking the prince for help. Please, sir, I need shelter.",
+      "chineseTranslation": "一名男子向王子求助。拜託先生，我需要避難處。",
+      "vocabularies": [
+        {
+          "word": "ask",
+          "phonetic": "/ɑːsk/",
+          "meaning": "詢問；請求"
+        },
+        {
+          "word": "shelter",
+          "phonetic": "/ˈʃeltə(r)/",
+          "meaning": "庇護所；住處"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:09-09:16",
+      "englishSentence": "Then build a house. The prince snapped. Can you give me a few coins?",
+      "chineseTranslation": "王子厲聲說：「那就自己蓋房子。」你可以給我幾枚硬幣嗎？",
+      "vocabularies": [
+        {
+          "word": "build",
+          "phonetic": "/bɪld/",
+          "meaning": "建造"
+        },
+        {
+          "word": "snap",
+          "phonetic": "/snæp/",
+          "meaning": "厲聲說"
+        },
+        {
+          "word": "coin",
+          "phonetic": "/kɔɪn/",
+          "meaning": "硬幣"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:16-09:20",
+      "englishSentence": "Never. The prince said. Fairy shook her head.",
+      "chineseTranslation": "王子說：「絕對不行。」仙女搖搖頭。",
+      "vocabularies": [
+        {
+          "word": "never",
+          "phonetic": "/ˈnevə(r)/",
+          "meaning": "從不；絕不"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:27-09:37",
+      "englishSentence": "I know he lost his princess, she thought. But I must teach him to be loving again.",
+      "chineseTranslation": "她心想：我知道他失去了公主，但我必須教他再次學會愛人。",
+      "vocabularies": [
+        {
+          "word": "princess",
+          "phonetic": "/ˌprɪnˈses/",
+          "meaning": "公主"
+        },
+        {
+          "word": "teach",
+          "phonetic": "/tiːtʃ/",
+          "meaning": "教導"
+        },
+        {
+          "word": "loving",
+          "phonetic": "/ˈlʌvɪŋ/",
+          "meaning": "有愛心的"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:37-09:48",
+      "englishSentence": "Poof. The fairy turned into an old woman.",
+      "chineseTranslation": "噗！仙女變成一位老婦人。",
+      "vocabularies": [
+        {
+          "word": "turn into",
+          "phonetic": "/tɜːn ˈɪntuː/",
+          "meaning": "變成"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:02-10:10",
+      "englishSentence": "She went up to the prince. Please, sir. I am hungry.",
+      "chineseTranslation": "她走向王子。拜託先生，我很餓。",
+      "vocabularies": [
+        {
+          "word": "hungry",
+          "phonetic": "/ˈhʌŋɡri/",
+          "meaning": "飢餓的"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:10-10:20",
+      "englishSentence": "Then buy some food, the prince said. The woman pulled out a rose.",
+      "chineseTranslation": "王子說：「那就自己買食物。」老婦人拿出一朵玫瑰。",
+      "vocabularies": [
+        {
+          "word": "buy",
+          "phonetic": "/baɪ/",
+          "meaning": "購買"
+        },
+        {
+          "word": "pull out",
+          "phonetic": "/pʊl aʊt/",
+          "meaning": "拿出"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:20-10:24",
+      "englishSentence": "I'll pay you with this.",
+      "chineseTranslation": "我用這個付給你。",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "10:24-10:33",
+      "englishSentence": "I don't want that, the prince said. Then I'll use magic.",
+      "chineseTranslation": "王子說：「我不要那個。」那我就要使用魔法了。",
+      "vocabularies": [
+        {
+          "word": "magic",
+          "phonetic": "/ˈmædʒɪk/",
+          "meaning": "魔法"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:45-10:53",
+      "englishSentence": "She waved her wand. Poof. I've cursed everyone in your castle.",
+      "chineseTranslation": "她揮動魔杖。噗！我詛咒了你城堡裡所有人。",
+      "vocabularies": [
+        {
+          "word": "wave",
+          "phonetic": "/weɪv/",
+          "meaning": "揮動"
+        },
+        {
+          "word": "wand",
+          "phonetic": "/wɒnd/",
+          "meaning": "魔杖"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:55-11:02",
+      "englishSentence": "The forest is cursed, too. What? The prince was confused.",
+      "chineseTranslation": "森林也被詛咒了。什麼？王子感到困惑。",
+      "vocabularies": [
+        {
+          "word": "confused",
+          "phonetic": "/kənˈfjuːzd/",
+          "meaning": "困惑的"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:02-11:09",
+      "englishSentence": "The fairy lifted her wand again. Now it's your turn.",
+      "chineseTranslation": "仙女再次舉起魔杖。現在輪到你了。",
+      "vocabularies": [
+        {
+          "word": "lift",
+          "phonetic": "/lɪft/",
+          "meaning": "舉起"
+        },
+        {
+          "word": "turn",
+          "phonetic": "/tɜːn/",
+          "meaning": "輪到"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:09-11:16",
+      "englishSentence": "You'll look as beastly as you act.",
+      "chineseTranslation": "你的樣子會變得和你的行為一樣殘暴。",
+      "vocabularies": [
+        {
+          "word": "beastly",
+          "phonetic": "/ˈbiːstli/",
+          "meaning": "野獸般的；殘暴的"
+        },
+        {
+          "word": "act",
+          "phonetic": "/ækt/",
+          "meaning": "行為；舉止"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:18-11:24",
+      "englishSentence": "The prince turned into a terrible beast. Fairy smiled.",
+      "chineseTranslation": "王子變成一隻可怕的野獸。仙女笑了。",
+      "vocabularies": [
+        {
+          "word": "terrible",
+          "phonetic": "/ˈterəbl/",
+          "meaning": "可怕的"
+        },
+        {
+          "word": "beast",
+          "phonetic": "/biːst/",
+          "meaning": "野獸"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:24-11:34",
+      "englishSentence": "Perfect. I put my curse on you. Now you're as ugly as your heart.",
+      "chineseTranslation": "很好。我將詛咒施加於你。現在你的樣子和內心一樣醜陋。",
+      "vocabularies": [
+        {
+          "word": "perfect",
+          "phonetic": "/ˈpɜːfɪkt/",
+          "meaning": "完美的"
+        },
+        {
+          "word": "ugly",
+          "phonetic": "/ˈʌɡli/",
+          "meaning": "醜陋的"
+        },
+        {
+          "word": "heart",
+          "phonetic": "/hɑːt/",
+          "meaning": "內心；心臟"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:34-11:41",
+      "englishSentence": "The prince looked down. He had sharp claws and dark fur.",
+      "chineseTranslation": "王子往下看。他長出尖銳的爪子與深色毛皮。",
+      "vocabularies": [
+        {
+          "word": "sharp",
+          "phonetic": "/ʃɑːp/",
+          "meaning": "尖銳的"
+        },
+        {
+          "word": "claw",
+          "phonetic": "/klɔː/",
+          "meaning": "爪子"
+        },
+        {
+          "word": "fur",
+          "phonetic": "/fɜː(r)/",
+          "meaning": "毛皮"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:41-11:48",
+      "englishSentence": "His ring seemed to glow with magic. Turn me back into a prince.",
+      "chineseTranslation": "他的戒指似乎閃著魔法光芒。把我變回王子。",
+      "vocabularies": [
+        {
+          "word": "ring",
+          "phonetic": "/rɪŋ/",
+          "meaning": "戒指"
+        },
+        {
+          "word": "glow",
+          "phonetic": "/ɡləʊ/",
+          "meaning": "發光"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:48-12:02",
+      "englishSentence": "He roared. Fairy shook her head and handed him the rose.",
+      "chineseTranslation": "他咆哮。仙女搖搖頭，把玫瑰遞給他。",
+      "vocabularies": [
+        {
+          "word": "roar",
+          "phonetic": "/rɔː(r)/",
+          "meaning": "咆哮"
+        },
+        {
+          "word": "hand",
+          "phonetic": "/hænd/",
+          "meaning": "遞給"
+        }
+      ]
+    },
+    {
+      "timeRange": "12:02-12:11",
+      "englishSentence": "Only love can break my curse. Find true love before the rose's last petal falls.",
+      "chineseTranslation": "只有愛能解除我的詛咒。在玫瑰最後一片花瓣掉落前找到真愛。",
+      "vocabularies": [
+        {
+          "word": "break",
+          "phonetic": "/breɪk/",
+          "meaning": "打破；解除"
+        },
+        {
+          "word": "true",
+          "phonetic": "/truː/",
+          "meaning": "真實的"
+        },
+        {
+          "word": "petal",
+          "phonetic": "/ˈpetl/",
+          "meaning": "花瓣"
+        },
+        {
+          "word": "fall",
+          "phonetic": "/fɔːl/",
+          "meaning": "掉落"
+        }
+      ]
+    },
+{
+  "timeRange": "12:11-12:24",
+  "englishSentence": "I have been trapped in this beastly form for years, hiding away from the world.",
+  "chineseTranslation": "我被困在這野獸的模樣許多年，躲離這個世界。",
+  "vocabularies": [
+    {
+      "word": "trap",
+      "phonetic": "/træp/",
+      "meaning": "困住；使陷入"
+    },
+    {
+      "word": "beastly",
+      "phonetic": "/ˈbiːstli/",
+      "meaning": "野獸般的"
+    },
+    {
+      "word": "form",
+      "phonetic": "/fɔːm/",
+      "meaning": "外形，模樣"
+    },
+    {
+      "word": "hide",
+      "phonetic": "/haɪd/",
+      "meaning": "躲藏，隱藏"
+    }
+  ]
+}
+]
+}

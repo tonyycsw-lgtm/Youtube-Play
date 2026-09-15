@@ -14,15 +14,12 @@
   var TICK_MS = 250;          // 時間輪詢週期
   var SPEEDS = [0.5, 0.75, 0.85, 1.0, 1.25];
   var LS_PREFIX = 'utube_web_v1:';
-  var DEFAULT_WINDOW = 10;    // 詞匯分段秒數
 
   var App = {
     program: null,
     videoId: '',
     title: '',
     lang: 'en',
-    srtPath: '',
-    vocabPath: '',
     player: null,
     ready: false,
     duration: 0,
@@ -31,10 +28,8 @@
     loopActive: false,
     speed: 1,
     fadeEnabled: true,
-    subtitles: [],
-    subNote: '',
     vocab: [],            // [ { start, end, words: [ { w, zh } ] } ]
-    vocabSource: 'none',  // json | auto | none
+    vocabSource: 'none',  // json | none
     segIndex: -1,
     follow: true,
     pinned: null,
@@ -43,25 +38,40 @@
     osdTimer: null
   };
 
+  /* ================= 節目查詢（靜態優先，找不到再查 KV） ================= */
+  async function findProgram(id) {
+    var defaultLang = 'en';
+    var p = null;
+    try {
+      var res = await fetch('programs.json', { cache: 'no-cache' });
+      if (res.ok) {
+        var data = await res.json();
+        defaultLang = data.defaultLang || defaultLang;
+        p = (data.programs || []).find(function (x) { return x.id === id; }) || null;
+      }
+    } catch (e) { /* 靜態清單不存在時仍可查 KV */ }
+    if (!p) {
+      try {
+        var res2 = await fetch('api/programs', { cache: 'no-cache' });
+        if (res2.ok) {
+          var d2 = await res2.json();
+          p = (d2.programs || []).find(function (x) { return x.id === id; }) || null;
+        }
+      } catch (e) { /* 無 API 時略過 */ }
+    }
+    return { program: p, defaultLang: defaultLang };
+  }
+
   /* ================= 初始化 ================= */
   async function init() {
     if (programId) {
-      try {
-        var res = await fetch('programs.json', { cache: 'no-cache' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        var data = await res.json();
-        var p = (data.programs || []).find(function (x) { return x.id === programId; });
-        if (!p || !p.videoId) throw new Error('找不到節目');
-        App.program = p;
-        App.videoId = p.videoId;
-        App.title = p.title || 'Journey to the West';
-        App.lang = p.lang || data.defaultLang || 'en';
-        App.srtPath = p.srt || '';
-        App.vocabPath = p.vocab || '';
-      } catch (err) {
-        showFatal('無法載入節目：' + err.message);
-        return;
-      }
+      var found = await findProgram(programId);
+      var p = found.program;
+      if (!p || !p.videoId) { showFatal('找不到節目'); return; }
+      App.program = p;
+      App.videoId = p.videoId;
+      App.title = p.title || 'Journey to the West';
+      App.lang = p.lang || found.defaultLang || 'en';
     } else if (directV) {
       App.videoId = directV;
       App.title = 'YouTube 影片';
@@ -76,9 +86,6 @@
     if (App.program && App.program.description) {
       $('page-desc').textContent = App.program.description;
     }
-    var toolLink = $('btn-srt-tool');
-    if (toolLink) toolLink.href = 'srt-tool.html?v=' + encodeURIComponent(App.videoId);
-
     bindUI();
     loadPlayer();
   }
@@ -142,7 +149,7 @@
     updatePlayhead(0);
     window.focus();
     document.body.focus();
-    loadSubtitles();
+    loadVocabulary();
     App.tickTimer = setInterval(tick, TICK_MS);
   }
 
@@ -171,20 +178,9 @@
     updateSegment(t);
   }
 
-  /* ================= 字幕與詞匯載入 ================= */
-  async function loadSubtitles() {
-    var result = await window.Captions.load(App.videoId, App.lang, App.srtPath);
-    result = result || { subtitles: [], source: 'none', note: '字幕載入失敗' };
-    App.subtitles = result.subtitles || [];
-    App.subNote = result.note || '';
-    loadVocabulary();
-  }
-
+  /* ================= 詞匯載入（唯一來源：KV / api/vocab/{videoId}） ================= */
   async function loadVocabulary() {
-    var res = await window.Vocab.load(App.videoId, App.subtitles, {
-      window: DEFAULT_WINDOW,
-      vocabPath: App.vocabPath || ''
-    });
+    var res = await window.Vocab.load(App.videoId);
     App.vocab = (res && res.segments) || [];
     App.vocabSource = (res && res.source) || 'none';
     App.segIndex = -1;
@@ -193,8 +189,7 @@
 
     if (!App.vocab.length) {
       $('vocab-list').innerHTML = '<div class="vocab-empty">目前沒有可用的詞匯。' +
-        (App.subNote ? '<br>' + escapeHtml(App.subNote) : '') +
-        '<br><br>請老師用「字幕工具」建立字幕與詞匯表。</div>';
+        '<br><br>請老師在首頁「新增影片」上載詞匯 JSON。</div>';
       $('seg-label').textContent = '--:-- – --:--';
       return;
     }
@@ -367,47 +362,6 @@
     saveState();
   }
 
-  /* 循環一段時間範圍（a、b 為字幕時間，會套用校時 offset） */
-  function loopRange(a, b, pad, label) {
-    if (!App.ready) return;
-    pad = pad || 0;
-    App.timeA = clamp(a + App.offset - pad, 0, App.duration || a);
-    App.timeB = clamp(b + App.offset + pad, App.timeA + MIN_GAP, App.duration || b);
-    App.loopActive = true;
-    setLoopUI(true);
-    seekTo(App.timeA);
-    showOSD(label || '循環本段', '#2563EB', 1200);
-    updateTimelineUI();
-    updateTimeLabels();
-    saveState();
-  }
-
-  function loopSentence(line) {
-    loopRange(line.start, line.end, 0.15, '單句循環');
-  }
-
-  function jumpSentence(dir) {
-    if (!App.subtitles.length) {
-      showOSD('⚠️ 無字幕數據', '#F59E0B', 1200);
-      return;
-    }
-    var t = App.player.getCurrentTime() - App.offset;
-    var target = null;
-    if (dir < 0) {
-      var prev = App.subtitles.filter(function (s) { return s.end < t - 0.05; });
-      target = prev.length ? prev[prev.length - 1] : App.subtitles[0];
-    } else {
-      var next = App.subtitles.filter(function (s) { return s.start > t + 0.05; });
-      target = next.length ? next[0] : App.subtitles[App.subtitles.length - 1];
-    }
-    if (App.loopActive) {
-      loopSentence(target);
-    } else {
-      seekTo(target.start + App.offset);
-      showOSD(dir < 0 ? '◀ 上一句' : '下一句 ▶', '#FFFFFF', 800);
-    }
-  }
-
   /* ================= 播放控制 ================= */
   function seekTo(t) {
     if (!App.ready) return;
@@ -557,8 +511,6 @@
     $('txt-b').addEventListener('click', setB);
     $('btn-nudge-a').addEventListener('click', function () { nudgeA(-0.1); });
     $('btn-nudge-b').addEventListener('click', function () { nudgeB(0.1); });
-    $('btn-prev-sub').addEventListener('click', function () { jumpSentence(-1); });
-    $('btn-next-sub').addEventListener('click', function () { jumpSentence(1); });
     $('speed-select').addEventListener('change', function () {
       App.speed = parseFloat(this.value) || 1;
       applySpeed();
@@ -620,11 +572,9 @@
           if (App.loopActive) { e.preventDefault(); nudgeB(0.1); }
           break;
         case 'a': case 'A':
-          if (App.loopActive) { e.preventDefault(); jumpSentence(-1); }
-          break;
+          e.preventDefault(); gotoSegment(App.segIndex - 1); break;
         case 'd': case 'D':
-          if (App.loopActive) { e.preventDefault(); jumpSentence(1); }
-          break;
+          e.preventDefault(); gotoSegment(App.segIndex + 1); break;
         case ' ':
           e.preventDefault(); togglePlay(); break;
       }

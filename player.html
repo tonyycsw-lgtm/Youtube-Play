@@ -17,7 +17,6 @@
           <p id="page-desc" class="player-desc"></p>
         </div>
       </div>
-      <a class="tool-btn" id="btn-srt-tool" href="srt-tool.html" title="製作／校對字幕並匯出 SRT">✎ 字幕工具</a>
     </div>
   </header>
 
@@ -61,8 +60,6 @@
         </div>
 
         <div class="cb-right">
-          <button class="mini-btn" id="btn-prev-sub" title="上一句（A 鍵）">上一句</button>
-          <button class="mini-btn" id="btn-next-sub" title="下一句（D 鍵）">下一句</button>
           <label class="speed-wrap">
             <span class="speed-label">速度</span>
             <select id="speed-select" class="speed-select">
@@ -83,7 +80,7 @@
     <section class="vocab-panel">
       <div class="vocab-head">
         <span>詞匯（依片段）</span>
-        <label class="offset-wrap" title="字幕校時（秒）：正值＝字幕延後出現，負值＝提早">
+        <label class="offset-wrap" title="詞匯校時（秒）：正值＝詞匯延後出現，負值＝提早">
           <span class="offset-label">校時</span>
           <input id="sub-offset" class="sub-offset" type="number" step="0.1" value="0" inputmode="decimal">
         </label>
@@ -106,7 +103,6 @@
 
   <div id="osd" class="osd" aria-live="assertive"></div>
 
-  <script src="js/captions.js"></script>
   <script src="js/vocab.js"></script>
   <script src="js/player.js"></script>
 </body>

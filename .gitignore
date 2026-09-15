@@ -14,6 +14,9 @@ _shots/
 # Node
 node_modules/
 
+# Cloudflare 本機開發
+.wrangler/
+
 # 暫用檔案
 *.tmp
 *.log

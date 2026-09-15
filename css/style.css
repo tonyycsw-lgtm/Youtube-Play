@@ -544,6 +544,122 @@ html, body {
 }
 .osd.active { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
+/* ---------- 首頁：新增影片 ---------- */
+.header-actions { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.add-btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+}
+.add-btn:hover { background: #1D4ED8; border-color: #1D4ED8; }
+.program-badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  background: rgba(37, 99, 235, 0.9);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+}
+
+body.modal-open { overflow: hidden; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal[hidden] { display: none; }
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  padding: 20px 22px 22px;
+}
+.modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.modal-head h2 { margin: 0; font-size: 18px; font-weight: 600; }
+.modal-x {
+  background: transparent;
+  border: 0;
+  color: var(--text-dim);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 6px;
+}
+.modal-x:hover { color: #fff; }
+
+.modal-tabs { display: flex; gap: 8px; margin: 16px 0 14px; }
+.modal-tab {
+  flex: 1 1 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 13.5px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.modal-tab:hover { color: #fff; border-color: rgba(255, 255, 255, 0.2); }
+.modal-tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.tab-pane[hidden] { display: none; }
+.field { display: block; margin-bottom: 14px; }
+.field-label { display: block; font-size: 12.5px; color: var(--text-dim); margin-bottom: 6px; }
+.field input[type="text"],
+.field input[type="url"],
+.field textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-soft);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: 14px;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.field input:focus, .field textarea:focus { border-color: var(--accent); }
+.field input[type="file"] { width: 100%; color: var(--text-dim); font-size: 13px; }
+.field textarea { resize: vertical; }
+.field-row { display: flex; gap: 12px; }
+.field-row .field { flex: 1 1 0; }
+.field-hint { margin: -6px 0 14px; font-size: 12px; color: var(--text-faint); }
+.field-hint.ok { color: var(--green); }
+.field-hint.error { color: var(--amber); }
+
+.modal-msg { font-size: 13px; padding: 9px 12px; border-radius: 8px; margin-bottom: 14px; }
+.modal-msg.error { background: rgba(220, 38, 38, 0.14); border: 1px solid rgba(220, 38, 38, 0.4); color: #FCA5A5; }
+.modal-msg.ok { background: rgba(52, 199, 89, 0.14); border: 1px solid rgba(52, 199, 89, 0.4); color: #86EFAC; }
+
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+.modal-actions .mini-btn { padding: 9px 18px; font-size: 13.5px; }
+.modal-actions .mini-btn:disabled { opacity: 0.55; cursor: default; }
+
 /* ---------- 響應式 ---------- */
 @media (max-width: 1024px) {
   .player-layout { grid-template-columns: 1fr; }
@@ -556,4 +672,8 @@ html, body {
   .control-bar { flex-direction: column; align-items: stretch; }
   .cb-center, .cb-right { justify-content: flex-start; }
   .seg-nav { justify-content: flex-start; }
+  .home-header-inner { flex-wrap: wrap; }
+  .header-actions { width: 100%; justify-content: flex-start; }
+  .modal { padding: 12px; }
+  .modal-card { padding: 18px 16px; }
 }
