@@ -43,12 +43,24 @@
     if (m) return m[1];
     try {
       var u = new URL(s);
+      var host = u.hostname.toLowerCase();
+      if (!/(^|\.)(youtube\.com|youtube-nocookie\.com|youtu\.be)$/.test(host)) return '';
       var v = u.searchParams.get('v');
       if (v && VIDEO_ID_RE.test(v)) return v;
       var parts = u.pathname.split('/').filter(Boolean);
       var last = parts[parts.length - 1] || '';
       if (VIDEO_ID_RE.test(last)) return last;
     } catch (e) { /* 非完整網址 */ }
+    return '';
+  }
+
+  /* ---------- 已知但尚未支援的來源 ---------- */
+  function unsupportedSource(input) {
+    var s = String(input || '').toLowerCase();
+    if (/douyin\.com|iesdouyin\.com/.test(s)) return '抖音（Douyin）';
+    if (/facebook\.com|fb\.watch/.test(s)) return 'Facebook';
+    if (/instagram\.com/.test(s)) return 'Instagram';
+    if (/vimeo\.com/.test(s)) return 'Vimeo（尚未支援）';
     return '';
   }
 
@@ -326,7 +338,10 @@
 
     var resolved = resolveUrl(urlEl.value) || state.jsonResolved;
     if (!resolved) {
-      showMsg('請提供有效的 YouTube／TikTok 連結、媒體檔 URL（mp4/mp3…），或上載含影片網址的 JSON。', 'error');
+      var unsupported = unsupportedSource(urlEl.value);
+      showMsg(unsupported
+        ? ('目前不支援 ' + unsupported + '。請使用 YouTube、TikTok 或直接媒體檔 URL（mp4/mp3…）。')
+        : '請提供有效的 YouTube／TikTok 連結、媒體檔 URL（mp4/mp3…），或上載含影片網址的 JSON。', 'error');
       return;
     }
 

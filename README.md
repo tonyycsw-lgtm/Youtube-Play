@@ -113,6 +113,7 @@ python -m http.server 8000
 - 詞匯 key 用節目 `id`：YouTube 用 `videoId`、TikTok 用 `tt_<貼文ID>`、媒體檔用 `f_<URL 短雜湊>`。
 - 舊資料（只有 `videoId`）會視為 YouTube，完全相容。
 - 目前媒體檔**只支援貼 URL**，尚未提供上載（R2）功能。
+- 尚未支援：抖音（Douyin）、Facebook、Instagram；Vimeo 規劃於 Phase 2。貼上這些連結會顯示明確的「不支援」訊息（不會誤判成 YouTube）。
 
 ## 詞匯面板（播放頁）
 
