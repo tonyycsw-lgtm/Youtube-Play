@@ -26,11 +26,16 @@
 
   var App = {
     program: null,
+    id: '',               // 節目 id（詞匯 key 用）
+    source: 'youtube',    // youtube | file | tiktok
     videoId: '',
+    src: '',              // file 來源的媒體 URL
+    mediaType: 'video',   // video | audio
     title: '',
     lang: 'en',
-    player: null,
+    player: null,         // 播放器轉接器（Player Adapter）
     ready: false,
+    abDefaultPending: false,
     duration: 0,
     timeA: 0,
     timeB: 0,
@@ -81,12 +86,18 @@
     if (programId) {
       var found = await findProgram(programId);
       var p = found.program;
-      if (!p || !p.videoId) { showFatal('找不到節目'); return; }
+      if (!p || (!p.videoId && !p.src)) { showFatal('找不到節目'); return; }
       App.program = p;
-      App.videoId = p.videoId;
-      App.title = p.title || 'Journey to the West';
+      App.source = p.source || 'youtube';
+      App.id = p.id || p.videoId;
+      App.videoId = p.videoId || '';
+      App.src = p.src || '';
+      App.mediaType = p.mediaType === 'audio' ? 'audio' : 'video';
+      App.title = p.title || '影片';
       App.lang = p.lang || found.defaultLang || 'en';
     } else if (directV) {
+      App.source = 'youtube';
+      App.id = directV;
       App.videoId = directV;
       App.title = 'YouTube 影片';
       App.lang = params.get('lang') || 'en';
@@ -100,10 +111,19 @@
     if (App.program && App.program.description) {
       $('page-desc').textContent = App.program.description;
     }
+    setupMediaArea();
     loadSubFont();
     loadSubHeight();
     bindUI();
     loadPlayer();
+  }
+
+  function setupMediaArea() {
+    if (App.source === 'file' && App.mediaType === 'audio') {
+      $('video-wrap').classList.add('audio-mode');
+      $('audio-stage').hidden = false;
+      $('audio-title').textContent = App.title;
+    }
   }
 
   function showFatal(msg) {
@@ -112,54 +132,73 @@
     el.hidden = false;
   }
 
-  /* ================= 播放器載入 ================= */
+  /* ================= 播放器載入（依來源選轉接器） ================= */
   function loadPlayer() {
-    if (window.YT && window.YT.Player) {
-      createPlayer();
-      return;
-    }
-    window.onYouTubeIframeAPIReady = createPlayer;
+    if (App.source === 'file') { createFilePlayer(); return; }
+    if (App.source === 'tiktok') { createTikTokPlayer(); return; }
+    createYouTubePlayer();
+  }
+
+  function createYouTubePlayer() {
+    if (window.YT && window.YT.Player) { buildYouTube(); return; }
+    window.onYouTubeIframeAPIReady = buildYouTube;
     var tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     var first = document.getElementsByTagName('script')[0];
     first.parentNode.insertBefore(tag, first);
-
     setTimeout(function () {
-      if (!App.ready && !window.YT) {
-        showFatal('無法載入 YouTube 播放器。請檢查網路，或學校網路是否封鎖 youtube.com / youtube-nocookie.com。');
+      if (!App.ready && !(window.YT && window.YT.Player)) {
+        showFatal('無法載入 YouTube 播放器。請檢查網路，或學校網路是否封鎖 youtube.com。');
       }
     }, 9000);
   }
 
-  function createPlayer() {
+  function buildYouTube() {
     try {
-      App.player = new YT.Player('player', {
+      App.player = window.Players.createYouTube({
+        container: $('player'),
         videoId: App.videoId,
-        playerVars: {
-          autoplay: 0,
-          rel: 0,
-          modestbranding: 1,
-          playsinline: 1,
-          controls: 1,
-          hl: App.lang
-        },
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-          onError: onPlayerError
-        }
+        lang: App.lang,
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+        onError: onPlayerError
       });
-    } catch (e) {
-      showFatal('播放器初始化失敗：' + e.message);
-    }
+    } catch (e) { showFatal('播放器初始化失敗：' + e.message); }
+  }
+
+  function createFilePlayer() {
+    try {
+      App.player = window.Players.createHtml5({
+        container: App.mediaType === 'audio' ? $('audio-player-slot') : $('player'),
+        src: App.src,
+        mediaType: App.mediaType,
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+        onError: onPlayerError
+      });
+    } catch (e) { showFatal('播放器初始化失敗：' + e.message); }
+  }
+
+  function createTikTokPlayer() {
+    try {
+      App.player = window.Players.createTikTok({
+        container: $('player'),
+        postId: App.videoId,
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+        onError: onPlayerError
+      });
+    } catch (e) { showFatal('播放器初始化失敗：' + e.message); }
   }
 
   function onPlayerReady() {
+    if (App.ready) return;
     App.ready = true;
     App.duration = App.player.getDuration() || 0;
     App.timeA = 0;
-    App.timeB = App.duration ? Math.min(10, App.duration) : 0;
-    restoreState();
+    App.timeB = App.duration ? Math.min(10, App.duration) : 10;
+    var hadSaved = restoreState();
+    if (!hadSaved && !App.duration) App.abDefaultPending = true;
     setLoopUI(App.loopActive);
     applySpeed();
     applySubtitleHeight();
@@ -172,19 +211,34 @@
     App.tickTimer = setInterval(tick, TICK_MS);
   }
 
-  function onPlayerStateChange(e) {
-    if (e && e.data === YT.PlayerState.ENDED && App.loopActive && App.duration) {
-      seekTo(App.timeA);
-    }
+  function onPlayerStateChange(state) {
+    if (state === 'ended' && App.loopActive && App.duration) seekTo(App.timeA);
   }
 
   function onPlayerError() {
-    showOSD('✕ 影片無法播放（可能受地區或年齡限制）', '#F59E0B', 2600);
+    showOSD('✕ 影片無法播放（可能受地區或年齡限制，或連結不允許嵌入）', '#F59E0B', 2600);
   }
 
   /* ================= 時間輪詢 ================= */
+  function syncDuration() {
+    if (!App.player) return;
+    var d = App.player.getDuration() || 0;
+    if (d <= 0 || Math.abs(d - App.duration) < 0.5) return;
+    App.duration = d;
+    if (App.abDefaultPending) {
+      App.abDefaultPending = false;
+      App.timeA = 0;
+      App.timeB = Math.min(10, d);
+    } else if (App.timeB > d) {
+      App.timeB = d;
+    }
+    updateTimelineUI();
+    updateTimeLabels();
+  }
+
   function tick() {
     if (!App.ready || !App.player) return;
+    syncDuration();
     var t = App.player.getCurrentTime();
     if (!isFinite(t)) return;
 
@@ -205,9 +259,9 @@
     if (App.follow) updateSegment(t);
   }
 
-  /* ================= 詞匯載入（唯一來源：KV / api/vocab/{videoId}） ================= */
+  /* ================= 詞匯載入（唯一來源：KV / api/vocab/{id}） ================= */
   async function loadVocabulary() {
-    var res = await window.Vocab.load(App.videoId);
+    var res = await window.Vocab.load(App.id);
     App.vocab = (res && res.segments) || [];
     App.vocabSource = (res && res.source) || 'none';
     App.hasSubtitle = App.vocab.some(function (s) { return s.en || s.zh; });
@@ -386,7 +440,7 @@
   }
 
   function pauseVideo() {
-    if (App.ready) { try { App.player.pauseVideo(); } catch (e) { /* ignore */ } }
+    if (App.ready && App.player) { try { App.player.pause(); } catch (e) { /* ignore */ } }
   }
 
   function selectWord(word) {
@@ -466,7 +520,7 @@
   function replayFromA() {
     if (!App.ready) return;
     seekTo(App.timeA);
-    try { App.player.playVideo(); } catch (e) { /* ignore */ }
+    try { App.player.play(); } catch (e) { /* ignore */ }
     showOSD('▶ 從 A 點重播', '#F59E0B', 900);
   }
 
@@ -486,20 +540,12 @@
 
   /* ================= 播放控制 ================= */
   function seekTo(t) {
-    if (!App.ready) return;
+    if (!App.ready || !App.player) return;
     t = clamp(t, 0, App.duration || t);
     App.pendingSeek = t;
     App.pendingUntil = Date.now() + 2000;
     displayAtTime(t);
-    if (App.fadeEnabled) {
-      try { App.player.setVolume(0); } catch (e) { /* ignore */ }
-      App.player.seekTo(t, true);
-      setTimeout(function () {
-        try { App.player.setVolume(100); } catch (e) { /* ignore */ }
-      }, 60);
-    } else {
-      App.player.seekTo(t, true);
-    }
+    App.player.seek(t);
   }
 
   /* 立即依指定時間更新字幕與詞匯（不等影片載入完成） */
@@ -512,17 +558,21 @@
   }
 
   function togglePlay() {
-    if (!App.ready) return;
-    var st = App.player.getPlayerState();
-    if (st === 1) App.player.pauseVideo();
-    else App.player.playVideo();
+    if (!App.ready || !App.player) return;
+    if (App.player.getState() === 'playing') App.player.pause();
+    else App.player.play();
   }
 
   function applySpeed() {
-    if (App.ready) {
-      try { App.player.setPlaybackRate(App.speed); } catch (e) { /* ignore */ }
+    var sel = $('speed-select');
+    if (App.player && App.player.supportsRate === false) {
+      sel.disabled = true;
+      sel.title = '此來源不支援變速';
+    } else {
+      sel.disabled = false;
+      if (App.ready && App.player) { try { App.player.setRate(App.speed); } catch (e) { /* ignore */ } }
     }
-    $('speed-select').value = String(App.speed);
+    sel.value = String(App.speed);
   }
 
   function changeSubtitleFont(delta) {
@@ -751,10 +801,9 @@
     $('btn-sub-larger').addEventListener('click', function () { changeSubtitleFont(SUB_FONT_STEP); });
     $('subtitle-text').addEventListener('click', function (e) {
       if (e.target.closest('.sub-word')) return;
-      if (!App.ready) return;
-      var st = App.player.getPlayerState();
-      if (st === 1) pauseVideo();
-      else App.player.playVideo();
+      if (!App.ready || !App.player) return;
+      if (App.player.getState() === 'playing') pauseVideo();
+      else App.player.play();
     });
 
     bindTimeline();
@@ -817,7 +866,7 @@
 
   /* ================= 持久化 ================= */
   function lsKey() {
-    return LS_PREFIX + App.videoId;
+    return LS_PREFIX + (App.id || App.videoId);
   }
 
   function saveState() {
@@ -836,7 +885,7 @@
   function restoreState() {
     try {
       var d = JSON.parse(localStorage.getItem(lsKey()));
-      if (!d) return;
+      if (!d) return false;
       if (isFinite(d.timeA)) App.timeA = clamp(d.timeA, 0, App.duration);
       if (isFinite(d.timeB)) App.timeB = clamp(d.timeB, Math.min(App.duration, App.timeA + MIN_GAP), App.duration);
       else App.timeB = App.duration;
@@ -847,7 +896,9 @@
       setLoopUI(App.loopActive);
       $('sub-offset').value = App.offset;
       $('btn-follow').classList.toggle('on', App.follow);
+      return true;
     } catch (e) { /* ignore */ }
+    return false;
   }
 
   /* ================= 工具函式 ================= */

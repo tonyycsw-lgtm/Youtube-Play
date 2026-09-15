@@ -12,6 +12,7 @@ css/style.css           共用樣式（暗色磨砂玻璃 + 電光藍）
 js/programs.js          首頁邏輯（合併靜態與雲端節目、渲染卡片）
 js/add-video.js         首頁「新增影片」：連結解析／JSON 轉換／呼叫 API
 js/player.js            播放頁主邏輯（A-B、詞匯片段、快捷鍵、持久化）
+js/player-adapters.js   播放器轉接層（YouTube IFrame／HTML5 媒體／TikTok Embed）
 js/vocab.js             詞匯引擎（只從 Cloudflare KV 載入詞匯 JSON）
 functions/api/programs.js    Function：/api/programs（GET 列出、POST 新增自訂節目）
 functions/api/vocab/[id].js  Function：/api/vocab/{id}（讀取 KV 內的詞匯 JSON）
@@ -71,6 +72,8 @@ python -m http.server 8000
 | 方式 | 輸入 | 說明 |
 |---|---|---|
 | YouTube 連結 | 例如 `https://youtu.be/KTCJC4GMPzg?si=...` | 自動解析影片 ID、透過 oEmbed 帶入標題 |
+| TikTok 連結 | 例如 `https://www.tiktok.com/@user/video/123...` | 使用官方 Embed Player（postMessage），可 A-B 循環 |
+| 媒體檔 URL | 例如 `https://.../clip.mp4`、`https://.../song.mp3` | 直接用 HTML5 `<video>`／`<audio>` 播放 |
 | 上載 JSON | 例如 `Beauty_and_the_beast_Ep1-3.json` | 自動讀取 `videoInfo.url` 與 `videoInfo.title`，並把詞匯轉成播放頁格式存入 KV |
 
 - 支援兩種詞匯 JSON 格式：`{ segments:[{start,end,words:[{w,src,zh}]}] }` 與 `{ wordSegments:[{timeRange, vocabularies:[{word,meaning}]}] }`（會自動轉換）。
@@ -94,6 +97,22 @@ python -m http.server 8000
    ```
 3. 也可改用 Dashboard：Pages 專案 → Settings → Functions → KV namespace bindings → 綁定 `KV_BINDING`（Production 與 Preview 都要）。
 4. 重新部署後，`/api/programs`、`/api/vocab/{id}` 才會讀寫 KV。
+
+## 播放來源（YouTube／TikTok／媒體檔）
+
+播放頁以「播放器轉接層」支援多種來源；學習功能（A-B 循環、詞匯／字幕依時間同步、校時）只要來源能回報播放時間就能運作：
+
+| 來源 | 播放方式 | A-B 循環 | 變速 | 備註 |
+|---|---|---|---|---|
+| YouTube | IFrame API | ✅ | ✅ | 預設 |
+| TikTok | 官方 Embed Player（postMessage） | ✅ | ❌ | 播放器不提供變速 |
+| 媒體檔 mp4/webm… | HTML5 `<video>` | ✅ | ✅ | 需允許直連與 CORS／range |
+| 音頻 mp3/m4a… | HTML5 `<audio>` | ✅ | ✅ | 播放頁顯示封面圖示＋標題 |
+
+- 節目資料的 `source`：`youtube`（預設）、`tiktok`、`file`；`file` 另有 `src` 與 `mediaType`。
+- 詞匯 key 用節目 `id`：YouTube 用 `videoId`、TikTok 用 `tt_<貼文ID>`、媒體檔用 `f_<URL 短雜湊>`。
+- 舊資料（只有 `videoId`）會視為 YouTube，完全相容。
+- 目前媒體檔**只支援貼 URL**，尚未提供上載（R2）功能。
 
 ## 詞匯面板（播放頁）
 
@@ -159,6 +178,8 @@ python -m http.server 8000
 - 無登入/班級管理；所有學生共用同一清單。
 - 首頁「新增影片」不設保護；任何取得網址的人都能新增或覆寫（資料存 KV），且沒有刪除介面。
 - 影片若為年齡/地區限制，iframe 可能無法播放（會在頁面顯示錯誤）。
+- 媒體檔 URL 需允許直連與 CORS／range，否則讀不到播放時間，A-B 與詞匯同步會失效。
+- TikTok 不支援變速；部分影片可能不允許嵌入。
 
 ## V2 候選方向
 

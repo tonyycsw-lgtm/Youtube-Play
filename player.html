@@ -25,6 +25,13 @@
     <div class="player-main">
     <div class="video-wrap" id="video-wrap">
       <div id="player"></div>
+      <div id="audio-stage" class="audio-stage" hidden>
+        <div class="audio-cover">♪</div>
+        <div class="audio-meta">
+          <div class="audio-title" id="audio-title"></div>
+          <div id="audio-player-slot" class="audio-player-slot"></div>
+        </div>
+      </div>
       <div id="player-error" class="player-error" hidden></div>
     </div>
 
@@ -116,6 +123,7 @@
 
   <div id="osd" class="osd" aria-live="assertive"></div>
 
+  <script src="js/player-adapters.js"></script>
   <script src="js/vocab.js"></script>
   <script src="js/player.js"></script>
 </body>

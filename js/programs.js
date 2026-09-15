@@ -21,12 +21,20 @@
     const href = 'player.html?id=' + encodeURIComponent(program.id);
     const desc = program.description || '';
 
+    const source = program.source || 'youtube';
+    let thumb;
+    if (source === 'youtube' && program.videoId) {
+      thumb = '<img src="https://i.ytimg.com/vi/' + encodeURIComponent(program.videoId) + '/hqdefault.jpg" alt="' + esc(program.title) + ' 縮圖" loading="lazy" onerror="this.style.opacity=0.25">';
+    } else {
+      const icon = (source === 'file' && program.mediaType === 'audio') ? '♪' : '▶';
+      thumb = '<div class="thumb-icon">' + icon + '</div>';
+    }
+
     const card = document.createElement('a');
     card.className = 'program-card';
     card.href = href;
     card.innerHTML =
-      '<div class="program-thumb">' +
-        '<img src="https://i.ytimg.com/vi/' + encodeURIComponent(program.videoId) + '/hqdefault.jpg" alt="' + esc(program.title) + ' 縮圖" loading="lazy" onerror="this.style.opacity=0.25">' +
+      '<div class="program-thumb">' + thumb +
         '<span class="program-lang">' + esc(lang) + '</span>' +
         (program.custom ? '<span class="program-badge">自訂</span>' : '') +
       '</div>' +
@@ -72,9 +80,10 @@
     const seen = {};
     const merged = [];
     base.concat(custom).forEach(function (p) {
-      if (!p || !p.id || !p.videoId) return;
-      if (seen[p.videoId]) return;
-      seen[p.videoId] = true;
+      if (!p || !p.id) return;
+      const key = p.videoId || p.id;
+      if (seen[key]) return;
+      seen[key] = true;
       merged.push(p);
     });
     return merged;

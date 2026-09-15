@@ -35,13 +35,26 @@ export async function onRequest(context) {
   }
 
   const url = new URL(request.url);
-  const videoId = String(url.searchParams.get('v') || url.searchParams.get('videoId') || '').trim();
-  if (!/^[A-Za-z0-9_-]{6,20}$/.test(videoId)) {
-    return json({ ok: false, error: 'invalid_video_id' }, 400, headers);
-  }
+  const v = String(url.searchParams.get('v') || url.searchParams.get('videoId') || '').trim();
+  const full = String(url.searchParams.get('url') || '').trim();
 
-  const target = 'https://www.youtube.com/oembed?url=' +
-    encodeURIComponent('https://www.youtube.com/watch?v=' + videoId) + '&format=json';
+  let target = '';
+  let provider = 'youtube';
+
+  if (v) {
+    if (!/^[A-Za-z0-9_-]{6,20}$/.test(v)) {
+      return json({ ok: false, error: 'invalid_video_id' }, 400, headers);
+    }
+    target = 'https://www.youtube.com/oembed?url=' +
+      encodeURIComponent('https://www.youtube.com/watch?v=' + v) + '&format=json';
+  } else if (full && /tiktok\.com/i.test(full)) {
+    provider = 'tiktok';
+    target = 'https://www.tiktok.com/oembed?url=' + encodeURIComponent(full);
+  } else if (full && /^https?:\/\//i.test(full)) {
+    target = 'https://www.youtube.com/oembed?url=' + encodeURIComponent(full) + '&format=json';
+  } else {
+    return json({ ok: false, error: 'missing_url', note: '請提供 ?v=<YouTube ID> 或 ?url=<影片網址>' }, 400, headers);
+  }
 
   try {
     const res = await fetch(target, {
@@ -53,6 +66,7 @@ export async function onRequest(context) {
     const data = await res.json();
     return json({
       ok: true,
+      provider: provider,
       title: data.title || '',
       author: data.author_name || '',
       thumbnail: data.thumbnail_url || ''

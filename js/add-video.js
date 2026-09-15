@@ -1,6 +1,6 @@
 /* ============================================================
    首頁「新增影片」：
-   - 分頁一：貼 YouTube 連結（自動解析 videoId、抓標題）
+   - 分頁一：貼連結（YouTube／TikTok／媒體檔 URL；自動判斷來源、抓標題）
    - 分頁二：上載詞匯 JSON（自動讀取網址/標題並轉成播放頁格式）
    - 送出 → POST /api/programs（存 Cloudflare KV）
    ============================================================ */
@@ -23,13 +23,15 @@
 
   var state = {
     tab: 'link',
-    jsonVideoId: '',
+    jsonResolved: null,
     jsonTitle: '',
     jsonVocab: null,
     busy: false
   };
 
   var VIDEO_ID_RE = /^[A-Za-z0-9_-]{11}$/;
+  var VIDEO_EXT = ['mp4', 'webm', 'ogv', 'ogg', 'mov', 'm4v', 'mkv'];
+  var AUDIO_EXT = ['mp3', 'm4a', 'aac', 'wav', 'flac', 'oga'];
 
   /* ---------- 連結解析 ---------- */
   function extractVideoId(input) {
@@ -48,6 +50,42 @@
       if (VIDEO_ID_RE.test(last)) return last;
     } catch (e) { /* 非完整網址 */ }
     return '';
+  }
+
+  function hash(str) {
+    var h = 5381;
+    for (var i = 0; i < str.length; i++) { h = ((h << 5) + h + str.charCodeAt(i)) | 0; }
+    return (h >>> 0).toString(36);
+  }
+
+  function fileNameFromUrl(u) {
+    try {
+      var parts = new URL(u).pathname.split('/').filter(Boolean);
+      var last = parts[parts.length - 1] || '';
+      return decodeURIComponent(last) || u;
+    } catch (e) { return u; }
+  }
+
+  /* ---------- 來源判斷：youtube | tiktok | file ---------- */
+  function resolveUrl(input) {
+    if (!input) return null;
+    var s = String(input).trim();
+    if (!s) return null;
+    var yt = extractVideoId(s);
+    if (yt) return { source: 'youtube', id: yt, videoId: yt };
+    var tt = s.match(/tiktok\.com\/(?:@[^/]+\/video|player\/v1|v)\/(\d{6,25})/i);
+    if (tt) return { source: 'tiktok', id: 'tt_' + tt[1], videoId: tt[1], url: s };
+    var m = s.match(/\.([a-z0-9]+)(?:[?#].*)?$/i);
+    var ext = m ? m[1].toLowerCase() : '';
+    if (VIDEO_EXT.indexOf(ext) !== -1 || AUDIO_EXT.indexOf(ext) !== -1) {
+      return {
+        source: 'file',
+        id: 'f_' + hash(s),
+        src: s,
+        mediaType: VIDEO_EXT.indexOf(ext) !== -1 ? 'video' : 'audio'
+      };
+    }
+    return null;
   }
 
   /* ---------- 時間範圍解析 ---------- */
@@ -127,10 +165,15 @@
     });
   }
 
-  /* ---------- oEmbed 抓標題 ---------- */
-  async function fetchOembed(videoId) {
+  /* ---------- oEmbed 抓標題（YouTube / TikTok） ---------- */
+  async function fetchOembed(resolved) {
+    if (!resolved) return null;
+    var q;
+    if (resolved.source === 'youtube') q = 'v=' + encodeURIComponent(resolved.videoId);
+    else if (resolved.source === 'tiktok') q = 'url=' + encodeURIComponent(resolved.url || ('https://www.tiktok.com/@i/video/' + resolved.videoId));
+    else return null;
     try {
-      var res = await fetch('api/oembed?v=' + encodeURIComponent(videoId), { cache: 'no-cache' });
+      var res = await fetch('api/oembed?' + q, { cache: 'no-cache' });
       if (!res.ok) return null;
       var data = await res.json();
       return (data && data.ok) ? data : null;
@@ -185,7 +228,7 @@
   function resetForm() {
     form.reset();
     langEl.value = 'en';
-    state.jsonVideoId = '';
+    state.jsonResolved = null;
     state.jsonTitle = '';
     state.jsonVocab = null;
     jsonHint.textContent = '會自動讀取影片網址與標題；支援 segments 與 wordSegments 兩種詞匯格式。';
@@ -224,11 +267,11 @@
   var oembedTimer = null;
   urlEl.addEventListener('input', function () {
     clearTimeout(oembedTimer);
-    var id = extractVideoId(urlEl.value);
-    if (!id) return;
+    var r = resolveUrl(urlEl.value);
+    if (!r) return;
     oembedTimer = setTimeout(async function () {
       if (titleEl.value.trim()) return;
-      var info = await fetchOembed(id);
+      var info = await fetchOembed(r);
       if (info && info.title && !titleEl.value.trim()) titleEl.value = info.title;
     }, 450);
   });
@@ -241,30 +284,34 @@
     try {
       var text = await readJsonFile(file);
       var data = JSON.parse(text);
-      var videoId = extractVideoId(data.videoId || '');
-      if (!videoId && data.videoInfo && data.videoInfo.url) videoId = extractVideoId(data.videoInfo.url);
+      var url = (data.videoInfo && data.videoInfo.url) || data.src || '';
+      var resolved = resolveUrl(url) || resolveUrl(data.videoId || '');
       var title = (data.videoInfo && data.videoInfo.title) || data.title || '';
       var vocab = convertVocab(data);
 
-      state.jsonVideoId = videoId;
+      state.jsonResolved = resolved;
       state.jsonTitle = title;
       state.jsonVocab = vocab;
 
       if (title && !titleEl.value.trim()) titleEl.value = title;
-      if (videoId && !urlEl.value.trim()) urlEl.value = 'https://youtu.be/' + videoId;
+      if (resolved && !urlEl.value.trim()) {
+        urlEl.value = resolved.source === 'file'
+          ? resolved.src
+          : (resolved.source === 'youtube' ? ('https://youtu.be/' + resolved.videoId) : (resolved.url || ('https://www.tiktok.com/@i/video/' + resolved.videoId)));
+      }
 
-      if (!videoId) {
-        jsonHint.textContent = '已讀取，但找不到影片網址；請手動填入 YouTube 連結。';
+      if (!resolved) {
+        jsonHint.textContent = '已讀取，但找不到可辨識的影片網址；請手動填入連結或媒體檔 URL。';
         jsonHint.classList.add('error');
       } else if (!vocab) {
-        jsonHint.textContent = '已讀取（影片 ' + videoId + '），但詞匯格式無法辨識；仍可新增影片，詞匯將於播放頁即時抽取。';
+        jsonHint.textContent = '已讀取（' + resolved.id + '），但詞匯格式無法辨識；仍可新增影片。';
         jsonHint.classList.add('error');
       } else {
-        jsonHint.textContent = '已讀取：' + videoId + '，共 ' + vocab.segments.length + ' 段詞匯。';
+        jsonHint.textContent = '已讀取：' + resolved.id + '，共 ' + vocab.segments.length + ' 段詞匯。';
         jsonHint.classList.add('ok');
       }
     } catch (e) {
-      state.jsonVideoId = '';
+      state.jsonResolved = null;
       state.jsonTitle = '';
       state.jsonVocab = null;
       jsonHint.textContent = '無法解析 JSON：' + (e && e.message ? e.message : e);
@@ -277,25 +324,28 @@
     if (state.busy) return;
     hideMsg();
 
-    var videoId = extractVideoId(urlEl.value) || state.jsonVideoId;
-    if (!videoId) {
-      showMsg('請提供有效的 YouTube 連結，或上載含影片網址的 JSON。', 'error');
+    var resolved = resolveUrl(urlEl.value) || state.jsonResolved;
+    if (!resolved) {
+      showMsg('請提供有效的 YouTube／TikTok 連結、媒體檔 URL（mp4/mp3…），或上載含影片網址的 JSON。', 'error');
       return;
     }
 
     var title = titleEl.value.trim() || state.jsonTitle || '';
     if (!title) {
-      var info = await fetchOembed(videoId);
-      title = (info && info.title) || videoId;
+      var info = await fetchOembed(resolved);
+      title = (info && info.title) || (resolved.source === 'file' ? fileNameFromUrl(resolved.src) : resolved.id);
       titleEl.value = title;
     }
 
     var payload = {
-      videoId: videoId,
+      id: resolved.id,
+      source: resolved.source,
       title: title,
       lang: langEl.value.trim() || 'en',
       description: descEl.value.trim()
     };
+    if (resolved.videoId) payload.videoId = resolved.videoId;
+    if (resolved.src) { payload.src = resolved.src; payload.mediaType = resolved.mediaType; }
     if (state.jsonVocab) payload.vocab = state.jsonVocab;
 
     setBusy(true);
