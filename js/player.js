@@ -14,6 +14,11 @@
   var TICK_MS = 250;          // 時間輪詢週期
   var SPEEDS = [0.5, 0.75, 0.85, 1.0, 1.25];
   var LS_PREFIX = 'utube_web_v1:';
+  var SUB_FONT_MIN = 14;
+  var SUB_FONT_MAX = 34;
+  var SUB_FONT_STEP = 2;
+  var SUB_FONT_DEFAULT = 20;
+  var LS_SUBFONT = LS_PREFIX + 'subfont';
 
   var App = {
     program: null,
@@ -34,6 +39,10 @@
     follow: true,
     pinned: null,
     offset: 0,
+    subFontSize: SUB_FONT_DEFAULT,
+    hasSubtitle: false,
+    pendingSeek: null,
+    pendingUntil: 0,
     tickTimer: null,
     osdTimer: null
   };
@@ -86,6 +95,7 @@
     if (App.program && App.program.description) {
       $('page-desc').textContent = App.program.description;
     }
+    loadSubFont();
     bindUI();
     loadPlayer();
   }
@@ -141,9 +151,13 @@
   function onPlayerReady() {
     App.ready = true;
     App.duration = App.player.getDuration() || 0;
-    App.timeB = App.duration;
+    App.timeA = 0;
+    App.timeB = App.duration ? Math.min(10, App.duration) : 0;
+    App.loopActive = true;
     restoreState();
+    setLoopUI(App.loopActive);
     applySpeed();
+    applySubtitleFont();
     updateTimelineUI();
     updateTimeLabels();
     updatePlayhead(0);
@@ -169,13 +183,21 @@
     var t = App.player.getCurrentTime();
     if (!isFinite(t)) return;
 
+    if (App.pendingSeek != null) {
+      if (Math.abs(t - App.pendingSeek) < 1.0 || Date.now() > App.pendingUntil) {
+        App.pendingSeek = null;
+      } else {
+        t = App.pendingSeek;
+      }
+    }
+
     $('txt-now').textContent = formatTime(t);
     updatePlayhead(t);
 
     if (App.loopActive && App.duration && t >= App.timeB) {
       seekTo(App.timeA);
     }
-    updateSegment(t);
+    if (App.follow) updateSegment(t);
   }
 
   /* ================= 詞匯載入（唯一來源：KV / api/vocab/{videoId}） ================= */
@@ -183,6 +205,8 @@
     var res = await window.Vocab.load(App.videoId);
     App.vocab = (res && res.segments) || [];
     App.vocabSource = (res && res.source) || 'none';
+    App.hasSubtitle = App.vocab.some(function (s) { return s.en || s.zh; });
+    $('subtitle-bar').hidden = !App.hasSubtitle;
     App.segIndex = -1;
     App.pinned = null;
     renderPinned();
@@ -223,6 +247,7 @@
     var seg = App.vocab[i];
 
     $('seg-label').textContent = formatClock(seg.start) + ' – ' + formatClock(seg.end);
+    renderSubtitle(seg);
 
     if (changed) {
       App.pinned = null;
@@ -252,14 +277,18 @@
     list.appendChild(frag);
   }
 
+  function renderSubtitle(seg) {
+    if (!App.hasSubtitle) return;
+    $('subtitle-en').textContent = (seg && seg.en) || '';
+    $('subtitle-zh').textContent = (seg && seg.zh) || '';
+  }
+
   function renderPinned() {
     var box = $('pinned-word');
     if (!App.pinned) {
-      box.hidden = true;
-      box.innerHTML = '';
+      box.innerHTML = '<span class="pinned-placeholder">點下方詞匯，這裡會顯示中文解釋</span>';
       return;
     }
-    box.hidden = false;
     box.innerHTML =
       '<span class="pinned-en">' + escapeHtml(wordLabel(App.pinned)) + '</span>' +
       '<span class="pinned-zh">' + escapeHtml(App.pinned.zh || '（尚無中文翻譯）') + '</span>';
@@ -366,6 +395,9 @@
   function seekTo(t) {
     if (!App.ready) return;
     t = clamp(t, 0, App.duration || t);
+    App.pendingSeek = t;
+    App.pendingUntil = Date.now() + 2000;
+    displayAtTime(t);
     if (App.fadeEnabled) {
       try { App.player.setVolume(0); } catch (e) { /* ignore */ }
       App.player.seekTo(t, true);
@@ -375,6 +407,15 @@
     } else {
       App.player.seekTo(t, true);
     }
+  }
+
+  /* 立即依指定時間更新字幕與詞匯（不等影片載入完成） */
+  function displayAtTime(t) {
+    $('txt-now').textContent = formatTime(t);
+    updatePlayhead(t);
+    if (!App.vocab.length) return;
+    var i = segmentIndexAt(t - App.offset);
+    if (i >= 0 && i !== App.segIndex) renderSegment(i);
   }
 
   function togglePlay() {
@@ -389,6 +430,28 @@
       try { App.player.setPlaybackRate(App.speed); } catch (e) { /* ignore */ }
     }
     $('speed-select').value = String(App.speed);
+  }
+
+  function applySubtitleFont() {
+    var bar = $('subtitle-bar');
+    if (bar) bar.style.setProperty('--sub-font', App.subFontSize + 'px');
+  }
+
+  function changeSubtitleFont(delta) {
+    App.subFontSize = clamp(App.subFontSize + delta, SUB_FONT_MIN, SUB_FONT_MAX);
+    applySubtitleFont();
+    saveSubFont();
+  }
+
+  function loadSubFont() {
+    try {
+      var v = parseInt(localStorage.getItem(LS_SUBFONT), 10);
+      if (isFinite(v)) App.subFontSize = clamp(v, SUB_FONT_MIN, SUB_FONT_MAX);
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveSubFont() {
+    try { localStorage.setItem(LS_SUBFONT, String(App.subFontSize)); } catch (e) { /* ignore */ }
   }
 
   /* ================= 時間軸 UI ================= */
@@ -534,6 +597,8 @@
       if (App.ready) renderSegment(segmentIndexAt(App.player.getCurrentTime() - App.offset));
       saveState();
     });
+    $('btn-sub-smaller').addEventListener('click', function () { changeSubtitleFont(-SUB_FONT_STEP); });
+    $('btn-sub-larger').addEventListener('click', function () { changeSubtitleFont(SUB_FONT_STEP); });
 
     bindTimeline();
     bindKeyboard();

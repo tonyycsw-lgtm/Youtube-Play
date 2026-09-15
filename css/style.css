@@ -166,14 +166,21 @@ html, body {
 /* ---------- 播放頁：頂欄 ---------- */
 .player-header { padding: 18px 0 14px; }
 .back-link {
-  display: inline-block;
-  color: var(--text-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
   text-decoration: none;
-  font-size: 13.5px;
-  margin-bottom: 10px;
-  transition: color 0.15s;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
-.back-link:hover { color: #fff; }
+.back-link:hover { color: #fff; border-color: var(--accent); background: var(--accent-soft); }
 .player-title-block h1 { margin: 0; font-size: 20px; font-weight: 600; }
 .player-desc { margin: 4px 0 0; font-size: 13px; color: var(--text-dim); }
 
@@ -225,6 +232,34 @@ html, body {
   -webkit-backdrop-filter: blur(20px);
   padding: 14px 18px 16px;
 }
+
+/* ---------- 播放頁：字幕列（進度條上方、影片視窗外） ---------- */
+.subtitle-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 4px 2px 12px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.subtitle-bar[hidden] { display: none; }
+.subtitle-text { flex: 1 1 auto; min-width: 0; }
+.subtitle-en {
+  font-size: var(--sub-font, 20px);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.35;
+}
+.subtitle-zh {
+  font-size: calc(var(--sub-font, 20px) * 0.85);
+  color: #BFDBFE;
+  line-height: 1.45;
+  margin-top: 2px;
+}
+.subtitle-en:empty, .subtitle-zh:empty { display: none; }
+.subtitle-size { flex: 0 0 auto; display: flex; gap: 6px; }
+.subtitle-size .mini-btn { padding: 4px 9px; font-size: 12px; }
 
 .ab-timeline {
   height: 22px;
@@ -467,17 +502,18 @@ html, body {
 
 .pinned-word {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  padding: 14px 16px;
+  min-height: 76px;
+  padding: 12px 16px;
   background: var(--accent-soft);
   border-bottom: 1px solid var(--border-soft);
   border-left: 3px solid var(--accent);
 }
-.pinned-word[hidden] { display: none; }
 .pinned-en { font-size: 26px; font-weight: 700; color: #fff; line-height: 1.2; }
 .pinned-zh { font-size: 18px; color: #BFDBFE; }
+.pinned-placeholder { font-size: 13.5px; color: var(--text-faint); }
 
 .vocab-search-wrap {
   padding: 10px 14px;

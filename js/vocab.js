@@ -16,7 +16,13 @@ window.Vocab = (function () {
         var w = it.w || it.word || '';
         return { w: w, src: it.src || w, zh: it.zh || '' };
       }).filter(function (it) { return it.w; });
-      return { start: +seg.start || 0, end: +seg.end || 0, words: words };
+      return {
+        start: +seg.start || 0,
+        end: +seg.end || 0,
+        en: seg.en || seg.englishSentence || '',
+        zh: seg.zh || seg.chineseTranslation || '',
+        words: words
+      };
     }).filter(function (seg) { return seg.end > seg.start; });
     if (!segments.length) return null;
     return { window: +data.window || 10, segments: segments };

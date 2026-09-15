@@ -83,7 +83,13 @@
           var w = String(it.w || it.word || '').toLowerCase().trim();
           return { w: w, src: String(it.src || w), zh: it.zh || '' };
         }).filter(function (it) { return it.w; });
-        return { start: +seg.start || 0, end: +seg.end || 0, words: words };
+        return {
+          start: +seg.start || 0,
+          end: +seg.end || 0,
+          en: seg.en || seg.englishSentence || seg.sentence || '',
+          zh: seg.zh || seg.chineseTranslation || seg.translation || '',
+          words: words
+        };
       }).filter(function (seg) { return seg.end > seg.start; });
       if (!segs.length) return null;
       return { window: +data.window || 10, segments: segs };
@@ -96,7 +102,13 @@
           var w = String(v.word || '').toLowerCase().trim();
           return { w: w, src: w, zh: v.meaning || '' };
         }).filter(function (it) { return it.w; });
-        return { start: r.start, end: r.end, words: words };
+        return {
+          start: r.start,
+          end: r.end,
+          en: seg.englishSentence || '',
+          zh: seg.chineseTranslation || '',
+          words: words
+        };
       }).filter(function (seg) { return seg.end > seg.start; });
       if (!segs2.length) return null;
       return { window: 10, segments: segs2 };

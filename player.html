@@ -29,6 +29,18 @@
     </div>
 
     <section class="control-panel" aria-label="學習控制列">
+      <!-- 字幕（來自詞匯 JSON 的 englishSentence / chineseTranslation） -->
+      <div class="subtitle-bar" id="subtitle-bar" hidden>
+        <div class="subtitle-text">
+          <div class="subtitle-en" id="subtitle-en"></div>
+          <div class="subtitle-zh" id="subtitle-zh"></div>
+        </div>
+        <div class="subtitle-size">
+          <button class="mini-btn" type="button" id="btn-sub-smaller" title="縮小字幕">A−</button>
+          <button class="mini-btn" type="button" id="btn-sub-larger" title="放大字幕">A＋</button>
+        </div>
+      </div>
+
       <!-- A-B 時間軸 -->
       <div class="ab-timeline" id="ab-timeline">
         <div class="ab-track" id="ab-track">
@@ -91,7 +103,7 @@
         <button class="mini-btn" id="btn-next-seg" title="下一段">下一段 ›</button>
         <button class="mini-btn on" id="btn-follow" title="跟隨播放自動切換片段（可鎖定）">自動跟隨</button>
       </div>
-      <div class="pinned-word" id="pinned-word" hidden></div>
+      <div class="pinned-word" id="pinned-word"><span class="pinned-placeholder">點下方詞匯，這裡會顯示中文解釋</span></div>
       <div class="vocab-search-wrap">
         <input id="vocab-search" class="sub-filter" type="search" placeholder="搜尋詞匯（按 Enter 跳到該段）…" autocomplete="off">
       </div>
