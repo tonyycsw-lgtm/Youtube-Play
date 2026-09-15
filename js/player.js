@@ -36,6 +36,7 @@
     player: null,         // 播放器轉接器（Player Adapter）
     ready: false,
     abDefaultPending: false,
+    noTimeControl: false,
     duration: 0,
     timeA: 0,
     timeB: 0,
@@ -136,6 +137,7 @@
   function loadPlayer() {
     if (App.source === 'file') { createFilePlayer(); return; }
     if (App.source === 'tiktok') { createTikTokPlayer(); return; }
+    if (App.source === 'douyin') { createDouyinPlayer(); return; }
     createYouTubePlayer();
   }
 
@@ -191,9 +193,28 @@
     } catch (e) { showFatal('播放器初始化失敗：' + e.message); }
   }
 
+  function createDouyinPlayer() {
+    try {
+      App.player = window.Players.createDouyin({
+        container: $('player'),
+        videoId: App.videoId,
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+        onError: onPlayerError
+      });
+    } catch (e) { showFatal('播放器初始化失敗：' + e.message); }
+  }
+
   function onPlayerReady() {
     if (App.ready) return;
     App.ready = true;
+    if (App.player && App.player.supportsTime === false) {
+      App.noTimeControl = true;
+      document.body.classList.add('watch-only');
+      var note = $('watch-only-note');
+      if (note) note.hidden = false;
+      return;
+    }
     App.duration = App.player.getDuration() || 0;
     App.timeA = 0;
     App.timeB = App.duration ? Math.min(10, App.duration) : 10;
@@ -237,7 +258,7 @@
   }
 
   function tick() {
-    if (!App.ready || !App.player) return;
+    if (!App.ready || !App.player || App.noTimeControl) return;
     syncDuration();
     var t = App.player.getCurrentTime();
     if (!isFinite(t)) return;

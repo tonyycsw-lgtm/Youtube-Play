@@ -73,6 +73,7 @@ python -m http.server 8000
 |---|---|---|
 | YouTube 連結 | 例如 `https://youtu.be/KTCJC4GMPzg?si=...` | 自動解析影片 ID、透過 oEmbed 帶入標題 |
 | TikTok 連結 | 例如 `https://www.tiktok.com/@user/video/123...` | 使用官方 Embed Player（postMessage），可 A-B 循環 |
+| 抖音連結 | 例如 `https://www.douyin.com/video/123...` 或短連結 `https://v.douyin.com/xxxx/` | 官方 open player 嵌入，**僅供觀看**；短連結會自動解析 |
 | 媒體檔 URL | 例如 `https://.../clip.mp4`、`https://.../song.mp3` | 直接用 HTML5 `<video>`／`<audio>` 播放 |
 | 上載 JSON | 例如 `Beauty_and_the_beast_Ep1-3.json` | 自動讀取 `videoInfo.url` 與 `videoInfo.title`，並把詞匯轉成播放頁格式存入 KV |
 
@@ -106,6 +107,7 @@ python -m http.server 8000
 |---|---|---|---|---|
 | YouTube | IFrame API | ✅ | ✅ | 預設 |
 | TikTok | 官方 Embed Player（postMessage） | ✅ | ❌ | 播放器不提供變速 |
+| 抖音 Douyin | 官方 open player 嵌入 | ❌ | ❌ | 僅供觀看（無時間控制 API） |
 | 媒體檔 mp4/webm… | HTML5 `<video>` | ✅ | ✅ | 需允許直連與 CORS／range |
 | 音頻 mp3/m4a… | HTML5 `<audio>` | ✅ | ✅ | 播放頁顯示封面圖示＋標題 |
 
@@ -113,7 +115,8 @@ python -m http.server 8000
 - 詞匯 key 用節目 `id`：YouTube 用 `videoId`、TikTok 用 `tt_<貼文ID>`、媒體檔用 `f_<URL 短雜湊>`。
 - 舊資料（只有 `videoId`）會視為 YouTube，完全相容。
 - 目前媒體檔**只支援貼 URL**，尚未提供上載（R2）功能。
-- 尚未支援：抖音（Douyin）、Facebook、Instagram；Vimeo 規劃於 Phase 2。貼上這些連結會顯示明確的「不支援」訊息（不會誤判成 YouTube）。
+- 抖音（Douyin）為「僅供觀看」嵌入，播放頁不顯示 A-B 與詞匯面板。
+- 尚未支援：Facebook、Instagram；Vimeo 規劃於 Phase 2。貼上這些連結會顯示明確的「不支援」訊息（不會誤判成 YouTube）。
 
 ## 詞匯面板（播放頁）
 

@@ -34,6 +34,7 @@ window.Players = (function () {
     });
     return {
       supportsRate: true,
+      supportsTime: true,
       getCurrentTime: function () { try { return player.getCurrentTime() || 0; } catch (e) { return 0; } },
       getDuration: function () { try { return player.getDuration() || 0; } catch (e) { return 0; } },
       getState: function () { try { return ytState(player.getPlayerState()); } catch (e) { return 'unstarted'; } },
@@ -66,6 +67,7 @@ window.Players = (function () {
     opts.container.appendChild(el);
     return {
       supportsRate: true,
+      supportsTime: true,
       getCurrentTime: function () { return el.currentTime || 0; },
       getDuration: function () { return isFinite(el.duration) ? el.duration : 0; },
       getState: function () {
@@ -127,6 +129,7 @@ window.Players = (function () {
 
     return {
       supportsRate: false,
+      supportsTime: true,
       getCurrentTime: function () { return current; },
       getDuration: function () { return duration; },
       getState: function () { return state; },
@@ -138,9 +141,33 @@ window.Players = (function () {
     };
   }
 
+  /* ---------------- 抖音 Douyin（僅供觀看，無時間控制 API） ---------------- */
+  function createDouyin(opts) {
+    var iframe = document.createElement('iframe');
+    iframe.src = 'https://open.douyin.com/player/video?vid=' + encodeURIComponent(opts.videoId) + '&autoplay=0';
+    iframe.setAttribute('allow', 'fullscreen; encrypted-media; picture-in-picture');
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('title', 'Douyin player');
+    opts.container.appendChild(iframe);
+    setTimeout(function () { if (opts.onReady) opts.onReady(); }, 0);
+    return {
+      supportsRate: false,
+      supportsTime: false,
+      getCurrentTime: function () { return 0; },
+      getDuration: function () { return 0; },
+      getState: function () { return 'unstarted'; },
+      play: function () { /* 由抖音播放器自身控制 */ },
+      pause: function () { /* 由抖音播放器自身控制 */ },
+      seek: function () { /* 不支援 */ },
+      setRate: function () { /* 不支援 */ },
+      destroy: function () { try { iframe.remove(); } catch (e) { /* ignore */ } }
+    };
+  }
+
   return {
     createYouTube: createYouTube,
     createHtml5: createHtml5,
-    createTikTok: createTikTok
+    createTikTok: createTikTok,
+    createDouyin: createDouyin
   };
 })();

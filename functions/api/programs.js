@@ -4,9 +4,10 @@
 
    - GET  /api/programs            列出所有自訂節目
    - POST /api/programs            新增或更新節目（同 id 直接覆寫；可同時存入詞匯 JSON）
-     來源 source：youtube | tiktok | file
+     來源 source：youtube | tiktok | douyin | file
        youtube：需 videoId
        tiktok ：需 videoId（貼文 ID）
+       douyin ：需 videoId（影片 ID；播放頁僅供觀看）
        file   ：需 src（http(s) 媒體網址）與 mediaType（video|audio）
 
    KV binding：KV_BINDING
@@ -97,6 +98,12 @@ async function handlePost(env, request, headers) {
       return json({ ok: false, error: 'invalid_tiktok_id', note: '無法辨識 TikTok 影片 ID。' }, 400, headers);
     }
     id = 'tt_' + videoId;
+  } else if (source === 'douyin') {
+    videoId = String((body && body.videoId) || '').trim();
+    if (!TT_ID_RE.test(videoId)) {
+      return json({ ok: false, error: 'invalid_douyin_id', note: '無法辨識抖音影片 ID。' }, 400, headers);
+    }
+    id = 'dy_' + videoId;
   } else if (source === 'file') {
     src = String((body && body.src) || '').trim();
     if (!/^https?:\/\//i.test(src)) {

@@ -246,6 +246,22 @@ html, body {
 .audio-player-slot { width: min(560px, 90%); }
 .audio-player-slot audio { width: 100%; }
 
+/* ---------- 僅供觀看來源（如抖音） ---------- */
+.watch-only-note {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text-dim);
+  font-size: 13.5px;
+  text-align: center;
+}
+.watch-only-note[hidden] { display: none; }
+body.watch-only .control-panel { display: none; }
+body.watch-only .player-side { display: none; }
+body.watch-only .player-layout { grid-template-columns: 1fr; }
+
 .player-error {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;

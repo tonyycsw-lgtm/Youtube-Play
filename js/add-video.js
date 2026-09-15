@@ -57,7 +57,6 @@
   /* ---------- 已知但尚未支援的來源 ---------- */
   function unsupportedSource(input) {
     var s = String(input || '').toLowerCase();
-    if (/douyin\.com|iesdouyin\.com/.test(s)) return '抖音（Douyin）';
     if (/facebook\.com|fb\.watch/.test(s)) return 'Facebook';
     if (/instagram\.com/.test(s)) return 'Instagram';
     if (/vimeo\.com/.test(s)) return 'Vimeo（尚未支援）';
@@ -87,6 +86,11 @@
     if (yt) return { source: 'youtube', id: yt, videoId: yt };
     var tt = s.match(/tiktok\.com\/(?:@[^/]+\/video|player\/v1|v)\/(\d{6,25})/i);
     if (tt) return { source: 'tiktok', id: 'tt_' + tt[1], videoId: tt[1], url: s };
+    var dy = s.match(/(?:douyin\.com\/video|iesdouyin\.com\/share\/video)\/(\d{6,25})/i);
+    if (dy) return { source: 'douyin', id: 'dy_' + dy[1], videoId: dy[1], url: s };
+    if (/v\.douyin\.com\/[A-Za-z0-9_-]+/i.test(s)) {
+      return { source: 'douyin', id: '', videoId: '', shortUrl: s, needResolve: true };
+    }
     var m = s.match(/\.([a-z0-9]+)(?:[?#].*)?$/i);
     var ext = m ? m[1].toLowerCase() : '';
     if (VIDEO_EXT.indexOf(ext) !== -1 || AUDIO_EXT.indexOf(ext) !== -1) {
@@ -191,6 +195,18 @@
       return (data && data.ok) ? data : null;
     } catch (e) {
       return null;
+    }
+  }
+
+  /* ---------- 解析短連結（例如 v.douyin.com） ---------- */
+  async function resolveShortUrl(url) {
+    try {
+      var res = await fetch('api/resolve?url=' + encodeURIComponent(url), { cache: 'no-cache' });
+      if (!res.ok) return '';
+      var data = await res.json();
+      return (data && data.ok && data.url) ? data.url : '';
+    } catch (e) {
+      return '';
     }
   }
 
@@ -337,11 +353,26 @@
     hideMsg();
 
     var resolved = resolveUrl(urlEl.value) || state.jsonResolved;
+
+    if (resolved && resolved.needResolve) {
+      setBusy(true);
+      var finalUrl = await resolveShortUrl(resolved.shortUrl);
+      setBusy(false);
+      var r2 = finalUrl ? resolveUrl(finalUrl) : null;
+      if (r2 && !r2.needResolve) {
+        resolved = r2;
+        urlEl.value = finalUrl;
+      } else {
+        showMsg('無法解析抖音短連結；請在抖音按「分享 → 複製連結」，或改用完整網址（www.douyin.com/video/…）。', 'error');
+        return;
+      }
+    }
+
     if (!resolved) {
       var unsupported = unsupportedSource(urlEl.value);
       showMsg(unsupported
-        ? ('目前不支援 ' + unsupported + '。請使用 YouTube、TikTok 或直接媒體檔 URL（mp4/mp3…）。')
-        : '請提供有效的 YouTube／TikTok 連結、媒體檔 URL（mp4/mp3…），或上載含影片網址的 JSON。', 'error');
+        ? ('目前不支援 ' + unsupported + '。請使用 YouTube、TikTok、抖音或直接媒體檔 URL（mp4/mp3…）。')
+        : '請提供有效的 YouTube／TikTok／抖音連結、媒體檔 URL（mp4/mp3…），或上載含影片網址的 JSON。', 'error');
       return;
     }
 
@@ -350,7 +381,8 @@
       var info = await fetchOembed(resolved);
       title = (info && info.title) ||
         (resolved.source === 'file' ? fileNameFromUrl(resolved.src) :
-          (resolved.source === 'tiktok' ? 'TikTok 影片' : resolved.id));
+          (resolved.source === 'douyin' ? '抖音影片' :
+            (resolved.source === 'tiktok' ? 'TikTok 影片' : resolved.id)));
       titleEl.value = title;
     }
 
