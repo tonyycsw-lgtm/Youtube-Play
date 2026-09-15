@@ -1,0 +1,1800 @@
+{
+  "videoInfo": {
+    "title": "The Happy Prince: Was He Always Happy? | Episodes 1–3 | Little Fox",
+    "url": "https://youtu.be/uM5HC4FRduc?si=6F9Fvt5F9e8HPUX7",
+    "purpose": "香港小學3年級英語學習，影片播放時老師展示對應詞彙與例句"
+  },
+  "wordSegments": [
+    {
+      "timeRange": "00:07-00:15",
+      "englishSentence": "Once upon a time, there was a young prince. He smiled and laughed all day long.",
+      "chineseTranslation": "從前，有一位年輕的王子。他整天微笑和大笑。",
+      "vocabularies": [
+        {
+          "word": "prince",
+          "phonetic": "/prɪns/",
+          "meaning": "王子"
+        },
+        {
+          "word": "smile",
+          "phonetic": "/smaɪl/",
+          "meaning": "微笑"
+        },
+        {
+          "word": "laugh",
+          "phonetic": "/lɑːf/",
+          "meaning": "大笑"
+        },
+        {
+          "word": "young",
+          "phonetic": "/jʌŋ/",
+          "meaning": "年輕的"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:15-00:23",
+      "englishSentence": "His parents, the king and queen, always said, \"You're the perfect child.\"",
+      "chineseTranslation": "他的父母，國王和王后，總是說：「你是完美的孩子。」",
+      "vocabularies": [
+        {
+          "word": "king",
+          "phonetic": "/kɪŋ/",
+          "meaning": "國王"
+        },
+        {
+          "word": "queen",
+          "phonetic": "/kwiːn/",
+          "meaning": "王后"
+        },
+        {
+          "word": "parent",
+          "phonetic": "/ˈpeərənt/",
+          "meaning": "父母親"
+        },
+        {
+          "word": "perfect",
+          "phonetic": "/ˈpɜːfɪkt/",
+          "meaning": "完美的"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:23-00:31",
+      "englishSentence": "And they made sure the prince got everything he ever wanted.",
+      "chineseTranslation": "而且他們確保王子可以得到他想要的一切。",
+      "vocabularies": [
+        {
+          "word": "everything",
+          "phonetic": "/ˈevriθɪŋ/",
+          "meaning": "所有事物"
+        },
+        {
+          "word": "want",
+          "phonetic": "/wɒnt/",
+          "meaning": "想要"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:31-00:41",
+      "englishSentence": "He said, \"I want a pony.\" His parents gave him 10.",
+      "chineseTranslation": "他說：「我想要一匹小馬。」他的父母給了他十匹。",
+      "vocabularies": [
+        {
+          "word": "pony",
+          "phonetic": "/ˈpəʊni/",
+          "meaning": "小馬"
+        },
+        {
+          "word": "give",
+          "phonetic": "/ɡɪv/",
+          "meaning": "給"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:41-00:50",
+      "englishSentence": "He said, \"I want a new belt.\" They gave him one with two rubies and a sapphire.",
+      "chineseTranslation": "他說：「我想要一條新腰帶。」他們給了他一條鑲有兩顆紅寶石和一顆藍寶石的腰帶。",
+      "vocabularies": [
+        {
+          "word": "belt",
+          "phonetic": "/belt/",
+          "meaning": "腰帶"
+        },
+        {
+          "word": "new",
+          "phonetic": "/njuː/",
+          "meaning": "新的"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:50-00:58",
+      "englishSentence": "You might think that was why the prince was so happy, but you'd be wrong.",
+      "chineseTranslation": "你也許以為那就是王子很快樂的原因，但你錯了。",
+      "vocabularies": [
+        {
+          "word": "happy",
+          "phonetic": "/ˈhæpi/",
+          "meaning": "快樂的"
+        },
+        {
+          "word": "wrong",
+          "phonetic": "/rɒŋ/",
+          "meaning": "錯誤的"
+        },
+        {
+          "word": "think",
+          "phonetic": "/θɪŋk/",
+          "meaning": "想；認為"
+        }
+      ]
+    },
+    {
+      "timeRange": "00:58-01:14",
+      "englishSentence": "The prince was happy because he never got into trouble. Not even when he behaved badly, which was most days.",
+      "chineseTranslation": "王子快樂是因為他從不會惹上麻煩。就算他表現很差的時候也不會，而大部分日子他都是這樣。",
+      "vocabularies": [
+        {
+          "word": "never",
+          "phonetic": "/ˈnevə(r)/",
+          "meaning": "從不"
+        },
+        {
+          "word": "trouble",
+          "phonetic": "/ˈtrʌbl/",
+          "meaning": "麻煩"
+        },
+        {
+          "word": "badly",
+          "phonetic": "/ˈbædli/",
+          "meaning": "惡劣地"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:14-01:18",
+      "englishSentence": "A nursemaid, Nana, watched over the prince.",
+      "chineseTranslation": "一位保姆娜娜照顧著王子。",
+      "vocabularies": [
+        {
+          "word": "nursemaid",
+          "phonetic": "/ˈnɜːsmeɪd/",
+          "meaning": "保姆"
+        },
+        {
+          "word": "watch",
+          "phonetic": "/wɒtʃ/",
+          "meaning": "照看；看"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:18-01:24",
+      "englishSentence": "Nana was loving and gentle and very good at her job.",
+      "chineseTranslation": "娜娜有愛心又溫柔，而且非常擅長她的工作。",
+      "vocabularies": [
+        {
+          "word": "gentle",
+          "phonetic": "/ˈdʒentl/",
+          "meaning": "溫柔的"
+        },
+        {
+          "word": "job",
+          "phonetic": "/dʒɒb/",
+          "meaning": "工作"
+        },
+        {
+          "word": "good",
+          "phonetic": "/ɡʊd/",
+          "meaning": "好的"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:24-01:33",
+      "englishSentence": "Every day she'd gently remind him, \"You are a very smart boy.\"",
+      "chineseTranslation": "每一天她都會溫柔地提醒他：「你是一個非常聰明的男孩。」",
+      "vocabularies": [
+        {
+          "word": "every",
+          "phonetic": "/ˈevri/",
+          "meaning": "每一個"
+        },
+        {
+          "word": "smart",
+          "phonetic": "/smɑːt/",
+          "meaning": "聰明的"
+        },
+        {
+          "word": "boy",
+          "phonetic": "/bɔɪ/",
+          "meaning": "男孩"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:33-01:40",
+      "englishSentence": "Every night she'd tuck him into bed. A wonderful future awaits you, my precious prince.",
+      "chineseTranslation": "每個晚上她會幫他蓋好被子上床睡覺。美好的未來在等著你，我珍貴的王子。",
+      "vocabularies": [
+        {
+          "word": "night",
+          "phonetic": "/naɪt/",
+          "meaning": "夜晚"
+        },
+        {
+          "word": "bed",
+          "phonetic": "/bed/",
+          "meaning": "床"
+        },
+        {
+          "word": "wonderful",
+          "phonetic": "/ˈwʌndəfl/",
+          "meaning": "美好的"
+        },
+        {
+          "word": "future",
+          "phonetic": "/ˈfjuːtʃə(r)/",
+          "meaning": "未來"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:42-01:50",
+      "englishSentence": "But there was one thing Nana hadn't yet succeeded in doing, and it bothered her deeply.",
+      "chineseTranslation": "但是有一件事娜娜還沒有成功做到，這件事讓她非常煩惱。",
+      "vocabularies": [
+        {
+          "word": "thing",
+          "phonetic": "/θɪŋ/",
+          "meaning": "事情"
+        },
+        {
+          "word": "succeed",
+          "phonetic": "/səkˈsiːd/",
+          "meaning": "成功"
+        }
+      ]
+    },
+    {
+      "timeRange": "01:50-02:01",
+      "englishSentence": "I was sent to this castle for one reason. I must make sure he becomes a kind king.",
+      "chineseTranslation": "我被派到這座城堡只有一個理由。我必須確保他成為一位善良的國王。",
+      "vocabularies": [
+        {
+          "word": "castle",
+          "phonetic": "/ˈkɑːsl/",
+          "meaning": "城堡"
+        },
+        {
+          "word": "reason",
+          "phonetic": "/ˈriːzn/",
+          "meaning": "理由"
+        },
+        {
+          "word": "kind",
+          "phonetic": "/kaɪnd/",
+          "meaning": "善良的"
+        },
+        {
+          "word": "must",
+          "phonetic": "/mʌst/",
+          "meaning": "必須"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:01-02:05",
+      "englishSentence": "So, she kept trying to teach him to be kind.",
+      "chineseTranslation": "所以，她不斷嘗試教他要善良。",
+      "vocabularies": [
+        {
+          "word": "teach",
+          "phonetic": "/tiːtʃ/",
+          "meaning": "教導"
+        },
+        {
+          "word": "try",
+          "phonetic": "/traɪ/",
+          "meaning": "嘗試"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:05-02:13",
+      "englishSentence": "\"Your kingdom has many poor and sad families,\" she'd say. The prince would just shrug.",
+      "chineseTranslation": "她會說：「你的王國有許多貧窮又悲傷的家庭。」王子只會聳聳肩。",
+      "vocabularies": [
+        {
+          "word": "kingdom",
+          "phonetic": "/ˈkɪŋdəm/",
+          "meaning": "王國"
+        },
+        {
+          "word": "poor",
+          "phonetic": "/pʊə(r)/",
+          "meaning": "貧窮的"
+        },
+        {
+          "word": "sad",
+          "phonetic": "/sæd/",
+          "meaning": "悲傷的"
+        },
+        {
+          "word": "family",
+          "phonetic": "/ˈfæməli/",
+          "meaning": "家庭"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:13-02:22",
+      "englishSentence": "\"Oh, well, my family is rich and happy.\"",
+      "chineseTranslation": "「噢，好吧，我的家庭富有又快樂。」",
+      "vocabularies": [
+        {
+          "word": "rich",
+          "phonetic": "/rɪtʃ/",
+          "meaning": "富有的"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:22-02:26",
+      "englishSentence": "Nana finally went to the king for advice.",
+      "chineseTranslation": "娜娜最後去找國王尋求建議。",
+      "vocabularies": [
+        {
+          "word": "finally",
+          "phonetic": "/ˈfaɪnəli/",
+          "meaning": "最後；終於"
+        },
+        {
+          "word": "advice",
+          "phonetic": "/ədˈvaɪs/",
+          "meaning": "建議"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:26-02:31",
+      "englishSentence": "When the king heard how his son was acting, he grinned.",
+      "chineseTranslation": "當國王聽到他兒子的所作所為，他咧嘴笑了。",
+      "vocabularies": [
+        {
+          "word": "son",
+          "phonetic": "/sʌn/",
+          "meaning": "兒子"
+        },
+        {
+          "word": "hear",
+          "phonetic": "/hɪə(r)/",
+          "meaning": "聽見"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:31-02:39",
+      "englishSentence": "Wonderful news. He will make a fine king one day.",
+      "chineseTranslation": "好消息。他有一天會成為一位優秀的國王。",
+      "vocabularies": [
+        {
+          "word": "news",
+          "phonetic": "/njuːz/",
+          "meaning": "消息"
+        },
+        {
+          "word": "fine",
+          "phonetic": "/faɪn/",
+          "meaning": "優秀的；好的"
+        },
+        {
+          "word": "day",
+          "phonetic": "/deɪ/",
+          "meaning": "日子；一天"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:39-02:45",
+      "englishSentence": "Next, Nana went to the queen. Troubling behavior. But the queen covered her ears.",
+      "chineseTranslation": "接著，娜娜去找王后。（王子）的行為令人擔憂，但王后捂住了耳朵。",
+      "vocabularies": [
+        {
+          "word": "next",
+          "phonetic": "/nekst/",
+          "meaning": "接著"
+        },
+        {
+          "word": "ear",
+          "phonetic": "/ɪə(r)/",
+          "meaning": "耳朵"
+        },
+        {
+          "word": "cover",
+          "phonetic": "/ˈkʌvə(r)/",
+          "meaning": "遮蓋；覆蓋"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:46-02:51",
+      "englishSentence": "My son is a perfect angel.",
+      "chineseTranslation": "我的兒子是一個完美的天使。",
+      "vocabularies": [
+        {
+          "word": "angel",
+          "phonetic": "/ˈeɪndʒl/",
+          "meaning": "天使"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:51-02:57",
+      "englishSentence": "Nana knew then that she was all on her own.",
+      "chineseTranslation": "娜娜那時知道她只能靠自己。",
+      "vocabularies": [
+        {
+          "word": "know",
+          "phonetic": "/nəʊ/",
+          "meaning": "知道"
+        },
+        {
+          "word": "own",
+          "phonetic": "/əʊn/",
+          "meaning": "自己的"
+        }
+      ]
+    },
+    {
+      "timeRange": "02:57-03:07",
+      "englishSentence": "She was the only one who could teach the prince about kindness. But time was running out.",
+      "chineseTranslation": "她是唯一可以教導王子什麼是善良的人。但是時間不多了。",
+      "vocabularies": [
+        {
+          "word": "only",
+          "phonetic": "/ˈəʊnli/",
+          "meaning": "唯一的"
+        },
+        {
+          "word": "kindness",
+          "phonetic": "/ˈkaɪndnəs/",
+          "meaning": "善良"
+        },
+        {
+          "word": "time",
+          "phonetic": "/taɪm/",
+          "meaning": "時間"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:07-03:15",
+      "englishSentence": "The prince is growing up. She thought soon he won't need me anymore.",
+      "chineseTranslation": "王子正在長大。她心想很快他就不再需要我了。",
+      "vocabularies": [
+        {
+          "word": "grow",
+          "phonetic": "/ɡrəʊ/",
+          "meaning": "成長；生長"
+        },
+        {
+          "word": "need",
+          "phonetic": "/niːd/",
+          "meaning": "需要"
+        },
+        {
+          "word": "soon",
+          "phonetic": "/suːn/",
+          "meaning": "很快"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:15-03:20",
+      "englishSentence": "Yet his heart is growing harder and colder by the day.",
+      "chineseTranslation": "然而他的心一天比一天變得更硬、更冷漠。",
+      "vocabularies": [
+        {
+          "word": "heart",
+          "phonetic": "/hɑːt/",
+          "meaning": "心"
+        },
+        {
+          "word": "cold",
+          "phonetic": "/kəʊld/",
+          "meaning": "寒冷的；冷漠的"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:20-03:25",
+      "englishSentence": "It was time to do something, something magical.",
+      "chineseTranslation": "是時候要做些事情了，一些有魔法的事情。",
+      "vocabularies": [
+        {
+          "word": "magical",
+          "phonetic": "/ˈmædʒɪkl/",
+          "meaning": "有魔法的"
+        },
+        {
+          "word": "do",
+          "phonetic": "/duː/",
+          "meaning": "做"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:25-03:34",
+      "englishSentence": "You see, Reader, Nana wasn't just a nursemaid. She was a fairy.",
+      "chineseTranslation": "你知道嗎，讀者，娜娜不只是保姆，她是一位仙女。",
+      "vocabularies": [
+        {
+          "word": "fairy",
+          "phonetic": "/ˈfeəri/",
+          "meaning": "仙女"
+        },
+        {
+          "word": "just",
+          "phonetic": "/dʒʌst/",
+          "meaning": "僅僅；只是"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:34-03:38",
+      "englishSentence": "And it was the fairy queen who had sent her there.",
+      "chineseTranslation": "是仙女王后派她來到這裡。",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "03:38-03:47",
+      "englishSentence": "The next king must be kind and fair. The fairy queen had said.",
+      "chineseTranslation": "仙女王后曾說：下一任國王必須善良又公正。",
+      "vocabularies": [
+        {
+          "word": "next",
+          "phonetic": "/nekst/",
+          "meaning": "下一個"
+        },
+        {
+          "word": "fair",
+          "phonetic": "/feə(r)/",
+          "meaning": "公正的"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:47-03:51",
+      "englishSentence": "Nana had never used magic at the castle before.",
+      "chineseTranslation": "娜娜從來沒有在城堡裡用過魔法。",
+      "vocabularies": [
+        {
+          "word": "magic",
+          "phonetic": "/ˈmædʒɪk/",
+          "meaning": "魔法"
+        },
+        {
+          "word": "use",
+          "phonetic": "/juːz/",
+          "meaning": "使用"
+        },
+        {
+          "word": "before",
+          "phonetic": "/bɪˈfɔː(r)/",
+          "meaning": "從前；之前"
+        }
+      ]
+    },
+    {
+      "timeRange": "03:51-04:03",
+      "englishSentence": "But now, she thought, I will do what I must do.",
+      "chineseTranslation": "但是現在，她心想，我要做我必須做的事。",
+      "vocabularies": [
+        {
+          "word": "will",
+          "phonetic": "/wɪl/",
+          "meaning": "將會"
+        },
+        {
+          "word": "now",
+          "phonetic": "/naʊ/",
+          "meaning": "現在"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:03-04:08",
+      "englishSentence": "A few days later, the king and queen left the castle.",
+      "chineseTranslation": "幾天之後，國王和王后離開了城堡。",
+      "vocabularies": [
+        {
+          "word": "few",
+          "phonetic": "/fjuː/",
+          "meaning": "少數的"
+        },
+        {
+          "word": "later",
+          "phonetic": "/ˈleɪtə(r)/",
+          "meaning": "之後"
+        },
+        {
+          "word": "leave",
+          "phonetic": "/liːv/",
+          "meaning": "離開"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:08-04:13",
+      "englishSentence": "They were going to visit a king in a far away land.",
+      "chineseTranslation": "他們要去拜訪一位在遙遠國度的國王。",
+      "vocabularies": [
+        {
+          "word": "visit",
+          "phonetic": "/ˈvɪzɪt/",
+          "meaning": "拜訪；參觀"
+        },
+        {
+          "word": "far",
+          "phonetic": "/fɑː(r)/",
+          "meaning": "遙遠的"
+        },
+        {
+          "word": "land",
+          "phonetic": "/lænd/",
+          "meaning": "國土；地方"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:13-04:18",
+      "englishSentence": "Nana and the prince waved goodbye from the castle steps.",
+      "chineseTranslation": "娜娜和王子站在城堡台階上揮手道別。",
+      "vocabularies": [
+        {
+          "word": "wave",
+          "phonetic": "/weɪv/",
+          "meaning": "揮手"
+        },
+        {
+          "word": "goodbye",
+          "phonetic": "/ˌɡʊdˈbaɪ/",
+          "meaning": "再見"
+        },
+        {
+          "word": "step",
+          "phonetic": "/step/",
+          "meaning": "台階"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:18-04:24",
+      "englishSentence": "\"Nana, take care of my precious boy,\" the queen said.",
+      "chineseTranslation": "王后說：「娜娜，好好照顧我珍貴的孩子。」",
+      "vocabularies": [
+        {
+          "word": "care",
+          "phonetic": "/keə(r)/",
+          "meaning": "照料；關心"
+        },
+        {
+          "word": "precious",
+          "phonetic": "/ˈpreʃəs/",
+          "meaning": "珍貴的"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:24-04:31",
+      "englishSentence": "\"Bring me presents,\" the prince shouted as the carriage rolled away.",
+      "chineseTranslation": "當馬車駛離的時候，王子大喊：「帶禮物回給我！」",
+      "vocabularies": [
+        {
+          "word": "present",
+          "phonetic": "/ˈpreznt/",
+          "meaning": "禮物"
+        },
+        {
+          "word": "shout",
+          "phonetic": "/ʃaʊt/",
+          "meaning": "大叫；呼喊"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:31-04:41",
+      "englishSentence": "Nana sighed. This was her chance to try a magic spell, but magic was serious.",
+      "chineseTranslation": "娜娜嘆了一口氣。這是她嘗試魔法咒語的機會，但魔法是很嚴肅的事情。",
+      "vocabularies": [
+        {
+          "word": "sigh",
+          "phonetic": "/saɪ/",
+          "meaning": "嘆氣"
+        },
+        {
+          "word": "chance",
+          "phonetic": "/tʃɑːns/",
+          "meaning": "機會"
+        },
+        {
+          "word": "spell",
+          "phonetic": "/spel/",
+          "meaning": "咒語"
+        },
+        {
+          "word": "serious",
+          "phonetic": "/ˈsɪəriəs/",
+          "meaning": "嚴肅的"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:41-04:45",
+      "englishSentence": "Fairies used it only when they had to.",
+      "chineseTranslation": "仙女只在迫不得已的時候才會使用魔法。",
+      "vocabularies": [
+        {
+          "word": "only",
+          "phonetic": "/ˈəʊnli/",
+          "meaning": "只；僅僅"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:45-04:50",
+      "englishSentence": "She decided to talk to the prince one last time.",
+      "chineseTranslation": "她決定和王子做最後一次談話。",
+      "vocabularies": [
+        {
+          "word": "decide",
+          "phonetic": "/dɪˈsaɪd/",
+          "meaning": "決定"
+        },
+        {
+          "word": "talk",
+          "phonetic": "/tɔːk/",
+          "meaning": "交談"
+        },
+        {
+          "word": "last",
+          "phonetic": "/lɑːst/",
+          "meaning": "最後的"
+        }
+      ]
+    },
+    {
+      "timeRange": "04:50-05:01",
+      "englishSentence": "Prince, one day you'll rule this kingdom. You must have a kind and generous heart. Please show me that you can be kind.",
+      "chineseTranslation": "王子，有一天你將會統治這個王國。你必須擁有一顆善良又慷慨的心。請向我證明你可以變得善良。",
+      "vocabularies": [
+        {
+          "word": "rule",
+          "phonetic": "/ruːl/",
+          "meaning": "統治"
+        },
+        {
+          "word": "generous",
+          "phonetic": "/ˈdʒenərəs/",
+          "meaning": "慷慨的"
+        },
+        {
+          "word": "show",
+          "phonetic": "/ʃəʊ/",
+          "meaning": "展示；顯示"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:01-05:07",
+      "englishSentence": "Okay. The prince looked around.",
+      "chineseTranslation": "好的。王子向四周望了望。",
+      "vocabularies": [
+        {
+          "word": "look",
+          "phonetic": "/lʊk/",
+          "meaning": "看"
+        },
+        {
+          "word": "around",
+          "phonetic": "/əˈraʊnd/",
+          "meaning": "四處；周圍"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:07-05:16",
+      "englishSentence": "I see some servant girls. I'll ask if they need anything. He ran to the servants.",
+      "chineseTranslation": "我看見一些女僕。我去問她們需不需要什麼。他跑向僕人們。",
+      "vocabularies": [
+        {
+          "word": "servant",
+          "phonetic": "/ˈsɜːvənt/",
+          "meaning": "僕人"
+        },
+        {
+          "word": "ask",
+          "phonetic": "/ɑːsk/",
+          "meaning": "詢問"
+        },
+        {
+          "word": "run",
+          "phonetic": "/rʌn/",
+          "meaning": "跑"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:16-05:26",
+      "englishSentence": "You're working so hard. Can I bring you a refreshment? The servant girls looked surprised.",
+      "chineseTranslation": "你們工作得好辛苦。我可以拿點飲品給你們嗎？女僕們看起來很驚訝。",
+      "vocabularies": [
+        {
+          "word": "work",
+          "phonetic": "/wɜːk/",
+          "meaning": "工作"
+        },
+        {
+          "word": "hard",
+          "phonetic": "/hɑːd/",
+          "meaning": "辛苦地；努力地"
+        },
+        {
+          "word": "surprised",
+          "phonetic": "/səˈpraɪzd/",
+          "meaning": "感到驚訝的"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:26-05:33",
+      "englishSentence": "Why, um, certainly, your highness, one said. Great. I'll get some fruit.",
+      "chineseTranslation": "其中一位說：「呃，當然可以，殿下。」太好了，我去拿一些水果。",
+      "vocabularies": [
+        {
+          "word": "certainly",
+          "phonetic": "/ˈsɜːtnli/",
+          "meaning": "當然"
+        },
+        {
+          "word": "fruit",
+          "phonetic": "/fruːt/",
+          "meaning": "水果"
+        },
+        {
+          "word": "great",
+          "phonetic": "/ɡreɪt/",
+          "meaning": "太好了；很棒"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:33-05:42",
+      "englishSentence": "The prince dashed into the castle. He returned with a bowl of fruit.",
+      "chineseTranslation": "王子衝進城堡。他拿著一碗水果回來。",
+      "vocabularies": [
+        {
+          "word": "bowl",
+          "phonetic": "/bəʊl/",
+          "meaning": "碗"
+        },
+        {
+          "word": "return",
+          "phonetic": "/rɪˈtɜːn/",
+          "meaning": "回來"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:42-05:45",
+      "englishSentence": "Nana beamed. He's learning.",
+      "chineseTranslation": "娜娜面露喜色。他正在學習。",
+      "vocabularies": [
+        {
+          "word": "learn",
+          "phonetic": "/lɜːn/",
+          "meaning": "學習"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:45-05:52",
+      "englishSentence": "She thought maybe magic isn't needed after all.",
+      "chineseTranslation": "她心想也許終究不需要魔法。",
+      "vocabularies": [
+        {
+          "word": "maybe",
+          "phonetic": "/ˈmeɪbi/",
+          "meaning": "也許"
+        },
+        {
+          "word": "need",
+          "phonetic": "/niːd/",
+          "meaning": "需要"
+        }
+      ]
+    },
+    {
+      "timeRange": "05:52-06:02",
+      "englishSentence": "But then the prince laughed and threw the fruit at them. Stop that.",
+      "chineseTranslation": "但是接著王子大笑，並把水果丟向她們。不要那樣做。",
+      "vocabularies": [
+        {
+          "word": "throw",
+          "phonetic": "/θrəʊ/",
+          "meaning": "丟；扔"
+        },
+        {
+          "word": "stop",
+          "phonetic": "/stɒp/",
+          "meaning": "停止"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:02-06:04",
+      "englishSentence": "Nana pulled the prince away.",
+      "chineseTranslation": "娜娜把王子拉開。",
+      "vocabularies": [
+        {
+          "word": "pull",
+          "phonetic": "/pʊl/",
+          "meaning": "拉"
+        },
+        {
+          "word": "away",
+          "phonetic": "/əˈweɪ/",
+          "meaning": "離開"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:04-06:12",
+      "englishSentence": "I've tried to teach you to be kind, but your heart is as cold as stone.",
+      "chineseTranslation": "我已經嘗試教你要善良，但你的心像石頭一樣冰冷。",
+      "vocabularies": [
+        {
+          "word": "stone",
+          "phonetic": "/stəʊn/",
+          "meaning": "石頭"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:12-06:15",
+      "englishSentence": "So, I must do what I must do.",
+      "chineseTranslation": "所以，我必須做我該做的事。",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "06:15-06:23",
+      "englishSentence": "The prince laughed. Like what? Like this.",
+      "chineseTranslation": "王子笑了。像什麼？像這樣。",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "06:23-06:34",
+      "englishSentence": "The prince turned into a statue of stone covered in gold.",
+      "chineseTranslation": "王子變成一座覆蓋著黃金的石頭雕像。",
+      "vocabularies": [
+        {
+          "word": "statue",
+          "phonetic": "/ˈstætʃuː/",
+          "meaning": "雕像"
+        },
+        {
+          "word": "gold",
+          "phonetic": "/ɡəʊld/",
+          "meaning": "黃金"
+        },
+        {
+          "word": "turn into",
+          "phonetic": "/tɜːn ˈɪntuː/",
+          "meaning": "變成"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:36-06:41",
+      "englishSentence": "You will stand frozen above the village, watching your people.",
+      "chineseTranslation": "你將會僵立在村莊上方，看著你的子民。",
+      "vocabularies": [
+        {
+          "word": "stand",
+          "phonetic": "/stænd/",
+          "meaning": "站立"
+        },
+        {
+          "word": "frozen",
+          "phonetic": "/ˈfrəʊzn/",
+          "meaning": "凍住的；僵住的"
+        },
+        {
+          "word": "village",
+          "phonetic": "/ˈvɪlɪdʒ/",
+          "meaning": "村莊"
+        },
+        {
+          "word": "people",
+          "phonetic": "/ˈpiːpl/",
+          "meaning": "人們；子民"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:41-06:47",
+      "englishSentence": "Seeing their struggles will surely soften your heart.",
+      "chineseTranslation": "看見他們的困苦一定會軟化你的心。",
+      "vocabularies": [
+        {
+          "word": "see",
+          "phonetic": "/siː/",
+          "meaning": "看見"
+        },
+        {
+          "word": "surely",
+          "phonetic": "/ˈʃʊəli/",
+          "meaning": "一定；無疑地"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:47-06:53",
+      "englishSentence": "Break this spell now, the statue cried.",
+      "chineseTranslation": "雕像大喊：「現在解除這個咒語！」",
+      "vocabularies": [
+        {
+          "word": "break",
+          "phonetic": "/breɪk/",
+          "meaning": "打破；解除"
+        },
+        {
+          "word": "cry",
+          "phonetic": "/kraɪ/",
+          "meaning": "大喊；哭"
+        }
+      ]
+    },
+    {
+      "timeRange": "06:53-07:04",
+      "englishSentence": "Only you can do that, Nana said. Tell me when you know how to be kind.",
+      "chineseTranslation": "娜娜說：「只有你自己可以做到。當你懂得如何善良的時候就告訴我。」",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "07:04-07:08",
+      "englishSentence": "Days passed.",
+      "chineseTranslation": "日子一天天過去。",
+      "vocabularies": [
+        {
+          "word": "pass",
+          "phonetic": "/pɑːs/",
+          "meaning": "（時間）過去"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:08-07:13",
+      "englishSentence": "Nana waited, nervously, watching the statue.",
+      "chineseTranslation": "娜娜緊張地等待，守看著雕像。",
+      "vocabularies": [
+        {
+          "word": "wait",
+          "phonetic": "/weɪt/",
+          "meaning": "等待"
+        },
+        {
+          "word": "nervously",
+          "phonetic": "/ˈnɜːvəsli/",
+          "meaning": "緊張地"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:13-07:22",
+      "englishSentence": "Surely the prince sees the people's troubles now, she thought. And surely he wants to help them.",
+      "chineseTranslation": "她心想，王子現在一定看見人們的苦難，他一定想要幫助他們。",
+      "vocabularies": [
+        {
+          "word": "trouble",
+          "phonetic": "/ˈtrʌbl/",
+          "meaning": "苦難；麻煩"
+        },
+        {
+          "word": "help",
+          "phonetic": "/help/",
+          "meaning": "幫助"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:22-07:28",
+      "englishSentence": "But the statue stayed silent.",
+      "chineseTranslation": "但是雕像保持沉默。",
+      "vocabularies": [
+        {
+          "word": "silent",
+          "phonetic": "/ˈsaɪlənt/",
+          "meaning": "沉默的"
+        },
+        {
+          "word": "stay",
+          "phonetic": "/steɪ/",
+          "meaning": "維持；停留"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:28-07:34",
+      "englishSentence": "Then one day, news came. The king and queen were returning home.",
+      "chineseTranslation": "然後有一天，消息傳來。國王和王后正要返家。",
+      "vocabularies": [
+        {
+          "word": "home",
+          "phonetic": "/həʊm/",
+          "meaning": "家"
+        },
+        {
+          "word": "return",
+          "phonetic": "/rɪˈtɜːn/",
+          "meaning": "返回"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:34-07:37",
+      "englishSentence": "Nana ran to the statue.",
+      "chineseTranslation": "娜娜跑向雕像。",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "07:37-07:43",
+      "englishSentence": "\"I can't let them see my magic spell.\" She thought.",
+      "chineseTranslation": "她心想：「我不能讓他們看見我的魔法咒語。」",
+      "vocabularies": [
+        {
+          "word": "let",
+          "phonetic": "/let/",
+          "meaning": "讓"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:43-07:53",
+      "englishSentence": "She tried to break the spell herself, but nothing worked. The magic was too strong.",
+      "chineseTranslation": "她嘗試自己解除咒語，但什麼都沒有用。魔法太強大了。",
+      "vocabularies": [
+        {
+          "word": "nothing",
+          "phonetic": "/ˈnʌθɪŋ/",
+          "meaning": "沒有東西"
+        },
+        {
+          "word": "strong",
+          "phonetic": "/strɒŋ/",
+          "meaning": "強大的；強壯的"
+        },
+        {
+          "word": "work",
+          "phonetic": "/wɜːk/",
+          "meaning": "奏效；起作用"
+        }
+      ]
+    },
+    {
+      "timeRange": "07:53-08:01",
+      "englishSentence": "Nana buried her face in her hands. The king will throw me into the dungeon.",
+      "chineseTranslation": "娜娜把臉埋在雙手之中。國王會把我丟進地牢。",
+      "vocabularies": [
+        {
+          "word": "bury",
+          "phonetic": "/ˈberi/",
+          "meaning": "埋"
+        },
+        {
+          "word": "face",
+          "phonetic": "/feɪs/",
+          "meaning": "臉"
+        },
+        {
+          "word": "hand",
+          "phonetic": "/hænd/",
+          "meaning": "手"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:01-08:05",
+      "englishSentence": "I must leave at once.",
+      "chineseTranslation": "我必須立刻離開。",
+      "vocabularies": [
+        {
+          "word": "once",
+          "phonetic": "/wʌns/",
+          "meaning": "立刻；一次"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:05-08:16",
+      "englishSentence": "Nana disappeared, leaving the statue all alone.",
+      "chineseTranslation": "娜娜消失了，留下雕像孤零零一個。",
+      "vocabularies": [
+        {
+          "word": "disappear",
+          "phonetic": "/ˌdɪsəˈpɪə(r)/",
+          "meaning": "消失"
+        },
+        {
+          "word": "alone",
+          "phonetic": "/əˈləʊn/",
+          "meaning": "獨自的"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:16-08:22",
+      "englishSentence": "The king and queen stared at the stone statue in horror.",
+      "chineseTranslation": "國王和王后驚恐地盯著石雕像。",
+      "vocabularies": [
+        {
+          "word": "stare",
+          "phonetic": "/steə(r)/",
+          "meaning": "凝視；盯著"
+        },
+        {
+          "word": "horror",
+          "phonetic": "/ˈhɒrə(r)/",
+          "meaning": "恐懼；驚恐"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:22-08:26",
+      "englishSentence": "\"That's not our son,\" the king said.",
+      "chineseTranslation": "國王說：「那不是我們的兒子。」",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "08:26-08:31",
+      "englishSentence": "\"My baby has been kidnapped.\" the queen cried. And the villains left a statue in his place.",
+      "chineseTranslation": "王后哭著說：「我的孩子被綁架了。」壞人留下一座雕像來替代他。",
+      "vocabularies": [
+        {
+          "word": "baby",
+          "phonetic": "/ˈbeɪbi/",
+          "meaning": "寶貝；嬰兒"
+        },
+        {
+          "word": "place",
+          "phonetic": "/pleɪs/",
+          "meaning": "位置；地方"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:31-08:40",
+      "englishSentence": "This is Nana's fault. The king growled. Guards, find her, then throw her in the dungeon.",
+      "chineseTranslation": "國王低吼：「這都是娜娜的錯。侍衛，找到她，然後把她丟進地牢。」",
+      "vocabularies": [
+        {
+          "word": "fault",
+          "phonetic": "/fɔːlt/",
+          "meaning": "過錯"
+        },
+        {
+          "word": "guard",
+          "phonetic": "/ɡɑːd/",
+          "meaning": "侍衛；守衛"
+        },
+        {
+          "word": "throw",
+          "phonetic": "/θrəʊ/",
+          "meaning": "丟；投擲"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:46-08:54",
+      "englishSentence": "But the guards could not find Nana, and the prince's parents couldn't bear to look at the statue.",
+      "chineseTranslation": "但是侍衛找不到娜娜，王子的父母也無法忍受看著那座雕像。",
+      "vocabularies": [
+        {
+          "word": "could",
+          "phonetic": "/kʊd/",
+          "meaning": "能夠（can過去式）"
+        },
+        {
+          "word": "bear",
+          "phonetic": "/beə(r)/",
+          "meaning": "忍受"
+        }
+      ]
+    },
+    {
+      "timeRange": "08:54-09:04",
+      "englishSentence": "so they sent it to a town far from the castle.",
+      "chineseTranslation": "所以他們把雕像送到遠離城堡的小鎮。",
+      "vocabularies": [
+        {
+          "word": "send",
+          "phonetic": "/send/",
+          "meaning": "寄送；送"
+        },
+        {
+          "word": "town",
+          "phonetic": "/taʊn/",
+          "meaning": "小鎮"
+        },
+        {
+          "word": "from",
+          "phonetic": "/frəm/",
+          "meaning": "從；來自"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:04-09:10",
+      "englishSentence": "The town's people were happy to have such a beautiful statue.",
+      "chineseTranslation": "小鎮的人很高興擁有這麼一座美麗的雕像。",
+      "vocabularies": [
+        {
+          "word": "beautiful",
+          "phonetic": "/ˈbjuːtɪfl/",
+          "meaning": "美麗的"
+        },
+        {
+          "word": "such",
+          "phonetic": "/sʌtʃ/",
+          "meaning": "如此的"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:10-09:16",
+      "englishSentence": "It was made of stone, but covered in gleaming gold.",
+      "chineseTranslation": "它是石頭製成，但是外層覆蓋閃亮的黃金。",
+      "vocabularies": [
+        {
+          "word": "make",
+          "phonetic": "/meɪk/",
+          "meaning": "製作"
+        },
+        {
+          "word": "gleaming",
+          "phonetic": "/ˈɡliːmɪŋ/",
+          "meaning": "閃亮的"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:16-09:22",
+      "englishSentence": "Three sparkling jewels sat in its belt.",
+      "chineseTranslation": "腰帶上鑲著三顆閃耀的寶石。",
+      "vocabularies": [
+        {
+          "word": "three",
+          "phonetic": "/θriː/",
+          "meaning": "三"
+        },
+        {
+          "word": "jewel",
+          "phonetic": "/ˈdʒuːəl/",
+          "meaning": "寶石"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:22-09:31",
+      "englishSentence": "Often the people gathered at the statue's base talking about it. We're so lucky to have this statue.",
+      "chineseTranslation": "人們常常聚集在雕像底座談論它。我們很幸運擁有這座雕像。",
+      "vocabularies": [
+        {
+          "word": "often",
+          "phonetic": "/ˈɒfn/",
+          "meaning": "常常"
+        },
+        {
+          "word": "gather",
+          "phonetic": "/ˈɡæðə(r)/",
+          "meaning": "聚集"
+        },
+        {
+          "word": "lucky",
+          "phonetic": "/ˈlʌki/",
+          "meaning": "幸運的"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:31-09:43",
+      "englishSentence": "Look at his smile. Let's call him the happy prince.",
+      "chineseTranslation": "看他的笑容。我們叫他快樂王子吧。",
+      "vocabularies": [
+        {
+          "word": "call",
+          "phonetic": "/kɔːl/",
+          "meaning": "稱呼；叫"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:43-09:49",
+      "englishSentence": "One day, a flock of swallows flew over the town.",
+      "chineseTranslation": "有一天，一群燕子飛過小鎮上空。",
+      "vocabularies": [
+        {
+          "word": "flock",
+          "phonetic": "/flɒk/",
+          "meaning": "（鳥）一群"
+        },
+        {
+          "word": "swallow",
+          "phonetic": "/ˈswɒləʊ/",
+          "meaning": "燕子"
+        },
+        {
+          "word": "fly",
+          "phonetic": "/flaɪ/",
+          "meaning": "飛"
+        },
+        {
+          "word": "over",
+          "phonetic": "/ˈəʊvə(r)/",
+          "meaning": "越過；在……上方"
+        }
+      ]
+    },
+    {
+      "timeRange": "09:49-10:00",
+      "englishSentence": "This looks like a nice place, their leader said. We'll spend the rest of the summer here.",
+      "chineseTranslation": "牠們的領隊說：「這看起來是個不錯的地方。我們會在這裡度過夏天剩餘的時光。」",
+      "vocabularies": [
+        {
+          "word": "nice",
+          "phonetic": "/naɪs/",
+          "meaning": "美好的；不錯的"
+        },
+        {
+          "word": "leader",
+          "phonetic": "/ˈliːdə(r)/",
+          "meaning": "領袖；領隊"
+        },
+        {
+          "word": "spend",
+          "phonetic": "/spend/",
+          "meaning": "度過；花費"
+        },
+        {
+          "word": "summer",
+          "phonetic": "/ˈsʌmə(r)/",
+          "meaning": "夏天"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:00-10:06",
+      "englishSentence": "Then we'll fly to Egypt for the winter.",
+      "chineseTranslation": "然後我們會飛去埃及過冬天。",
+      "vocabularies": [
+        {
+          "word": "winter",
+          "phonetic": "/ˈwɪntə(r)/",
+          "meaning": "冬天"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:06-10:10",
+      "englishSentence": "And that's exactly what the swallows did.",
+      "chineseTranslation": "燕子們就照著這樣做了。",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "10:10-10:18",
+      "englishSentence": "Most of them stayed in town, but one swallow liked to spend his time at the lake.",
+      "chineseTranslation": "大部份燕子留在小鎮，但有一隻燕子喜歡在湖邊消磨時間。",
+      "vocabularies": [
+        {
+          "word": "most",
+          "phonetic": "/məʊst/",
+          "meaning": "大部份"
+        },
+        {
+          "word": "lake",
+          "phonetic": "/leɪk/",
+          "meaning": "湖泊"
+        },
+        {
+          "word": "time",
+          "phonetic": "/taɪm/",
+          "meaning": "時間"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:22-10:26",
+      "englishSentence": "One day, the leader flew to talk to him.",
+      "chineseTranslation": "有一天，領隊飛過來跟牠說話。",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "10:26-10:35",
+      "englishSentence": "\"Please join the rest of the flock,\" leader said. \"The summer is almost over.",
+      "chineseTranslation": "領隊說：「請回到鳥群之中，夏天差不多快要結束了。」",
+      "vocabularies": [
+        {
+          "word": "join",
+          "phonetic": "/dʒɔɪn/",
+          "meaning": "加入"
+        },
+        {
+          "word": "almost",
+          "phonetic": "/ˈɔːlməʊst/",
+          "meaning": "幾乎；差不多"
+        },
+        {
+          "word": "over",
+          "phonetic": "/ˈəʊvə(r)/",
+          "meaning": "結束的"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:35-10:44",
+      "englishSentence": "We will leave for Egypt soon. I'm not going to Egypt, Swallow said.",
+      "chineseTranslation": "「我們很快就要動身前往埃及。」燕子說：「我不去埃及。」",
+      "vocabularies": [
+        {
+          "word": "go",
+          "phonetic": "/ɡəʊ/",
+          "meaning": "去"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:44-10:50",
+      "englishSentence": "Because I am in love.",
+      "chineseTranslation": "因為我墜入愛河了。",
+      "vocabularies": [
+        {
+          "word": "love",
+          "phonetic": "/lʌv/",
+          "meaning": "愛；喜愛"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:50-10:56",
+      "englishSentence": "Not again, leader thought. But he smiled politely.",
+      "chineseTranslation": "領隊心想：「不會又來了吧。」但牠禮貌地微笑。",
+      "vocabularies": [
+        {
+          "word": "again",
+          "phonetic": "/əˈɡen/",
+          "meaning": "再一次"
+        },
+        {
+          "word": "politely",
+          "phonetic": "/pəˈlaɪtli/",
+          "meaning": "禮貌地"
+        }
+      ]
+    },
+    {
+      "timeRange": "10:56-11:00",
+      "englishSentence": "With who? He asked.",
+      "chineseTranslation": "牠問：「愛上誰？」",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "11:00-11:10",
+      "englishSentence": "Come, I'll introduce you to my love, Swallow said. He led leader out over the water.",
+      "chineseTranslation": "燕子說：「過來，我介紹我的愛人給你認識。」牠帶領領隊飛到水面上方。",
+      "vocabularies": [
+        {
+          "word": "introduce",
+          "phonetic": "/ˌɪntrəˈdjuːs/",
+          "meaning": "介紹"
+        },
+        {
+          "word": "lead",
+          "phonetic": "/liːd/",
+          "meaning": "帶領"
+        },
+        {
+          "word": "water",
+          "phonetic": "/ˈwɔːtə(r)/",
+          "meaning": "水"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:10-11:22",
+      "englishSentence": "As they flew, Swallow said, \"She is the most beautiful thing in the world.\" Now, every bird knew that Swallow loved beautiful things.",
+      "chineseTranslation": "牠們飛行的時候，燕子說：「她是全世界最美麗的事物。」每一隻鳥都知道燕子喜愛美麗的事物。",
+      "vocabularies": [
+        {
+          "word": "world",
+          "phonetic": "/wɜːld/",
+          "meaning": "世界"
+        },
+        {
+          "word": "bird",
+          "phonetic": "/bɜːd/",
+          "meaning": "鳥"
+        },
+        {
+          "word": "most",
+          "phonetic": "/məʊst/",
+          "meaning": "最（用於形容詞最高級）"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:22-11:28",
+      "englishSentence": "He fell in love every season.",
+      "chineseTranslation": "牠每個季節都會墜入愛河。",
+      "vocabularies": [
+        {
+          "word": "season",
+          "phonetic": "/ˈsiːzn/",
+          "meaning": "季節"
+        },
+        {
+          "word": "fall",
+          "phonetic": "/fɔːl/",
+          "meaning": "墜落；陷入"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:28-11:41",
+      "englishSentence": "Leader thought, \"Is he talking about the lake this time? The sun set. Another bird maybe.",
+      "chineseTranslation": "領隊心想：「這次牠愛上的會是湖泊嗎？太陽下山了，也許是另一隻鳥。」",
+      "vocabularies": [
+        {
+          "word": "talk",
+          "phonetic": "/tɔːk/",
+          "meaning": "談論"
+        },
+        {
+          "word": "sun",
+          "phonetic": "/sʌn/",
+          "meaning": "太陽"
+        },
+        {
+          "word": "set",
+          "phonetic": "/set/",
+          "meaning": "（太陽）落下"
+        },
+        {
+          "word": "maybe",
+          "phonetic": "/ˈmeɪbi/",
+          "meaning": "也許"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:41-11:49",
+      "englishSentence": "That's when swallow landed lightly on a tall reed. Leader gasped.",
+      "chineseTranslation": "就在那時候，燕子輕輕降落在高高的蘆葦上。領隊倒抽一口氣。",
+      "vocabularies": [
+        {
+          "word": "land",
+          "phonetic": "/lænd/",
+          "meaning": "降落"
+        },
+        {
+          "word": "light",
+          "phonetic": "/laɪt/",
+          "meaning": "輕輕地；輕的"
+        },
+        {
+          "word": "tall",
+          "phonetic": "/tɔːl/",
+          "meaning": "高高的"
+        }
+      ]
+    },
+    {
+      "timeRange": "11:49-11:56",
+      "englishSentence": "Your love is a reed. Yes. Swallow smiled. Isn't she beautiful?",
+      "chineseTranslation": "「你的愛人是一根蘆葦？」「對。」燕子微笑，「她難道不美嗎？」",
+      "vocabularies": []
+    },
+    {
+      "timeRange": "11:59-12:05",
+      "englishSentence": "Leader didn't want to be rude. And reader. Neither do I.",
+      "chineseTranslation": "領隊不想無禮，而我（敘述者）也一樣。",
+      "vocabularies": [
+        {
+          "word": "rude",
+          "phonetic": "/ruːd/",
+          "meaning": "無禮的；粗魯的"
+        },
+        {
+          "word": "want",
+          "phonetic": "/wɒnt/",
+          "meaning": "想要"
+        }
+      ]
+    },
+    {
+      "timeRange": "12:05-12:12",
+      "englishSentence": "Don't get me wrong, she was a lovely reed. She swayed in the breeze.",
+      "chineseTranslation": "別誤會，那是一株可愛的蘆葦。她在微風中搖曳。",
+      "vocabularies": [
+        {
+          "word": "lovely",
+          "phonetic": "/ˈlʌvli/",
+          "meaning": "可愛的"
+        },
+        {
+          "word": "breeze",
+          "phonetic": "/briːz/",
+          "meaning": "微風"
+        }
+      ]
+    },
+    {
+      "timeRange": "12:12-12:21",
+      "englishSentence": "She held Swallow gently when he landed on her, but she was still a reed.",
+      "chineseTranslation": "當燕子降落在她身上，她溫柔地承接住燕子，但她始終只是一株蘆葦。",
+      "vocabularies": []
+    },
+{
+  "timeRange": "12:21-12:28",
+  "englishSentence": "Later blinked a few times. I hope you change your mind. Winter is coming. It will get very cold here.",
+  "chineseTranslation": "後來領隊眨了好幾下眼睛。我希望你可以改變主意。冬天快要來了，這裡將會變得非常寒冷。",
+  "vocabularies": [
+    {
+      "word": "hope",
+      "phonetic": "/həʊp/",
+      "meaning": "希望"
+    },
+    {
+      "word": "change",
+      "phonetic": "/tʃeɪndʒ/",
+      "meaning": "改變"
+    },
+    {
+      "word": "mind",
+      "phonetic": "/maɪnd/",
+      "meaning": "想法；主意"
+    },
+    {
+      "word": "cold",
+      "phonetic": "/kəʊld/",
+      "meaning": "寒冷的"
+    }
+  ]
+},
+{
+  "timeRange": "12:28-12:36",
+  "englishSentence": "Swallow didn't reply. He just smiled and stared at his beloved Reed.",
+  "chineseTranslation": "燕子沒有回應。他只是微笑，凝視著他心愛的蘆葦。",
+  "vocabularies": [
+    {
+      "word": "reply",
+      "phonetic": "/rɪˈplaɪ/",
+      "meaning": "回應；答覆"
+    },
+    {
+      "word": "stare",
+      "phonetic": "/steə(r)/",
+      "meaning": "凝視；盯著"
+    },
+    {
+      "word": "beloved",
+      "phonetic": "/bɪˈlʌvɪd/",
+      "meaning": "心愛的"
+    }
+  ]
+}
+]
+}

@@ -434,6 +434,8 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 .ab-handle:hover { transform: translate(-50%, -50%) scale(1.25); }
 .ab-timeline:hover .ab-handle { opacity: 1; }
 .ab-handle.dragging { opacity: 1; transform: translate(-50%, -50%) scale(1.25); }
+.ab-handle-a:hover { background: var(--amber); transform: translate(-50%, -50%) scale(1.5); }
+.ab-handle-a.dragging { background: var(--amber); transform: translate(-50%, -50%) scale(1.5); }
 
 .control-bar {
   display: flex;
@@ -495,6 +497,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 }
 .anchor.clickable { cursor: pointer; }
 .anchor.clickable:hover { background: rgba(37, 99, 235, 0.25); border-color: rgba(37, 99, 235, 0.5); }
+#txt-a { cursor: default; }
 #txt-a:hover {
   color: var(--amber);
   background: rgba(245, 158, 11, 0.16);

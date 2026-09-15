@@ -298,7 +298,8 @@
       return;
     }
     var t = App.player ? App.player.getCurrentTime() : 0;
-    renderSegment(segmentIndexAt(t - App.offset));
+    var idx = segmentIndexAt(t - App.offset);
+    if (idx >= 0) renderSegment(idx); else clearSegment();
   }
 
   /* ---------- 段落索引 ---------- */
@@ -317,7 +318,23 @@
   function updateSegment(t) {
     if (!App.follow || !App.vocab.length) return;
     var i = segmentIndexAt(t - App.offset);
-    if (i !== App.segIndex && i >= 0) renderSegment(i);
+    if (i < 0) {
+      if (App.segIndex !== -1) clearSegment();
+      return;
+    }
+    if (i !== App.segIndex) renderSegment(i);
+  }
+
+  /* 尚未到第一段：清空字幕與詞匯 */
+  function clearSegment() {
+    App.segIndex = -1;
+    App.pinned = null;
+    renderPinned();
+    renderSubtitle(null);
+    $('seg-label').textContent = '--:-- – --:--';
+    if (App.vocab.length) {
+      $('vocab-list').innerHTML = '<div class="vocab-empty">尚未到第一段（' + formatClock(App.vocab[0].start) + ' 開始）。</div>';
+    }
   }
 
   /* ---------- 渲染目前段落 ---------- */
@@ -575,7 +592,11 @@
     updatePlayhead(t);
     if (!App.vocab.length) return;
     var i = segmentIndexAt(t - App.offset);
-    if (i >= 0 && i !== App.segIndex) renderSegment(i);
+    if (i < 0) {
+      if (App.segIndex !== -1) clearSegment();
+      return;
+    }
+    if (i !== App.segIndex) renderSegment(i);
   }
 
   function togglePlay() {
@@ -710,9 +731,12 @@
         e.preventDefault();
         var rect = track.getBoundingClientRect();
         var handle = which === 'A' ? $('ab-handle-a') : $('ab-handle-b');
+        var startX = e.clientX;
+        var moved = false;
         handle.classList.add('dragging');
 
         function onMove(ev) {
+          if (Math.abs(ev.clientX - startX) > 2) moved = true;
           var offsetX = ev.clientX - rect.left;
           offsetX = Math.max(0, Math.min(offsetX, rect.width));
           var t = (offsetX / rect.width) * App.duration;
@@ -731,6 +755,7 @@
           handle.classList.remove('dragging');
           window.removeEventListener('mousemove', onMove);
           window.removeEventListener('mouseup', onUp);
+          if (which === 'A' && !moved) replayFromA();
           saveState();
         }
         window.addEventListener('mousemove', onMove);
