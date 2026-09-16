@@ -39,7 +39,7 @@
   }
 
   function renderCard(program) {
-    const href = 'player.html?id=' + encodeURIComponent(program.id);
+    const href = 'player?id=' + encodeURIComponent(program.id);
     const desc = program.description || '';
     const source = program.source || 'youtube';
 
