@@ -1,3 +1,5 @@
+> ⚠️ **已整併（2026-09）**：本專案已併入 lyow（播放器位於 `lyow.app/y`，資料改存 lyow R2 `data/youtube/`，寫入經 lyow `api/youtube/*`）。此 repo 與 Cloudflare Pages／KV 已停用，僅保留作歷史參考。以下內容為整併前說明。
+
 # 飛象影片學習站（Web App 版）
 
 學生打開一個網址 → 看到老師編輯的節目列表 → 點擊觀看 → 依時間片段顯示老師提供的詞匯與字幕。
