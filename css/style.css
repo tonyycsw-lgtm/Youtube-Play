@@ -22,6 +22,8 @@
 
 * { box-sizing: border-box; }
 
+[hidden] { display: none !important; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -382,10 +384,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
 .sub-word {
   cursor: pointer;
   border-radius: 4px;
-  transition: color 0.12s ease, background 0.12s ease;
 }
-.sub-word:hover { color: var(--green); background: rgba(52, 199, 89, 0.14); }
-.sub-word:active { color: var(--green); background: rgba(52, 199, 89, 0.26); }
 .subtitle-resize {
   position: absolute;
   left: 0; right: 0; bottom: 0;
@@ -408,7 +407,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
   height: 22px;
   display: flex;
   align-items: center;
-  cursor: pointer;
+  cursor: default;
   position: relative;
 }
 .ab-track {
@@ -430,9 +429,20 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
   background: #fff;
   border-radius: 9999px;
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
-  pointer-events: none;
-  z-index: 1;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  z-index: 2;
   transition: height 0.12s ease;
+}
+.ab-playhead::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30px;
+  height: 34px;
+  transform: translate(-50%, -50%);
 }
 .ab-timeline:hover .ab-playhead { height: 16px; }
 .ab-timeline .ab-playhead.dragging {
@@ -440,6 +450,7 @@ body.watch-only .player-layout { grid-template-columns: 1fr; }
   height: 30px;
   background: var(--amber);
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.9);
+  cursor: grabbing;
 }
 
 /* 觸控：拖曳時不要觸發頁面捲動 */

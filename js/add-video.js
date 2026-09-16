@@ -355,6 +355,14 @@
     if (state.busy) return;
     hideMsg();
 
+    if (window.__LYOW__) {
+      await window.__LYOW__.ready;
+      if (!window.__LYOW__.isAdmin) {
+        showMsg('只有管理員可以新增影片。', 'error');
+        return;
+      }
+    }
+
     var resolved = resolveUrl(urlEl.value) || state.jsonResolved;
 
     if (resolved && resolved.needResolve) {
@@ -404,9 +412,12 @@
 
     setBusy(true);
     try {
+      var headers = { 'Content-Type': 'application/json' };
+      var token = window.__LYOW__ ? await window.__LYOW__.getIdToken() : null;
+      if (token) headers['Authorization'] = 'Bearer ' + token;
       var res = await fetch('api/programs', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: headers,
         body: JSON.stringify(payload)
       });
       var data = await res.json().catch(function () { return {}; });

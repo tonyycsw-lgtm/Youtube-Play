@@ -2,9 +2,11 @@
    Cloudflare Pages Function — /api/programs
    自訂節目清單（存在 KV；與靜態 programs.json 並存）
 
-   - GET    /api/programs          列出所有自訂節目
+   - GET    /api/programs          列出所有自訂節目（公開）
    - POST   /api/programs          新增或更新節目（同 id 直接覆寫；可同時存入詞匯 JSON）
    - DELETE /api/programs?id=<id>  刪除節目（同時刪除其詞匯）
+     寫入（POST／DELETE）需管理員：Authorization: Bearer <Firebase ID token>，claim admin === true
+     驗證邏輯在 functions/api/_auth.js
      來源 source：youtube | tiktok | douyin | file
        youtube：需 videoId
        tiktok ：需 videoId（貼文 ID）
@@ -14,6 +16,8 @@
    KV binding：KV_BINDING
    key：program:<id>（節目資料）、vocab:<id>（詞匯 JSON 字串）
    ============================================================ */
+
+import { requireAdmin } from './_auth.js';
 
 const PREFIX_PROGRAM = 'program:';
 const PREFIX_VOCAB = 'vocab:';
@@ -38,11 +42,8 @@ function json(data, status, headers) {
 }
 
 function corsHeaders() {
-  return {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  };
+  // 播放器與 API 同源（lyow.app/y/ 代理），不需開放跨域讀取
+  return {};
 }
 
 function noBinding() {
@@ -181,8 +182,13 @@ export async function onRequest(context) {
   if (!env || !env.KV_BINDING) return noBinding();
 
   if (request.method === 'GET') return handleGet(env, headers);
-  if (request.method === 'POST') return handlePost(env, request, headers);
-  if (request.method === 'DELETE') return handleDelete(env, request, headers);
+  if (request.method === 'POST' || request.method === 'DELETE') {
+    const auth = await requireAdmin(request, env);
+    if (!auth.ok) return json({ ok: false, error: auth.error }, auth.status, headers);
+    return request.method === 'POST'
+      ? handlePost(env, request, headers)
+      : handleDelete(env, request, headers);
+  }
 
   return json({ ok: false, error: 'method_not_allowed' }, 405, headers);
 }

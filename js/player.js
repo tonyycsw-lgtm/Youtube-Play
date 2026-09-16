@@ -213,6 +213,7 @@
     window.focus();
     document.body.focus();
     loadVocabulary();
+    collapseBrowserChrome();
     App.tickTimer = setInterval(tick, TICK_MS);
   }
 
@@ -264,7 +265,7 @@
     if (!App.vocab.length) {
       $('vocab-list').innerHTML = '<div class="vocab-empty">目前沒有可用的詞匯。' +
         '<br><br>請老師在首頁「新增影片」上載詞匯 JSON。</div>';
-      $('seg-label').textContent = '--:-- – --:--';
+      $('seg-label').textContent = segPosText(-1);
       return;
     }
     var t = App.player ? App.player.getCurrentTime() : 0;
@@ -285,6 +286,13 @@
     return idx;
   }
 
+  function segPosText(i) {
+    var n = App.vocab.length;
+    if (!n) return '-/-';
+    if (i < 0) return '-/' + n;
+    return (i + 1) + '/' + n;
+  }
+
   function updateSegment(t) {
     if (App.searching || !App.vocab.length) return;
     var i = segmentIndexAt(t);
@@ -301,7 +309,7 @@
     App.pinned = null;
     renderPinned();
     renderSubtitle(null);
-    $('seg-label').textContent = '--:-- – --:--';
+    $('seg-label').textContent = segPosText(-1);
     if (App.vocab.length) {
       $('vocab-list').innerHTML = '<div class="vocab-empty">尚未到第一段（' + formatClock(App.vocab[0].start) + ' 開始）。</div>';
     }
@@ -316,7 +324,7 @@
     App.segIndex = i;
     var seg = App.vocab[i];
 
-    $('seg-label').textContent = formatClock(seg.start) + ' – ' + formatClock(seg.end);
+    $('seg-label').textContent = segPosText(i);
     renderSubtitle(seg);
 
     if (changed) {
@@ -657,11 +665,11 @@
   }
 
   function bindTimeline() {
-    var wrapper = $('ab-timeline');
     var track = $('ab-track');
     var playhead = $('ab-playhead');
     var scrubbing = false;
     var wasPlaying = false;
+    var grabDx = 0;
 
     function timeAt(clientX) {
       var rect = track.getBoundingClientRect();
@@ -670,32 +678,34 @@
       return (x / rect.width) * App.duration;
     }
 
-    wrapper.addEventListener('pointerdown', function (e) {
+    playhead.addEventListener('pointerdown', function (e) {
       if (!App.ready || !App.player || !App.duration) return;
       e.preventDefault();
+      e.stopPropagation();
       scrubbing = true;
       wasPlaying = (App.player.getState() === 'playing');
       if (wasPlaying) App.player.pause();
-      if (playhead) playhead.classList.add('dragging');
-      try { wrapper.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-      seekTo(timeAt(e.clientX));
+      var r = playhead.getBoundingClientRect();
+      grabDx = e.clientX - (r.left + r.width / 2);
+      playhead.classList.add('dragging');
+      try { playhead.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
     });
 
-    wrapper.addEventListener('pointermove', function (e) {
+    playhead.addEventListener('pointermove', function (e) {
       if (!scrubbing) return;
       e.preventDefault();
-      seekTo(timeAt(e.clientX));
+      seekTo(timeAt(e.clientX - grabDx));
     });
 
     function endScrub() {
       if (!scrubbing) return;
       scrubbing = false;
-      if (playhead) playhead.classList.remove('dragging');
+      playhead.classList.remove('dragging');
       if (wasPlaying) { try { App.player.play(); } catch (e) { /* ignore */ } }
       wasPlaying = false;
     }
-    wrapper.addEventListener('pointerup', endScrub);
-    wrapper.addEventListener('pointercancel', endScrub);
+    playhead.addEventListener('pointerup', endScrub);
+    playhead.addEventListener('pointercancel', endScrub);
   }
 
   /* ================= UI 事件綁定 ================= */
@@ -731,6 +741,22 @@
     bindKeyboard();
     bindFocusRetention();
     window.addEventListener('resize', fitSubtitle);
+    collapseBrowserChrome();
+    window.addEventListener('orientationchange', function () {
+      setTimeout(collapseBrowserChrome, 260);
+    });
+    window.addEventListener('touchstart', function onFirstTouch() {
+      collapseBrowserChrome();
+      window.removeEventListener('touchstart', onFirstTouch);
+    }, { passive: true });
+  }
+
+  function collapseBrowserChrome() {
+    if (window.innerWidth > 1024) return;
+    try { window.scrollTo(0, 0); } catch (e) { /* ignore */ }
+    setTimeout(function () {
+      try { window.scrollTo(0, 1); } catch (e) { /* ignore */ }
+    }, 120);
   }
 
   /* ================= 快捷鍵（捕獲階段） ================= */

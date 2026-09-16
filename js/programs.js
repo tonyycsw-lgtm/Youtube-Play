@@ -16,6 +16,10 @@
     return div.innerHTML;
   }
 
+  function isAdmin() {
+    return !!(window.__LYOW__ && window.__LYOW__.isAdmin);
+  }
+
   function thumbInner(source, program) {
     if (program.thumbnail) {
       return '<img src="' + esc(program.thumbnail) + '" alt="' + esc(program.title) + ' 封面" loading="lazy" onerror="this.style.opacity=0.25">';
@@ -53,7 +57,7 @@
     item.className = 'program-item';
     item.appendChild(card);
 
-    if (program.custom) {
+    if (program.custom && isAdmin()) {
       const del = document.createElement('button');
       del.type = 'button';
       del.className = 'program-delete';
@@ -72,7 +76,10 @@
   async function deleteProgram(program) {
     if (!window.confirm('確定刪除「' + program.title + '」？')) return;
     try {
-      const res = await fetch('api/programs?id=' + encodeURIComponent(program.id), { method: 'DELETE' });
+      const headers = {};
+      const token = window.__LYOW__ ? await window.__LYOW__.getIdToken() : null;
+      if (token) headers['Authorization'] = 'Bearer ' + token;
+      const res = await fetch('api/programs?id=' + encodeURIComponent(program.id), { method: 'DELETE', headers });
       const data = await res.json().catch(function () { return {}; });
       if (!res.ok || !data.ok) {
         window.alert('刪除失敗：' + (data.note || data.error || ('HTTP ' + res.status)));
@@ -146,6 +153,8 @@
     const programs = await load();
     render(programs);
   }
+
+  window.addEventListener('lyow-auth-ready', function () { reload(); });
 
   (async function init() {
     const loadingHint = document.getElementById('loading-hint');

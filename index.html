@@ -14,7 +14,7 @@
         <h1 id="site-name">影片學習站</h1>
       </div>
       <div class="header-actions">
-        <button class="tool-btn add-btn" id="btn-add-video" type="button" title="新增影片（貼 YouTube 連結或上載詞匯 JSON）">＋ 新增影片</button>
+        <button class="tool-btn add-btn" id="btn-add-video" type="button" data-admin-only hidden title="新增影片（貼 YouTube 連結或上載詞匯 JSON）">＋ 新增影片</button>
       </div>
     </div>
   </header>
@@ -87,6 +87,7 @@
     </div>
   </div>
 
+  <script type="module" src="js/lyow-auth.js"></script>
   <script src="js/programs.js"></script>
   <script src="js/add-video.js"></script>
 </body>
